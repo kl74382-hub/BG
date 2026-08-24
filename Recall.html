@@ -120,6 +120,30 @@
     font-weight: 700;
     color: #0f766e;
   }
+    .nav-bar {
+    display: flex;
+    justify-content: flex-start;
+    margin-bottom: 16px;
+  }
+  .btn-home {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    background-color: #f1f5f9;
+    color: #334155;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 600;
+    border-radius: 6px;
+    border: 1px solid #cbd5e1;
+    transition: all 0.2s ease;
+  }
+  .btn-home:hover {
+    background-color: #e2e8f0;
+    color: #0f172a;
+    border-color: #94a3b8;
+  }
   @media print {
     body { background: #ffffff; padding: 0; }
     .card { box-shadow: none; border: none; padding: 0; margin: 0; page-break-after: always; }
@@ -130,6 +154,9 @@
 <body>
 
 <div class="card">
+  <div class="nav-bar">
+    <a href="index.html" class="btn-home">⬅ 보드게임 목록으로</a>
+  </div>
   <h1>Recall (리콜) – 개인 참조표 <span style="font-size: 14px; color: #64748b; font-weight: normal;">v1.0</span></h1>
   <div class="banner">
     자신의 차례가 되면 다음 중 <strong>반드시 하나</strong>를 수행해야 합니다: <strong>키카드 사용</strong> 또는 <strong>리콜</strong>
