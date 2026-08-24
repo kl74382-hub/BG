@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>리콜 (Recall) – 개인 참조표 v1.0</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  @page {
+    size: A4 portrait;
+    margin: 15mm;
+  }
+  * {
+    box-sizing: border-box;
+  }
+  body {
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 13.5px;
+    line-height: 1.6;
+    color: #1e293b;
+    background-color: #f1f5f9;
+    margin: 0;
+    padding: 24px 16px;
+  }
+  .card {
+    background: #ffffff;
+    max-width: 820px;
+    margin: 0 auto 24px auto;
+    padding: 32px 36px;
+    border-radius: 12px;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+    border: 1px solid #e2e8f0;
+  }
+  h1 {
+    font-size: 24px;
+    font-weight: 900;
+    color: #0f172a;
+    border-bottom: 2px solid #334155;
+    padding-bottom: 8px;
+    margin: 0 0 16px 0;
+  }
+  .banner {
+    background: #e0f2fe;
+    border-left: 4px solid #0284c7;
+    padding: 10px 14px;
+    border-radius: 4px;
+    font-weight: 600;
+    color: #0369a1;
+    margin-bottom: 20px;
+  }
+  h2 {
+    font-size: 17px;
+    font-weight: 800;
+    color: #1d4ed8;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    border-left: 4px solid #3b82f6;
+    padding-left: 8px;
+  }
+  h3 {
+    font-size: 14.5px;
+    font-weight: 700;
+    color: #334155;
+    margin-top: 14px;
+    margin-bottom: 6px;
+  }
+  ul {
+    margin: 6px 0 12px 0;
+    padding-left: 20px;
+  }
+  li {
+    margin-bottom: 6px;
+  }
+  .box-grid {
+    background: #f8fafc;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin: 10px 0;
+  }
+  .box-row {
+    padding: 6px 0;
+    border-bottom: 1px dashed #e2e8f0;
+  }
+  .box-row:last-child {
+    border-bottom: none;
+  }
+  .badge {
+    display: inline-block;
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 700;
+  }
+  .b-white { background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; }
+  .b-red { background: #fee2e2; color: #b91c1c; }
+  .b-purple { background: #f3e8ff; color: #7e22ce; }
+  .b-yellow { background: #f1c40f; color: #000; }
+  .b-green  { background: #2ecc71; color: #fff; }
+  .b-gray   { background: #7f8c8d; color: #fff; }
+  .callout {
+    background: #fffbeb;
+    border-left: 4px solid #f59e0b;
+    padding: 10px 14px;
+    margin: 12px 0;
+    border-radius: 0 6px 6px 0;
+    font-size: 13px;
+    color: #92400e;
+  }
+  .group-box {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin: 8px 0;
+  }
+  .tag-title {
+    font-weight: 700;
+    color: #0f766e;
+  }
+  @media print {
+    body { background: #ffffff; padding: 0; }
+    .card { box-shadow: none; border: none; padding: 0; margin: 0; page-break-after: always; }
+    .card:last-child { page-break-after: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<div class="card">
+  <h1>Recall (리콜) – 개인 참조표 <span style="font-size: 14px; color: #64748b; font-weight: normal;">v1.0</span></h1>
+  <div class="banner">
+    자신의 차례가 되면 다음 중 <strong>반드시 하나</strong>를 수행해야 합니다: <strong>키카드 사용</strong> 또는 <strong>리콜</strong>
+  </div>
+
+  <h2>1. 키카드 사용</h2>
+  <ul>
+    <li>사용 가능한 키카드 1장을 개인판의 빈 공간에 꽂습니다.</li>
+    <li><strong>키카드의 효과</strong>와 해당 슬롯 위의 <strong>행동 상자 효과</strong>를 모두 활성화합니다.</li>
+    <li>모든 효과는 <strong>선택 사항</strong>이며, <strong>원하는 순서대로</strong> 처리할 수 있습니다.</li>
+  </ul>
+
+  <h3>행동 상자 효과 (기본 게임)</h3>
+  <div class="box-grid">
+    <div class="box-row"><strong style="color:#2563eb;">A:</strong> <strong>추종자 2명 획득</strong>; (선택) 수정을 지불하여 추종자를 최대 4명까지 추가 획득 <br><small style="color:#64748b; margin-left: 20px;">*(보드 위의 추종자를 제거하여 흰색 수정을 얻을 수도 있음)*</small></div>
+    <div class="box-row"><strong style="color:#2563eb;">B:</strong> <strong>2회 이동</strong>(또는 <span class="badge b-white">흰색</span>/<span class="badge b-red">빨간색</span>/<span class="badge b-purple">보라색</span> 수정 1개를 지불하여 <strong>3/4/5회 이동</strong>) 및 <strong>개발 액션 1회</strong> 수행</div>
+    <div class="box-row"><strong style="color:#2563eb;">C:</strong> <strong>물 이동 1회</strong> 및 <strong>개발 액션 1회</strong> 수행</div>
+    <div class="box-row"><strong style="color:#2563eb;">D:</strong> <strong>2회 이동</strong> / <strong>개발 액션 2회</strong> / <strong>1회 이동 & 개발 액션 1회</strong> 중 택1</div>
+    <div class="box-row"><strong style="color:#2563eb;">E:</strong> <strong>1회 이동</strong>, <strong>개발 액션 1회</strong> 수행, 내 영향력(추종자 또는 건물)이 있는 인접 <strong>지역 타일 1개 공개</strong> <br><small style="color:#64748b; margin-left: 20px;">*(새로 공개된 타일에 인접한 지역 타일에 영향력이 있는 플레이어마다 1점씩 획득)*</small></div>
+    <div class="box-row"><strong style="color:#2563eb;">F:</strong> <span class="badge b-white">흰색 수정 1개</span>를 지불하여 이미 키카드로 사용한 행동 상자 1개의 효과를 복사</div>
+  </div>
+
+  <h2>2. 리콜</h2>
+  <ul>
+    <li>사용한 모든 <strong>키카드를 회수</strong>합니다.</li>
+    <li>회수한 키카드 1장당 개인판의 <strong>공개된 생산 칸(<span style="color:#dc2626; font-weight:700;">빨간색 칸</span>) 1곳을 활성화</strong>합니다. <small style="color:#64748b;">(리콜당 각 칸 1회만 활성화 가능; 초록색 큐브로 표시)</small></li>
+    <li>모든 <strong>능력석을 개인판의 지정된 위치로 반환</strong>합니다.</li>
+  </ul>
+  <div class="callout">
+    <strong>참고:</strong> 리콜 도중에도 능력석 사용을 포함한 모든 자유 행동을 수행할 수 있습니다. 단, 능력석이 재충전(반환)된 후에는 이번 턴에 다시 사용할 수 없습니다.
+  </div>
+
+  <h2>자유 행동(<span style="font-size:13px; color:#64748b; font-weight:normal;">언제든, 횟수 제한 없음</span>)</h2>
+  <ul>
+    <li><strong>캡슐 사용:</strong> 캡슐 타일 1개를 공개하여 효과를 적용한 후 버립니다.</li>
+    <li><strong>크리스탈 교환:</strong> 한 종류 수정 3개 &rarr; 다음 상위 등급 수정 1개; 또는 수정을 1단계 하위 등급으로 낮추고 + 흰색 수정 1개 추가 획득</li>
+    <li><strong>능력석 사용:</strong> 능력석을 배치하여 <strong>부족</strong>, <strong>장치</strong>, 해금된 <strong>고대 부족 능력</strong>을 활성화합니다. <br><small style="color:#64748b;">동일 능력을 반복 활성화할 때마다 능력석이 1개씩 추가 소모됩니다 (리콜 후 초기화). 일부 능력은 항상 능력석 1개만 소모합니다.</small></li>
+  </ul>
+</div>
+
+<div class="card">
+  <h2>개발 액션</h2>
+  <ul>
+    <li>
+      <strong>내 추종자가 있는 칸에서 건설 또는 발굴 수행:</strong>
+      <div class="group-box">
+        <p style="margin: 0 0 6px 0; font-weight: 700;">👷 건설: <span style="font-weight: normal;">추종자 1명 제거 (해당 칸의 다른 플레이어 건물 1개당 +1명 추가 제거; 해당 플레이어는 그곳에 추종자 1명 획득); 필요시 수정 비용 지불</span></p>
+        <ul style="margin-bottom:0;">
+          <li><span class="tag-title">볼트:</span> 원하는 볼트 배치 및 보상 획득 (유물 큐브 보상 선택 시 메인보드 우측 하단에서 획득)</li>
+          <li><span class="tag-title">작업장:</span> 선택 지형(<span class="badge b-yellow">평야</span>, <span class="badge b-green">숲</span>, <span class="badge b-gray">산</span>)의 가장 아래쪽 작업장을 배치, 크리스탈 비용 지불, 일치하는 키카드 획득</li>
+          <li><span class="tag-title">기념비:</span> 가장 아래쪽 기념비 배치, 증가하는 <span class="badge b-purple">보라색 수정</span> 비용 지불, 보상 또는 게임 종료 점수 획득 <br><small style="color:#64748b;">- 미리 인쇄된 칸: 게임 종료 점수 / 지역 타일 칸: 첫 번째 배치 시 기념비 타일 및 보상</small></li>
+          <li><span class="tag-title">캠프:</span> 캠프 인접칸 건설 시 보상 획득. 건물 인접칸에 새 캠프 공개 시 소유자가 즉시 획득 (플레이어당 각 캠프에서 1회만)</li>
+        </ul>
+      </div>
+
+      <div class="group-box">
+        <p style="margin: 0; font-weight: 700;">⛏️ 발굴 : <span style="font-weight: normal;">추종자 1명 제거, 남은 스톤이 3/2/1개일 때 <span class="badge b-white">흰색</span>/<span class="badge b-red">빨간색</span>/<span class="badge b-purple">보라색</span> 수정 1개 지불, 능력석 1개 획득, 능력석과 색이 일치하는 <strong>지식 트랙에서 2/3/4칸 전진</strong></span></p>
+      </div>
+    </li>
+    <li style="margin-top: 8px;"><strong>크리스탈 업그레이드:</strong> 건설/발굴 대신 수정 1개를 다음 상위 등급으로 업그레이드합니다.</li>
+  </ul>
+
+  <h2>이동 </h2>
+  <ul>
+    <li>한 칸에서 인접한 칸으로 추종자 무리를 이동합니다(전부 또는 일부).</li>
+    <li>숫자는 총 이동 횟수를 나타냅니다 (원하는 대로 분할 이동 가능, 이동 중 다른 효과 처리 후 이동 안됨).</li>
+    <li>허용되지 않는 한 물, 화산, 미공개 타일로는 이동할 수 없습니다.</li>
+    <li><strong>물 이동:</strong> 연결된 물 칸를 가로질러 이동합니다(한 무리는 함께 이동, <strong>특별 물 이동</strong>시에만 나누어 이동 가능).</li>
+    <li><strong>유물 큐브:</strong> 해당 칸으로 처음 이동해 들어갈 때 추종자를 제거하여 <strong>반드시</strong> 획득해야 합니다(충분한 추종자가 없다면 통과 안됨).</li>
+  </ul>
+
+  <h2>라운드 종료 </h2>
+  <ul>
+    <li>모래시계를 전진시키고, 수정 보관 한도(종류당 최대 6개) 확인, 액션 표시 초록색 큐브를 모두 제거합니다.</li>
+    <li><strong>특별 라운드:</strong> 갈색  칸에 도달하면 진행
+      <ul style="margin-top: 4px;">
+        <li><strong>길 선택 :</strong> 각 플레이어(시계 방향)는 길 카드 2장 중 1장을 선택하고 연결된 보너스 칩 보상을 즉시 획득합니다.</li>
+        <li><strong>목표 카드 버리기 :</strong> 각 플레이어(시계 방향)는 목표 카드 2장 중 1장을 버리고 하단에 표시된 보상을 즉시 받습니다.</li>
+      </ul>
+    </li>
+  </ul>
+</div>
+
+</body>
+</html>
