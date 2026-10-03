@@ -1,0 +1,1583 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>록 하드: 1977 (Rock Hard: 1977) – 매뉴얼 & 공식 에라타</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    @page {
+      size: A4 portrait;
+      margin: 15mm;
+    }
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Noto Sans KR', sans-serif;
+      font-size: 13.5px;
+      line-height: 1.6;
+      color: #1e293b;
+      background-color: #f1f5f9;
+      margin: 0;
+      padding: 16px;
+    }
+
+    /* 상단 고정 내비게이션 & 검색창 */
+    .top-nav-bar {
+      position: sticky;
+      top: 10px;
+      z-index: 1000;
+      max-width: 860px;
+      margin: 0 auto 16px auto;
+    }
+    .top-nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      background: rgba(255, 255, 255, 0.97);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      padding: 8px 14px;
+      border-radius: 12px;
+      border: 1px solid #cbd5e1;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+      flex-wrap: wrap;
+    }
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .btn-home {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      background-color: #0f172a;
+      color: #f8fafc;
+      text-decoration: none;
+      font-size: 12.5px;
+      font-weight: 700;
+      border-radius: 7px;
+      border: 1px solid #334155;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+    .btn-home:hover {
+      background-color: #1e293b;
+      color: #fbbf24;
+      border-color: #d97706;
+      transform: translateY(-1px);
+    }
+    .badge-rock {
+      background: #fef3c7;
+      color: #b45309;
+      border: 1px solid #fde68a;
+      font-size: 11px;
+      font-weight: 800;
+      padding: 2px 7px;
+      border-radius: 4px;
+      white-space: nowrap;
+    }
+
+    .search-box {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      border-radius: 7px;
+      padding: 3px 8px;
+      flex: 1;
+      min-width: 200px;
+      max-width: 380px;
+      transition: all 0.2s;
+    }
+    .search-box:focus-within {
+      border-color: #d97706;
+      background: #ffffff;
+      box-shadow: 0 0 0 2px rgba(217, 119, 6, 0.2);
+    }
+    .search-icon {
+      font-size: 13px;
+      color: #64748b;
+      user-select: none;
+    }
+    #searchInput {
+      border: none;
+      background: transparent;
+      outline: none;
+      font-family: inherit;
+      font-size: 13px;
+      color: #0f172a;
+      width: 100%;
+      min-width: 60px;
+    }
+    .search-count {
+      font-size: 11px;
+      color: #b45309;
+      font-weight: 700;
+      white-space: nowrap;
+      user-select: none;
+    }
+    .search-nav-btn {
+      border: 1px solid #cbd5e1;
+      background: #ffffff;
+      border-radius: 4px;
+      cursor: pointer;
+      padding: 2px 6px;
+      font-size: 10px;
+      color: #334155;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
+      height: 22px;
+      transition: all 0.15s;
+    }
+    .search-nav-btn:hover:not(:disabled) {
+      background: #fef3c7;
+      border-color: #d97706;
+      color: #b45309;
+    }
+    .search-nav-btn:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+    .search-clear-btn {
+      border: none;
+      background: transparent;
+      color: #94a3b8;
+      cursor: pointer;
+      font-size: 14px;
+      padding: 0 2px;
+      display: none;
+      line-height: 1;
+    }
+    .search-clear-btn:hover {
+      color: #ef4444;
+    }
+
+    /* 탭 메뉴 */
+    .tab-bar {
+      display: flex;
+      gap: 6px;
+      max-width: 860px;
+      margin: 0 auto 16px auto;
+      overflow-x: auto;
+      padding-bottom: 2px;
+    }
+    .tab-btn {
+      padding: 8px 14px;
+      border: 1px solid #cbd5e1;
+      background: #ffffff;
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 700;
+      color: #475569;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .tab-btn:hover {
+      background: #f8fafc;
+      color: #0f172a;
+      border-color: #94a3b8;
+    }
+    .tab-btn.active {
+      background: #0f172a;
+      color: #fbbf24;
+      border-color: #0f172a;
+      box-shadow: 0 2px 8px rgba(15, 23, 42, 0.2);
+    }
+    .tab-count {
+      font-size: 11px;
+      padding: 1px 5px;
+      border-radius: 10px;
+      background: #e2e8f0;
+      color: #475569;
+    }
+    .tab-btn.active .tab-count {
+      background: #d97706;
+      color: #ffffff;
+    }
+
+    /* 카드 컨테이너 */
+    .card {
+      background: #ffffff;
+      max-width: 860px;
+      margin: 0 auto 24px auto;
+      padding: 32px 36px;
+      border-radius: 14px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+      border: 1px solid #e2e8f0;
+    }
+
+    /* 히어로 헤더 */
+    .game-hero {
+      border-bottom: 2px solid #0f172a;
+      padding-bottom: 18px;
+      margin-bottom: 24px;
+    }
+    .game-hero-title {
+      font-size: 26px;
+      font-weight: 900;
+      color: #0f172a;
+      margin: 0 0 6px 0;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .game-hero-subtitle {
+      font-size: 14px;
+      color: #64748b;
+      margin: 0 0 12px 0;
+    }
+    .meta-pills {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .pill {
+      font-size: 12px;
+      font-weight: 700;
+      padding: 3px 9px;
+      border-radius: 6px;
+      background: #f1f5f9;
+      color: #334155;
+      border: 1px solid #cbd5e1;
+    }
+    .pill.accent {
+      background: #fef3c7;
+      color: #b45309;
+      border-color: #fde68a;
+    }
+    .pill.red {
+      background: #fee2e2;
+      color: #b91c1c;
+      border-color: #fecaca;
+    }
+
+    /* 바로가기 목차 칩 */
+    .shortcut-nav {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 12px 14px;
+      margin-bottom: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .shortcut-nav-title {
+      font-size: 12.5px;
+      font-weight: 800;
+      color: #475569;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .shortcut-chips-wrap {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .chip-link {
+      font-size: 12px;
+      font-weight: 600;
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      padding: 4px 9px;
+      border-radius: 6px;
+      color: #334155;
+      text-decoration: none;
+      transition: all 0.15s ease;
+    }
+    .chip-link:hover {
+      background: #fef3c7;
+      border-color: #d97706;
+      color: #b45309;
+      transform: translateY(-1px);
+    }
+
+    /* 본문 섹션 타이틀 */
+    h2.section-header {
+      font-size: 18px;
+      font-weight: 900;
+      color: #0f172a;
+      margin: 32px 0 14px 0;
+      padding-left: 10px;
+      border-left: 5px solid #d97706;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    h3 {
+      font-size: 15px;
+      font-weight: 800;
+      color: #1e293b;
+      margin: 20px 0 8px 0;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* 섹션 앵커 타겟 스크롤 & 플래시 */
+    :target {
+      scroll-margin-top: 80px;
+      animation: target-flash 1.8s ease;
+    }
+    @keyframes target-flash {
+      0% { background-color: rgba(254, 240, 138, 0.7); }
+      100% { background-color: transparent; }
+    }
+
+    /* 검색 하이라이트 */
+    mark.search-highlight {
+      background-color: #fef08a;
+      color: #854d0e;
+      padding: 1px 3px;
+      border-radius: 3px;
+      transition: background-color 0.2s;
+    }
+    mark.search-highlight.active-match {
+      background-color: #ea580c;
+      color: #ffffff;
+      outline: 2px solid #c2410c;
+    }
+
+    /* 정보 상자들 */
+    .callout {
+      border-radius: 8px;
+      padding: 12px 16px;
+      margin: 12px 0 16px 0;
+      font-size: 13.5px;
+      line-height: 1.6;
+    }
+    .callout-info {
+      background: #eff6ff;
+      border-left: 4px solid #3b82f6;
+      color: #1e40af;
+    }
+    .callout-warning {
+      background: #fffbeb;
+      border-left: 4px solid #f59e0b;
+      color: #92400e;
+    }
+    .callout-danger {
+      background: #fef2f2;
+      border-left: 4px solid #ef4444;
+      color: #991b1b;
+    }
+    .callout-rock {
+      background: #f8fafc;
+      border-left: 4px solid #0f172a;
+      color: #0f172a;
+    }
+
+    /* 그리드 및 표 */
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+      margin: 14px 0 20px 0;
+    }
+    .stat-card {
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      border-radius: 10px;
+      padding: 14px;
+      transition: all 0.2s ease;
+    }
+    .stat-card:hover {
+      border-color: #d97706;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+    }
+    .stat-knob-val {
+      font-size: 22px;
+      font-weight: 900;
+      color: #d97706;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .stat-title {
+      font-size: 14px;
+      font-weight: 800;
+      color: #0f172a;
+      margin-bottom: 4px;
+    }
+    .stat-desc {
+      font-size: 12.5px;
+      color: #475569;
+      line-height: 1.5;
+    }
+
+    /* 규칙 리스트 */
+    ul.rule-list {
+      margin: 8px 0 16px 0;
+      padding-left: 20px;
+    }
+    ul.rule-list li {
+      margin-bottom: 8px;
+    }
+
+    /* 에라타 비교 카드 */
+    .errata-card {
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 10px;
+      padding: 18px;
+      margin-bottom: 16px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+      transition: all 0.2s ease;
+    }
+    .errata-card:hover {
+      border-color: #ef4444;
+      box-shadow: 0 4px 12px rgba(239, 68, 68, 0.1);
+    }
+    .errata-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+    }
+    .errata-title {
+      font-size: 15px;
+      font-weight: 800;
+      color: #0f172a;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .errata-compare {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin: 10px 0;
+    }
+    @media (max-width: 640px) {
+      .errata-compare { grid-template-columns: 1fr; }
+    }
+    .compare-box {
+      padding: 10px 14px;
+      border-radius: 7px;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+    .compare-before {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      color: #991b1b;
+    }
+    .compare-after {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      color: #166534;
+    }
+    .compare-label {
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+      display: block;
+    }
+    .designer-comment {
+      font-size: 12.5px;
+      color: #475569;
+      background: #f8fafc;
+      border-left: 3px solid #64748b;
+      padding: 8px 12px;
+      border-radius: 0 6px 6px 0;
+      margin-top: 8px;
+    }
+
+    /* 시뮬레이터 & 도구 */
+    .tool-box {
+      background: #0f172a;
+      color: #f8fafc;
+      border-radius: 12px;
+      padding: 24px;
+      margin: 16px 0 24px 0;
+      box-shadow: 0 6px 20px rgba(15, 23, 42, 0.25);
+    }
+    .tool-title {
+      font-size: 17px;
+      font-weight: 900;
+      color: #fbbf24;
+      margin: 0 0 14px 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .sim-controls {
+      display: flex;
+      gap: 14px;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+    .sim-label {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: #e2e8f0;
+    }
+    .dial-select {
+      background: #1e293b;
+      color: #fbbf24;
+      border: 2px solid #d97706;
+      border-radius: 8px;
+      padding: 8px 14px;
+      font-size: 15px;
+      font-weight: 800;
+      font-family: inherit;
+      cursor: pointer;
+      outline: none;
+    }
+    .btn-roll {
+      background: #d97706;
+      color: #ffffff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 800;
+      font-family: inherit;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s ease;
+    }
+    .btn-roll:hover {
+      background: #b45309;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(217, 119, 6, 0.4);
+    }
+    .dice-result-panel {
+      background: #1e293b;
+      border-radius: 10px;
+      padding: 16px;
+      border: 1px solid #334155;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      min-height: 80px;
+    }
+    .dice-face {
+      font-size: 40px;
+      line-height: 1;
+      width: 56px;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #ffffff;
+      border-radius: 10px;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.3);
+    }
+    .dice-text {
+      flex: 1;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    /* 메모 관리 탭 스타일 */
+    .note-form {
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      border-radius: 10px;
+      padding: 18px;
+      margin-bottom: 24px;
+    }
+    .form-row {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+    .form-input, .form-select, .form-textarea {
+      font-family: inherit;
+      font-size: 13.5px;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      padding: 8px 12px;
+      background: #ffffff;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .form-input:focus, .form-select:focus, .form-textarea:focus {
+      border-color: #d97706;
+      box-shadow: 0 0 0 2px rgba(217, 119, 6, 0.15);
+    }
+    .form-textarea {
+      width: 100%;
+      min-height: 80px;
+      resize: vertical;
+    }
+    .btn-save-note {
+      background: #0f172a;
+      color: #fbbf24;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s;
+    }
+    .btn-save-note:hover {
+      background: #1e293b;
+      transform: translateY(-1px);
+    }
+    .notes-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .note-item {
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 14px 16px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+    }
+    .note-item-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+    .note-item-title {
+      font-size: 14px;
+      font-weight: 800;
+      color: #0f172a;
+    }
+    .btn-delete-note {
+      background: none;
+      border: none;
+      color: #94a3b8;
+      cursor: pointer;
+      font-size: 12px;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+    .btn-delete-note:hover {
+      color: #ef4444;
+      background: #fee2e2;
+    }
+    .note-meta {
+      font-size: 11.5px;
+      color: #64748b;
+      margin-bottom: 6px;
+    }
+    .note-content-text {
+      font-size: 13px;
+      color: #334155;
+      white-space: pre-wrap;
+      line-height: 1.5;
+    }
+
+    /* 인쇄 전용 스타일 */
+    @media print {
+      body {
+        background: #ffffff;
+        padding: 0;
+        font-size: 12px;
+      }
+      .top-nav-bar, .tab-bar, .shortcut-nav, .tool-box, .note-form, .btn-delete-note, .search-nav-btn, .search-clear-btn {
+        display: none !important;
+      }
+      .card {
+        box-shadow: none;
+        border: none;
+        padding: 0;
+        margin: 0;
+        max-width: 100%;
+      }
+      .tab-content {
+        display: block !important;
+      }
+      h2.section-header {
+        page-break-before: auto;
+      }
+    }
+
+    @media (max-width: 600px) {
+      body { padding: 8px; }
+      .card { padding: 20px 16px; }
+      .top-nav-inner { flex-direction: column; align-items: stretch; }
+      .search-box { max-width: 100%; }
+      .stat-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 상단 네비게이션 및 검색 -->
+  <div class="top-nav-bar">
+    <div class="top-nav-inner">
+      <div class="nav-left">
+        <a href="index.html" class="btn-home" title="보드게임 참조표 허브로 이동">← 참조표 목록</a>
+        <span class="badge-rock">🎸 Rock Hard: 1977</span>
+      </div>
+
+      <div class="search-box">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="searchInput" placeholder="규칙, 에라타, 캔디, 긱 검색..." autocomplete="off">
+        <span id="searchCount" class="search-count"></span>
+        <button type="button" id="prevMatch" class="search-nav-btn" title="이전 결과 (Shift+Enter)" disabled>▲</button>
+        <button type="button" id="nextMatch" class="search-nav-btn" title="다음 결과 (Enter)" disabled>▼</button>
+        <button type="button" id="clearSearch" class="search-clear-btn" title="검색어 지우기">✕</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 탭 메뉴 -->
+  <div class="tab-bar">
+    <button type="button" class="tab-btn active" data-tab="tab-manual">
+      <span>📖 규칙 및 참조표</span>
+    </button>
+    <button type="button" class="tab-btn" data-tab="tab-errata">
+      <span>⚠️ 공식 에라타 & FAQ</span>
+      <span class="tab-count">5</span>
+    </button>
+    <button type="button" class="tab-btn" data-tab="tab-tools">
+      <span>🎲 슈가 크래시 주사위</span>
+    </button>
+    <button type="button" class="tab-btn" data-tab="tab-notes">
+      <span>📝 하우스 룰 & 메모</span>
+      <span id="notesBadge" class="tab-count">0</span>
+    </button>
+  </div>
+
+  <div class="card">
+    <!-- 히어로 헤더 -->
+    <div class="game-hero">
+      <h1 class="game-hero-title">
+        <span>🎸 록 하드: 1977</span>
+        <span style="font-size: 18px; color:#64748b; font-weight:700;">(Rock Hard: 1977)</span>
+      </h1>
+      <p class="game-hero-subtitle">1977년 로스앤젤레스 록 씬에서 전설적인 록 스타로 거듭나기 위한 치열한 음악 커리어 매니지먼트</p>
+      <div class="meta-pills">
+        <span class="pill">👥 2~5인</span>
+        <span class="pill">⏱️ 45~90분</span>
+        <span class="pill">🎯 일꾼 놓기 / 커리어 경영</span>
+        <span class="pill accent">⚡ 디자이너: 재키 폭스 (The Runaways)</span>
+        <span class="pill red">⚠️ 최신 에라타 v1.0 반영</span>
+      </div>
+    </div>
+
+    <!-- TAB 1: 규칙 및 참조표 (Manual & Aid) -->
+    <div id="tab-manual" class="tab-content">
+      <!-- 목차 바로가기 -->
+      <div class="shortcut-nav">
+        <div class="shortcut-nav-title">⚡ 빠른 섹션 바로가기:</div>
+        <div class="shortcut-chips-wrap">
+          <a href="#sec-overview" class="chip-link">1. 개요 & 앰프 보드</a>
+          <a href="#sec-stats" class="chip-link">2. 3대 능력치 (0~11)</a>
+          <a href="#sec-daytime" class="chip-link">3. 낮 페이즈 (직업/계약)</a>
+          <a href="#sec-nighttime" class="chip-link">4. 밤 페이즈 (공연 긱)</a>
+          <a href="#sec-afterhours" class="chip-link">5. 심야 페이즈 (행아웃)</a>
+          <a href="#sec-candy" class="chip-link">6. 캔디 & 슈가 크래시</a>
+          <a href="#sec-scoring" class="chip-link">7. 게임 종료 & 점수</a>
+        </div>
+      </div>
+
+      <!-- 1. 개요 및 세팅 -->
+      <section id="sec-overview">
+        <h2 class="section-header">1. 게임 개요 및 핵심 컴포넌트 세팅</h2>
+        <div class="callout callout-rock">
+          <strong>🏆 승리 조건:</strong> 4월부터 12월까지 총 9라운드(개월) 동안 활동하며 가장 많은 <strong>명성(Fame)</strong>을 모은 플레이어가 승리합니다. 라운드 도중 누군가 <strong>50 Fame</strong>에 도달하면 해당 라운드를 완전히 끝마치고 최종 점수를 결산합니다.
+        </div>
+
+        <h3>🎛️ 앰프 개인판 (Amplifier Player Board)</h3>
+        <p>각 플레이어는 실제 일렉트릭 기타/베이스 앰프를 모티브로 한 개인 보드를 사용합니다. 상단의 볼륨/톤 노브처럼 <strong>0부터 최대 11까지</strong> 올라가는 다이얼 노브를 돌려 능력치를 기록합니다.</p>
+        
+        <h3>💼 주요 시작 카드 및 컴포넌트</h3>
+        <ul class="rule-list">
+          <li><strong>낮 직업 카드 (Day Job):</strong> 밴드 활동 초기의 생계를 위한 직업입니다. 낮 페이즈에 출근하여 급여($)를 받습니다. 결근이 누적되면 해고될 수 있습니다.</li>
+          <li><strong>매니저 카드 (Manager, 총 6장):</strong> 밴드의 성장을 돕는 전문 매니저입니다. 강력한 혜택을 주지만 매달 급여를 지불해야 하며, 미지급 시 명성 감점을 받습니다.</li>
+          <li><strong>개인 목표 카드 (Personal Goals, 총 21장):</strong> 게임 종료 시 특정 조건(스탯, 공연 횟수, 음반 계약 등)을 달성했을 때 보너스 명성을 제공합니다.</li>
+          <li><strong>시작 플레이어 결정:</strong> 공식 규칙에 따르면 <em>"가장 최근에 샤워하면서 노래를 부른 사람"</em>이 선 플레이어 토큰을 받습니다.</li>
+        </ul>
+      </section>
+
+      <!-- 2. 3대 능력치 -->
+      <section id="sec-stats">
+        <h2 class="section-header">2. 3대 기본 능력치 및 다이얼 시스템 (Knobs to 11)</h2>
+        <p>음악계에서 성공하기 위해서는 세 가지 핵심 능력치를 균형 있게 육성해야 합니다. 각 능력치는 앰프 노브를 돌려 관리합니다.</p>
+
+        <div class="stat-grid">
+          <div class="stat-card">
+            <div class="stat-knob-val"><span>0 ~ 11</span><span>🎸</span></div>
+            <div class="stat-title">연주력 (Chops)</div>
+            <div class="stat-desc">악기 연주 및 가창 기량입니다. 상위 등급의 대형 공연(Gig)을 따내거나 유명 레코드사와 계약하기 위한 필수 조건입니다.</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-knob-val"><span>0 ~ 11</span><span>⭐</span></div>
+            <div class="stat-title">평판 (Reputation)</div>
+            <div class="stat-desc">팬덤과 음악 씬에서의 인지도입니다. 라디오 방송, 언론 홍보, 클럽 행아웃을 통해 상승하며 관객 동원력의 기준이 됩니다.</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-knob-val"><span>0 ~ 11</span><span>🎵</span></div>
+            <div class="stat-title">작곡력 (Songs)</div>
+            <div class="stat-desc">보유한 오리지널 곡의 수와 완성도입니다. 데모 테이프 제작 및 음반사 계약 시 로열티 수익을 좌우하는 핵심 밑천입니다.</div>
+          </div>
+        </div>
+
+        <div class="callout callout-warning">
+          <strong>🔥 "This Goes to 11" 한계 돌파 보너스:</strong> 일반적인 10점을 넘어 전설의 수치인 <strong>11</strong>까지 도달한 각 능력치(Chops, Reputation, Songs)마다 게임 종료 시 막대한 추가 명성 보너스를 획득합니다!
+        </div>
+      </section>
+
+      <!-- 3. 낮 페이즈 -->
+      <section id="sec-daytime">
+        <h2 class="section-header">3. 페이즈 1: 낮 (Daytime)</h2>
+        <p>낮에는 밴드의 전문성을 갈고닦고 생활비를 버는 활동을 진행합니다. 기본적으로 일꾼 1명을 배치하여 1개의 행동을 수행합니다.</p>
+
+        <ul class="rule-list">
+          <li><strong>직업 출근 (Work):</strong> 자신의 직업 카드에 일꾼을 놓아 급여($)를 받습니다. <br>
+            <span style="color:#b91c1c; font-weight:700;">※ 중요 제한:</span> 캔디를 사용해 추가 행동을 하더라도, 직업 출근(Work)은 <strong>한 라운드에 최대 1회만</strong> 가능합니다.
+          </li>
+          <li><strong>합주 및 연습 (Rehearsal):</strong> 연습실을 대여하여 합주를 진행하고 <strong>연주력(Chops)</strong> 다이얼을 올립니다. (2~3인 플레이 시 전용 슬롯 규칙 적용)</li>
+          <li><strong>라디오 & 홍보 (Radio Station & PR):</strong> 방송국을 찾아가 신곡을 틀거나 홍보 담당자(Publicist)를 고용하여 <strong>평판(Reputation)</strong>을 상승시킵니다.</li>
+          <li><strong>크루 고용 (Hire Crew):</strong> 사운드 엔지니어, 로디 등 밴드를 서포트할 전문 인력을 고용합니다. <br>
+            <span style="color:#b91c1c; font-weight:700;">※ 중요 제한:</span> 크루 고용은 <strong>한 페이즈에 최대 1회만</strong> 가능합니다.
+          </li>
+          <li><strong>음반사 계약 (Record Deals):</strong> 요구되는 Chops, Songs, Demo 테이프 조건을 충족하여 인디/메이저 레이블과 음반 계약을 맺고, 이후 매달 수익을 창출하는 로열티 트랙을 개시합니다.</li>
+        </ul>
+      </section>
+
+      <!-- 4. 밤 페이즈 -->
+      <section id="sec-nighttime">
+        <h2 class="section-header">4. 페이즈 2: 밤 (Nighttime)</h2>
+        <p>밤은 록 스타로서의 진가를 증명하는 무대의 시간입니다. 관객 앞에서 열정적인 공연을 펼칩니다.</p>
+
+        <ul class="rule-list">
+          <li><strong>공연 (Play Gigs):</strong> 로컬 펍, 라이브 하우스, 뮤직 홀, 대형 스타디움 등 다양한 베뉴에서 공연을 진행합니다.
+            <ul>
+              <li>각 공연 장소마다 요구하는 최소 연주력(Chops)과 평판(Reputation)이 있습니다.</li>
+              <li>공연을 성공시키면 장소 규모에 비례하여 막대한 <strong>돈($)</strong>과 <strong>명성(Fame)</strong>을 즉시 획득합니다.</li>
+              <li><span style="color:#b91c1c; font-weight:700;">※ 중요 제한:</span> 캔디를 사용하더라도 공연(Gig)은 <strong>한 라운드에 최대 1회만</strong> 진행할 수 있습니다.</li>
+            </ul>
+          </li>
+          <li><strong>야간 합주 (Night Rehearsal):</strong> 공연을 뛸 자격이 부족하거나 기회가 마땅치 않을 때 야간 추가 연습을 통해 Chops를 보충할 수 있습니다.</li>
+        </ul>
+      </section>
+
+      <!-- 5. 심야 페이즈 -->
+      <section id="sec-afterhours">
+        <h2 class="section-header">5. 페이즈 3: 심야 (After Hours)</h2>
+        <p>공연이 끝난 깊은 밤, 유명 클럽에서 사교 활동을 펼치고 데모를 녹음하며 다음 라운드를 도모합니다.</p>
+
+        <ul class="rule-list">
+          <li><strong>행아웃 (Hangouts at Hot Clubs):</strong> 당대 가장 핫한 나이트클럽과 바를 방문하여 셀럽 및 인맥을 만나고 홍보 혜택, 보너스 카드를 얻습니다.
+            <div class="callout callout-warning">
+              <strong>⚠️ 에라타 주의:</strong> 캔디를 써서 심야에 여러 클럽을 연속 방문하더라도, <strong>최종적으로 턴을 마친(마지막에 머무른) 장소의 Fame 보너스만</strong> 1회 받습니다!
+            </div>
+          </li>
+          <li><strong>데모 테이프 녹음 (Cut a Demo):</strong> 녹음실에서 데모 테이프를 제작합니다. 음반 계약 협상 시 필수적이거나 결정적인 가산점을 줍니다.</li>
+          <li><strong>턴 순서 재배치:</strong> 심야 페이즈에서 머무른 장소의 우선순위에 따라 <strong>다음 라운드(다음 달)의 턴 순서</strong>가 결정됩니다.</li>
+        </ul>
+      </section>
+
+      <!-- 6. 캔디 & 슈가 크래시 -->
+      <section id="sec-candy">
+        <h2 class="section-header">6. 캔디(Candy) & 슈가 러시 / 크래시 시스템</h2>
+        <div class="callout callout-danger">
+          <strong>🍬 캔디(Candy)의 테마적 의미:</strong> 70년대 록 씬의 에너지 부스터(각성제/약물)를 은유한 핵심 메커니즘입니다. 달콤한 추가 행동을 제공하지만, 과도하게 섭취하면 처참한 <strong>슈가 크래시(Sugar Crash)</strong> 페널티가 기다립니다.
+        </div>
+
+        <h3>섭취 및 슈가 러시 (Sugar Rush)</h3>
+        <p>어떤 페이즈에서든 기본 행동 외에 추가 행동을 원할 경우 캔디 1개를 소비할 수 있습니다.</p>
+        <ol style="margin-left: 20px; line-height: 1.8;">
+          <li>앰프 보드의 <strong>갈망(Craving)</strong> 다이얼을 <strong>+1</strong> 올립니다.</li>
+          <li><strong>슈가 러시(Sugar Rush)</strong> 카드 덱에서 1장을 뽑아 효과(추가 행동 등)를 적용합니다.</li>
+          <li>섭취 즉시 6면체 주사위(D6) 1개를 굴려 <strong>슈가 크래시 판정</strong>을 수행합니다.</li>
+        </ol>
+
+        <h3>💥 슈가 크래시 판정 및 페널티</h3>
+        <ul class="rule-list">
+          <li><strong>판정 공식:</strong> <span style="background:#fee2e2; color:#b91c1c; font-weight:800; padding:2px 6px; border-radius:4px;">주사위 눈금 &lt; 현재 Craving 다이얼 수치</span> 이면 즉시 크래시 발생!</li>
+          <li><strong>페널티:</strong> 몸이 탈진하여 <strong>다음 라운드의 낮 페이즈(Daytime)를 통째로 스킵</strong>하고 휴식해야 합니다! (출근 불가로 급여 손실 및 커리어 지연 발생)</li>
+        </ul>
+
+        <h3>🚫 3대 절대 제한 규칙 (No Candy Icon)</h3>
+        <p>캔디를 아무리 많이 소모해도 아래 3가지 행동은 절대 중복할 수 없습니다:</p>
+        <ul class="rule-list">
+          <li><strong>일(Work):</strong> 라운드당 최대 <strong>1회</strong></li>
+          <li><strong>공연(Gig):</strong> 라운드당 최대 <strong>1회</strong></li>
+          <li><strong>크루 고용(Hire Crew):</strong> 페이즈당 최대 <strong>1회</strong></li>
+        </ul>
+      </section>
+
+      <!-- 7. 점수 계산 -->
+      <section id="sec-scoring">
+        <h2 class="section-header">7. 게임 종료 조건 및 최종 점수 계산</h2>
+        <p>9라운드(12월)가 종료되거나 어떤 플레이어가 50 Fame에 도달한 라운드를 마무리하면 게임이 종료됩니다.</p>
+
+        <div style="background:#f8fafc; border:1px solid #cbd5e1; border-radius:10px; padding:16px; margin:14px 0;">
+          <h3 style="margin-top:0;">📊 최종 명성(Fame) 결산 항목</h3>
+          <ul class="rule-list" style="margin-bottom:0;">
+            <li><strong>기본 명성 점수:</strong> 게임 진행 중 획득하여 트랙에 기록된 점수</li>
+            <li><strong>11 스탯 보너스:</strong> 한계치인 11에 도달한 각 능력치(Chops, Reputation, Songs)당 추가 보너스 점수</li>
+            <li><strong>프로덕션 / 퍼포먼스 / 퍼블리시티 보너스:</strong> 관련 카드 및 트랙 달성도 보너스</li>
+            <li><strong>개인 목표 카드 (Personal Goals):</strong> 달성한 카드에 기재된 명성 점수</li>
+            <li><strong>잔여 재화 환산:</strong> 남은 현금($) 및 자원을 정해진 비율로 명성으로 변환</li>
+          </ul>
+        </div>
+      </section>
+    </div>
+
+    <!-- TAB 2: 공식 에라타 & FAQ -->
+    <div id="tab-errata" class="tab-content" style="display:none;">
+      <div class="callout callout-info">
+        <strong>📢 공식 에라타 출처:</strong> 디자이너 재키 폭스(Jackie Fox)가 BoardGameGeek 공식 에라타/FAQ 스레드(#3357849) 및 Devir Games를 통해 인정한 공식 정정 사항입니다.
+      </div>
+
+      <!-- 에라타 1: 컴포넌트 수량 -->
+      <div id="sec-errata-components" class="errata-card">
+        <div class="errata-header">
+          <div class="errata-title">
+            <span style="font-size:18px;">📦</span>
+            <span>1. 컴포넌트 수량 인쇄 오류 (Component Counts)</span>
+          </div>
+          <span class="pill red">규칙서 오기</span>
+        </div>
+        <p style="margin: 4px 0 8px 0; color:#475569;">규칙서의 구성물 목록에 적힌 카드 수량과 실제 박스 내용물 간의 불일치 정정입니다.</p>
+        <div class="errata-compare">
+          <div class="compare-box compare-before">
+            <span class="compare-label">❌ 룰북 오기 표기</span>
+            매니저 카드 및 개인 목표 카드의 수량이 상이하게 인쇄됨
+          </div>
+          <div class="compare-box compare-after">
+            <span class="compare-label">✅ 실제 정상 컴포넌트 수량</span>
+            • <strong>매니저 카드 (Manager Cards): 6장</strong><br>
+            • <strong>개인 목표 카드 (Personal Goal Cards): 21장</strong>
+          </div>
+        </div>
+        <div class="designer-comment">
+          💬 <strong>디자이너 코멘트:</strong> "최종 인쇄 과정에서 수량 텍스트 교정이 누락되었습니다. 6장의 매니저 카드와 21장의 목표 카드가 있는 것이 완벽히 정상입니다."
+        </div>
+      </div>
+
+      <!-- 에라타 2: No Candy 아이콘 -->
+      <div id="sec-errata-rules" class="errata-card">
+        <div class="errata-header">
+          <div class="errata-title">
+            <span style="font-size:18px;">🚫</span>
+            <span>2. 'No Candy' (🚫🍬) 아이콘 의미 정정</span>
+          </div>
+          <span class="pill accent">아이콘 해석</span>
+        </div>
+        <p style="margin: 4px 0 8px 0; color:#475569;">보드판에 그려진 캔디 금지 기호의 오해를 바로잡는 핵심 규칙입니다.</p>
+        <div class="errata-compare">
+          <div class="compare-box compare-before">
+            <span class="compare-label">❌ 흔한 오해</span>
+            "캔디를 소지하고 있거나 캔디를 섭취한 플레이어는 이 행동 칸에 들어갈 수 없다"
+          </div>
+          <div class="compare-box compare-after">
+            <span class="compare-label">✅ 올바른 공식 규칙</span>
+            캔디 사용자의 진입을 막는 것이 아니라, <strong>"캔디로 추가 행동을 하더라도 이 행동은 라운드/페이즈당 1회만 가능함"</strong>을 경고하는 주의 플래그입니다.
+          </div>
+        </div>
+        <div class="designer-comment">
+          💬 <strong>디자이너 코멘트:</strong> "아이콘 디자인 선택이 아쉬웠던 부분입니다. 캔디 복용 금지가 아니라, 해당 액션을 캔디로 2번 이상 연타할 수 없다는 중복 방지 플래그입니다."
+        </div>
+      </div>
+
+      <!-- 에라타 3: 심야 행아웃 복수 방문 -->
+      <div class="errata-card">
+        <div class="errata-header">
+          <div class="errata-title">
+            <span style="font-size:18px;">🍸</span>
+            <span>3. 심야 행아웃(After-Hours Hangouts) 복수 방문 시 명성 규칙</span>
+          </div>
+          <span class="pill red">행동 판정</span>
+        </div>
+        <p style="margin: 4px 0 8px 0; color:#475569;">캔디를 사용해 여러 클럽을 방문할 때 명성(Fame) 획득 방식 정정입니다.</p>
+        <div class="errata-compare">
+          <div class="compare-box compare-before">
+            <span class="compare-label">❌ 잘못된 처리</span>
+            심야에 캔디를 먹으며 방문한 모든 클럽의 Fame 보너스를 각각 누적 획득
+          </div>
+          <div class="compare-box compare-after">
+            <span class="compare-label">✅ 올바른 공식 규칙</span>
+            심야 페이즈가 끝날 때 <strong>최종적으로 턴을 마친(마지막에 머무른) 장소 1곳의 Fame 보너스만</strong> 획득합니다.
+          </div>
+        </div>
+      </div>
+
+      <!-- FAQ 섹션 -->
+      <div id="sec-faq" class="errata-card">
+        <div class="errata-header">
+          <div class="errata-title">
+            <span style="font-size:18px;">❓</span>
+            <span>4. 공식 FAQ 및 카드 텍스트 정정</span>
+          </div>
+          <span class="pill">Q&A 모음</span>
+        </div>
+
+        <div style="margin-top:10px;">
+          <h4 style="margin: 10px 0 4px 0; color:#1e293b; font-size:14px;">Q1. 카드에 적힌 "모든 플레이어(All Players)"의 대상은?</h4>
+          <p style="font-size:13px; color:#475569; margin: 0 0 10px 0;">
+            일부 이벤트 및 매니저 카드에 "All Players"로 기재되어 있으나, 카드를 사용한 본인을 제외한 <strong>"모든 상대방(All Opponents)"</strong>으로 적용해야 의도된 게임 밸런스에 맞습니다.
+          </p>
+
+          <h4 style="margin: 10px 0 4px 0; color:#1e293b; font-size:14px;">Q2. 랜덤 긱(Random Gig) 카드의 무한대(∞) 기호는 무엇인가요?</h4>
+          <p style="font-size:13px; color:#475569; margin: 0 0 10px 0;">
+            메인 게임 보드에는 해당 심볼이 없더라도 카드 자체에 무한대 기호가 인쇄되어 있다면, 카드의 설명에 따라 지속/무제한 혜택으로 정상 처리합니다.
+          </p>
+
+          <h4 style="margin: 10px 0 4px 0; color:#1e293b; font-size:14px;">Q3. 2~3인 플레이 시 합주실(Rehearsal) 칸은 어떻게 쓰나요?</h4>
+          <p style="font-size:13px; color:#475569; margin: 0;">
+            보드에 표시된 2~3인 전용 덮개 또는 표시 구획을 준수하며, 인원수에 맞춰 제한된 연습실 칸만 개방됩니다.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 3: 슈가 크래시 & 다이얼 도구 -->
+    <div id="tab-tools" class="tab-content" style="display:none;">
+      <div class="tool-box">
+        <div class="tool-title">
+          <span>🎲 슈가 크래시(Sugar Crash) 주사위 판정기</span>
+        </div>
+        <p style="font-size:13px; color:#cbd5e1; margin: 0 0 16px 0;">
+          캔디를 섭취할 때마다 Craving을 올리고 주사위를 굴려 크래시 여부를 즉시 판정하세요!
+        </p>
+
+        <div class="sim-controls">
+          <span class="sim-label">현재 갈망(Craving) 다이얼:</span>
+          <select id="simCravingSelect" class="dial-select">
+            <option value="1">1 (완전 안전: 0%)</option>
+            <option value="2">2 (위험도: 16.7%)</option>
+            <option value="3">3 (위험도: 33.3%)</option>
+            <option value="4" selected>4 (위험도: 50.0%)</option>
+            <option value="5">5 (위험도: 66.7%)</option>
+            <option value="6">6 (위험도: 83.3%)</option>
+            <option value="7">7 (극도로 위험)</option>
+            <option value="8">8 (극도로 위험)</option>
+            <option value="9">9 (극도로 위험)</option>
+            <option value="10">10 (치명적)</option>
+            <option value="11">11 (최대 한계치)</option>
+          </select>
+          <button type="button" id="btnRollDice" class="btn-roll">
+            <span>🎲 주사위 굴리기 (Roll D6)</span>
+          </button>
+        </div>
+
+        <div id="diceResultBox" class="dice-result-panel">
+          <div id="diceFace" class="dice-face">🎲</div>
+          <div id="diceStatusText" class="dice-text">
+            <strong>주사위를 굴려보세요!</strong><br>
+            <span style="color:#94a3b8;">주사위 눈금이 현재 Craving 수치보다 작으면(&lt;) 슈가 크래시가 발생합니다.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 간이 점수 계산기 -->
+      <div style="background:#ffffff; border:1px solid #cbd5e1; border-radius:12px; padding:20px;">
+        <h3 style="margin-top:0; color:#0f172a;">🧮 최종 명성(Fame) 간이 계산기</h3>
+        <p style="font-size:13px; color:#64748b; margin-bottom:14px;">게임 종료 시 점수 항목들을 입력하여 총 명성을 자동 합산합니다.</p>
+
+        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap:12px; margin-bottom:14px;">
+          <div>
+            <label style="font-size:12px; font-weight:700; color:#475569; display:block; margin-bottom:4px;">트랙 기본 명성</label>
+            <input type="number" id="calcTrackFame" class="form-input" style="width:100%;" value="0" min="0">
+          </div>
+          <div>
+            <label style="font-size:12px; font-weight:700; color:#475569; display:block; margin-bottom:4px;">11 달성 스탯 개수 (각 +Fame)</label>
+            <select id="calcElevenCount" class="form-select" style="width:100%;">
+              <option value="0">0개 (0점)</option>
+              <option value="5">1개 달성 (+5점)</option>
+              <option value="10">2개 달성 (+10점)</option>
+              <option value="15">3개 올맥스 (+15점)</option>
+            </select>
+          </div>
+          <div>
+            <label style="font-size:12px; font-weight:700; color:#475569; display:block; margin-bottom:4px;">개인 목표 카드 점수</label>
+            <input type="number" id="calcGoalFame" class="form-input" style="width:100%;" value="0" min="0">
+          </div>
+          <div>
+            <label style="font-size:12px; font-weight:700; color:#475569; display:block; margin-bottom:4px;">보너스 및 잔여 자원 점수</label>
+            <input type="number" id="calcBonusFame" class="form-input" style="width:100%;" value="0" min="0">
+          </div>
+        </div>
+
+        <div style="background:#f8fafc; border:1px solid #cbd5e1; border-radius:8px; padding:12px 16px; display:flex; align-items:center; justify-content:space-between;">
+          <span style="font-size:15px; font-weight:800; color:#0f172a;">최종 합산 명성 (Total Fame):</span>
+          <span id="calcTotalFame" style="font-size:24px; font-weight:900; color:#d97706;">0점</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 4: 하우스 룰 & 메모 관리 -->
+    <div id="tab-notes" class="tab-content" style="display:none;">
+      <div class="note-form">
+        <h3 style="margin-top:0; color:#0f172a;">📝 하우스 룰 & 플레이 메모 추가</h3>
+        <p style="font-size:12.5px; color:#64748b; margin-bottom:12px;">모임 고유의 하우스 룰, 세팅 팁, 자주 헷갈리는 FAQ를 브라우저에 영구 저장하세요.</p>
+        
+        <div class="form-row">
+          <input type="text" id="noteTitle" class="form-input" placeholder="메모 제목 (예: 우리 모임 캔디 하우스 룰)" style="flex:2; min-width:200px;">
+          <select id="noteCategory" class="form-select" style="flex:1; min-width:140px;">
+            <option value="하우스 룰">🏠 하우스 룰</option>
+            <option value="에라타 메모">⚠️ 에라타 메모</option>
+            <option value="세팅 팁">⚙️ 세팅 팁</option>
+            <option value="전략/참고">💡 전략/참고</option>
+          </select>
+        </div>
+        <textarea id="noteContent" class="form-textarea" placeholder="상세 내용을 입력하세요..."></textarea>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:8px;">
+          <button type="button" id="btnSaveNote" class="btn-save-note">💾 메모 저장하기</button>
+          <div style="display:flex; gap:6px;">
+            <button type="button" id="btnExportNotes" class="search-nav-btn" style="height:28px; padding:0 8px;">JSON 백업</button>
+            <button type="button" id="btnImportNotes" class="search-nav-btn" style="height:28px; padding:0 8px;">JSON 복원</button>
+            <input type="file" id="importFileInput" accept=".json" style="display:none;">
+          </div>
+        </div>
+      </div>
+
+      <div id="notesContainer" class="notes-list">
+        <!-- 동적 렌더링 -->
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      // 1. 탭 전환 제어
+      const tabBtns = document.querySelectorAll('.tab-btn');
+      const tabContents = document.querySelectorAll('.tab-content');
+
+      function switchTab(tabId) {
+        tabBtns.forEach(btn => {
+          btn.classList.toggle('active', btn.dataset.tab === tabId);
+        });
+        tabContents.forEach(content => {
+          content.style.display = (content.id === tabId) ? 'block' : 'none';
+        });
+      }
+
+      tabBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          switchTab(btn.dataset.tab);
+        });
+      });
+
+      // 2. 텍스트 검색 및 하이라이트 시스템
+      const searchInput = document.getElementById('searchInput');
+      const searchCount = document.getElementById('searchCount');
+      const prevBtn = document.getElementById('prevMatch');
+      const nextBtn = document.getElementById('nextMatch');
+      const clearBtn = document.getElementById('clearSearch');
+
+      let currentMatches = [];
+      let currentIndex = -1;
+
+      function clearHighlights() {
+        const highlights = document.querySelectorAll('mark.search-highlight');
+        highlights.forEach(mark => {
+          const parent = mark.parentNode;
+          if (parent) {
+            parent.replaceChild(document.createTextNode(mark.textContent), mark);
+            parent.normalize();
+          }
+        });
+      }
+
+      function highlightText(rootNode, query) {
+        if (!query) return [];
+        const matches = [];
+        const queryLower = query.toLowerCase();
+
+        const treeWalker = document.createTreeWalker(
+          rootNode,
+          NodeFilter.SHOW_TEXT,
+          {
+            acceptNode: function(node) {
+              if (!node.textContent || !node.textContent.trim()) return NodeFilter.FILTER_REJECT;
+              let parent = node.parentElement;
+              while (parent && parent !== rootNode) {
+                if (parent.classList.contains('top-nav-bar') || parent.classList.contains('tab-bar') || parent.tagName === 'SCRIPT' || parent.tagName === 'STYLE') {
+                  return NodeFilter.FILTER_REJECT;
+                }
+                parent = parent.parentElement;
+              }
+              return NodeFilter.FILTER_ACCEPT;
+            }
+          }
+        );
+
+        const textNodes = [];
+        while (treeWalker.nextNode()) {
+          textNodes.push(treeWalker.currentNode);
+        }
+
+        textNodes.forEach(textNode => {
+          const text = textNode.textContent;
+          const textLower = text.toLowerCase();
+          let index = textLower.indexOf(queryLower);
+          if (index === -1) return;
+
+          const fragment = document.createDocumentFragment();
+          let lastIndex = 0;
+
+          while (index !== -1) {
+            if (index > lastIndex) {
+              fragment.appendChild(document.createTextNode(text.substring(lastIndex, index)));
+            }
+            const mark = document.createElement('mark');
+            mark.className = 'search-highlight';
+            mark.textContent = text.substring(index, index + query.length);
+            matches.push(mark);
+            fragment.appendChild(mark);
+
+            lastIndex = index + query.length;
+            index = textLower.indexOf(queryLower, lastIndex);
+          }
+
+          if (lastIndex < text.length) {
+            fragment.appendChild(document.createTextNode(text.substring(lastIndex)));
+          }
+
+          if (textNode.parentNode) {
+            textNode.parentNode.replaceChild(fragment, textNode);
+          }
+        });
+
+        return matches;
+      }
+
+      function updateMatchUI() {
+        const query = searchInput.value.trim();
+        clearBtn.style.display = query ? 'inline-block' : 'none';
+
+        if (!query) {
+          searchCount.textContent = '';
+          prevBtn.disabled = true;
+          nextBtn.disabled = true;
+          return;
+        }
+
+        if (currentMatches.length === 0) {
+          searchCount.textContent = '0건';
+          prevBtn.disabled = true;
+          nextBtn.disabled = true;
+          return;
+        }
+
+        searchCount.textContent = `${currentIndex + 1}/${currentMatches.length}`;
+        prevBtn.disabled = false;
+        nextBtn.disabled = false;
+      }
+
+      function goToMatch(index) {
+        if (currentMatches.length === 0) return;
+        if (currentIndex >= 0 && currentMatches[currentIndex]) {
+          currentMatches[currentIndex].classList.remove('active-match');
+        }
+        currentIndex = (index + currentMatches.length) % currentMatches.length;
+        const target = currentMatches[currentIndex];
+        target.classList.add('active-match');
+
+        // 해당 매칭이 속한 탭을 자동으로 활성화
+        let parentTab = target.closest('.tab-content');
+        if (parentTab && parentTab.style.display === 'none') {
+          switchTab(parentTab.id);
+        }
+
+        target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        updateMatchUI();
+      }
+
+      function performSearch(query) {
+        clearHighlights();
+        currentMatches = [];
+        currentIndex = -1;
+
+        const trimmed = (query || '').trim();
+        if (!trimmed) {
+          updateMatchUI();
+          return;
+        }
+
+        const cards = document.querySelectorAll('.card');
+        cards.forEach(card => {
+          const matches = highlightText(card, trimmed);
+          currentMatches = currentMatches.concat(matches);
+        });
+
+        if (currentMatches.length > 0) {
+          goToMatch(0);
+        } else {
+          updateMatchUI();
+        }
+      }
+
+      searchInput.addEventListener('input', (e) => performSearch(e.target.value));
+      searchInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          if (e.shiftKey) goToMatch(currentIndex - 1);
+          else goToMatch(currentIndex + 1);
+        } else if (e.key === 'Escape') {
+          searchInput.value = '';
+          performSearch('');
+          searchInput.blur();
+        }
+      });
+      prevBtn.addEventListener('click', () => goToMatch(currentIndex - 1));
+      nextBtn.addEventListener('click', () => goToMatch(currentIndex + 1));
+      clearBtn.addEventListener('click', () => {
+        searchInput.value = '';
+        performSearch('');
+        searchInput.focus();
+      });
+
+      // 단축키 '/' 포커스
+      window.addEventListener('keydown', (e) => {
+        if (e.key === '/' && document.activeElement !== searchInput && document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA') {
+          e.preventDefault();
+          searchInput.focus();
+          searchInput.select();
+        }
+      });
+
+      // 3. 슈가 크래시 시뮬레이터 로직
+      const diceFaces = ['⚀', '⚁', '⚂', '⚃', '⚄', '⚅'];
+      const simCravingSelect = document.getElementById('simCravingSelect');
+      const btnRollDice = document.getElementById('btnRollDice');
+      const diceFace = document.getElementById('diceFace');
+      const diceStatusText = document.getElementById('diceStatusText');
+
+      btnRollDice.addEventListener('click', () => {
+        const craving = parseInt(simCravingSelect.value, 10);
+        btnRollDice.disabled = true;
+        diceFace.textContent = '🎲';
+        diceStatusText.innerHTML = '주사위 굴리는 중...';
+
+        let count = 0;
+        const interval = setInterval(() => {
+          diceFace.textContent = diceFaces[Math.floor(Math.random() * 6)];
+          count++;
+          if (count > 6) {
+            clearInterval(interval);
+            const roll = Math.floor(Math.random() * 6) + 1;
+            diceFace.textContent = diceFaces[roll - 1];
+
+            if (roll < craving) {
+              diceStatusText.innerHTML = `
+                <span style="color:#ef4444; font-size:15px; font-weight:900;">🚨 SUGAR CRASH 발생!</span><br>
+                <span>주사위 결과: <strong>${roll}</strong> &lt; 갈망(Craving): <strong>${craving}</strong></span><br>
+                <span style="color:#fca5a5;">→ 페널티: 다음 라운드 낮 페이즈(Daytime)를 통째로 스킵하고 쉬어야 합니다!</span>
+              `;
+            } else {
+              diceStatusText.innerHTML = `
+                <span style="color:#22c55e; font-size:15px; font-weight:900;">✅ 안전! 크래시 모면</span><br>
+                <span>주사위 결과: <strong>${roll}</strong> &ge; 갈망(Craving): <strong>${craving}</strong></span><br>
+                <span style="color:#86efac;">→ 정상 활동을 이어갈 수 있습니다. 무대 위로 직행하세요!</span>
+              `;
+            }
+            btnRollDice.disabled = false;
+          }
+        }, 60);
+      });
+
+      // 4. 간이 점수 계산기 로직
+      const calcTrackFame = document.getElementById('calcTrackFame');
+      const calcElevenCount = document.getElementById('calcElevenCount');
+      const calcGoalFame = document.getElementById('calcGoalFame');
+      const calcBonusFame = document.getElementById('calcBonusFame');
+      const calcTotalFame = document.getElementById('calcTotalFame');
+
+      function updateTotalFame() {
+        const track = parseInt(calcTrackFame.value, 10) || 0;
+        const eleven = parseInt(calcElevenCount.value, 10) || 0;
+        const goal = parseInt(calcGoalFame.value, 10) || 0;
+        const bonus = parseInt(calcBonusFame.value, 10) || 0;
+        calcTotalFame.textContent = `${track + eleven + goal + bonus}점`;
+      }
+
+      [calcTrackFame, calcElevenCount, calcGoalFame, calcBonusFame].forEach(el => {
+        el.addEventListener('input', updateTotalFame);
+        el.addEventListener('change', updateTotalFame);
+      });
+
+      // 5. 로컬스토리지 메모 및 하우스 룰 관리
+      const STORAGE_KEY = 'rockhard1977_user_notes';
+      const noteTitle = document.getElementById('noteTitle');
+      const noteCategory = document.getElementById('noteCategory');
+      const noteContent = document.getElementById('noteContent');
+      const btnSaveNote = document.getElementById('btnSaveNote');
+      const notesContainer = document.getElementById('notesContainer');
+      const notesBadge = document.getElementById('notesBadge');
+      const btnExportNotes = document.getElementById('btnExportNotes');
+      const btnImportNotes = document.getElementById('btnImportNotes');
+      const importFileInput = document.getElementById('importFileInput');
+
+      function loadNotes() {
+        try {
+          return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+        } catch (e) {
+          return [];
+        }
+      }
+
+      function saveNotes(notes) {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(notes));
+        renderNotes();
+      }
+
+      function renderNotes() {
+        const notes = loadNotes();
+        notesBadge.textContent = notes.length;
+
+        if (notes.length === 0) {
+          notesContainer.innerHTML = `
+            <div style="text-align:center; padding:30px; background:#f8fafc; border:1px dashed #cbd5e1; border-radius:8px; color:#64748b;">
+              등록된 메모나 하우스 룰이 없습니다. 상단에서 첫 번째 메모를 작성해보세요!
+            </div>
+          `;
+          return;
+        }
+
+        notesContainer.innerHTML = notes.map((n, idx) => `
+          <div class="note-item">
+            <div class="note-item-header">
+              <span class="note-item-title">${escapeHtml(n.title)}</span>
+              <button type="button" class="btn-delete-note" data-index="${idx}">삭제</button>
+            </div>
+            <div class="note-meta">
+              <span class="pill" style="font-size:10.5px; padding:1px 6px;">${escapeHtml(n.category)}</span>
+              <span>• ${n.date}</span>
+            </div>
+            <div class="note-content-text">${escapeHtml(n.content)}</div>
+          </div>
+        `).join('');
+
+        document.querySelectorAll('.btn-delete-note').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            const index = parseInt(e.target.dataset.index, 10);
+            const notes = loadNotes();
+            notes.splice(index, 1);
+            saveNotes(notes);
+          });
+        });
+      }
+
+      btnSaveNote.addEventListener('click', () => {
+        const title = noteTitle.value.trim();
+        const content = noteContent.value.trim();
+        const category = noteCategory.value;
+
+        if (!title || !content) {
+          alert('제목과 내용을 모두 입력해주세요.');
+          return;
+        }
+
+        const notes = loadNotes();
+        const now = new Date();
+        const dateStr = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
+
+        notes.unshift({ title, category, content, date: dateStr });
+        saveNotes(notes);
+
+        noteTitle.value = '';
+        noteContent.value = '';
+      });
+
+      btnExportNotes.addEventListener('click', () => {
+        const notes = loadNotes();
+        const blob = new Blob([JSON.stringify(notes, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `rockhard1977_notes_${Date.now()}.json`;
+        a.click();
+        URL.revokeObjectURL(url);
+      });
+
+      btnImportNotes.addEventListener('click', () => importFileInput.click());
+      importFileInput.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          try {
+            const imported = JSON.parse(event.target.result);
+            if (Array.isArray(imported)) {
+              saveNotes(imported);
+              alert('메모가 성공적으로 복원되었습니다.');
+            } else {
+              alert('올바른 메모 JSON 파일 형식이 아닙니다.');
+            }
+          } catch (err) {
+            alert('JSON 파일을 읽는 중 오류가 발생했습니다.');
+          }
+        };
+        reader.readAsText(file);
+      });
+
+      function escapeHtml(str) {
+        return (str || '')
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#039;');
+      }
+
+      // 초기화
+      renderNotes();
+
+      // URL 해시 및 쿼리 파라미터 연동
+      function handleHash() {
+        if (window.location.hash) {
+          const targetId = window.location.hash.substring(1);
+          const targetEl = document.getElementById(targetId);
+          if (targetEl) {
+            const parentTab = targetEl.closest('.tab-content');
+            if (parentTab) {
+              switchTab(parentTab.id);
+            }
+            setTimeout(() => {
+              targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 250);
+          }
+        }
+      }
+
+      window.addEventListener('DOMContentLoaded', () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const q = urlParams.get('q');
+        if (q) {
+          searchInput.value = q;
+          performSearch(q);
+        }
+        handleHash();
+      });
+
+      window.addEventListener('hashchange', handleHash);
+    })();
+  </script>
+</body>
+</html>
