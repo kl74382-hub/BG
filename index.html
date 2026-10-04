@@ -520,7 +520,10 @@
                       </a>
                     `).join('')}
                   </div>
-                  <a href="${b.file}" class="btn-view-all">참조표 열기 ↗</a>
+                  <div style="display:flex; gap:6px; align-items:center; flex-wrap:wrap;">
+                    ${b.aidFile ? `<a href="${b.aidFile}" class="btn-view-all" style="background:#475569;" title="인쇄용 2페이지 플레이어 에이드">📄 인쇄용 에이드</a>` : ''}
+                    <a href="${b.file}" class="btn-view-all">참조표 열기 ↗</a>
+                  </div>
                 </div>
               </div>
             `;

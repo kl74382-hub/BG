@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>록 하드: 1977 (Rock Hard: 1977) – 플레이어 에이드 v1.2.0</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  @page {
+    size: A4 portrait;
+    margin: 10mm;
+  }
+  * {
+    box-sizing: border-box;
+  }
+  body {
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 13px;
+    line-height: 1.55;
+    color: #1e293b;
+    background-color: #f1f5f9;
+    margin: 0;
+    padding: 16px;
+  }
+  
+  /* 상단 고정 내비게이션 & 검색창 */
+  .top-nav-bar {
+    position: sticky;
+    top: 8px;
+    z-index: 1000;
+    max-width: 920px;
+    margin: 0 auto 16px auto;
+  }
+  .top-nav-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    background: rgba(255, 255, 255, 0.97);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    padding: 8px 14px;
+    border-radius: 10px;
+    border: 1px solid #cbd5e1;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+  }
+  .btn-home {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    background-color: #0f172a;
+    color: #f8fafc;
+    text-decoration: none;
+    font-size: 12.5px;
+    font-weight: 700;
+    border-radius: 6px;
+    border: 1px solid #334155;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+  }
+  .btn-home:hover {
+    background-color: #1e293b;
+    color: #fbbf24;
+    border-color: #d97706;
+  }
+  .search-box {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: #f8fafc;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    padding: 3px 8px;
+    flex: 1;
+    max-width: 440px;
+    transition: all 0.2s;
+  }
+  .search-box:focus-within {
+    border-color: #d97706;
+    background: #ffffff;
+    box-shadow: 0 0 0 2px rgba(217, 119, 6, 0.15);
+  }
+  .search-icon {
+    font-size: 13px;
+    color: #64748b;
+    user-select: none;
+  }
+  #searchInput {
+    border: none;
+    background: transparent;
+    outline: none;
+    font-family: inherit;
+    font-size: 13px;
+    color: #0f172a;
+    width: 100%;
+    min-width: 80px;
+  }
+  .search-count {
+    font-size: 11px;
+    color: #b45309;
+    font-weight: 700;
+    white-space: nowrap;
+    user-select: none;
+  }
+  .search-nav-btn {
+    border: 1px solid #cbd5e1;
+    background: #ffffff;
+    border-radius: 4px;
+    cursor: pointer;
+    padding: 2px 6px;
+    font-size: 10px;
+    color: #334155;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    height: 22px;
+    transition: all 0.15s;
+  }
+  .search-nav-btn:hover:not(:disabled) {
+    background: #fef3c7;
+    border-color: #d97706;
+    color: #b45309;
+  }
+  .search-nav-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+  .search-clear-btn {
+    border: none;
+    background: transparent;
+    color: #94a3b8;
+    cursor: pointer;
+    font-size: 14px;
+    padding: 0 2px;
+    display: none;
+    line-height: 1;
+  }
+  .search-clear-btn:hover {
+    color: #ef4444;
+  }
+
+  /* 검색어 하이라이트 */
+  mark.search-highlight {
+    background-color: #fef08a;
+    color: #854d0e;
+    padding: 1px 3px;
+    border-radius: 3px;
+    transition: background-color 0.2s;
+  }
+  mark.search-highlight.active-match {
+    background-color: #ea580c;
+    color: #ffffff;
+    outline: 2px solid #c2410c;
+  }
+
+  /* 메인 카드 레이아웃 */
+  .page-card {
+    background: #ffffff;
+    max-width: 920px;
+    margin: 0 auto 20px auto;
+    padding: 26px 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+    border: 1px solid #e2e8f0;
+  }
+  .page-divider {
+    page-break-before: always;
+    margin-top: 30px;
+  }
+
+  /* 헤더 섹션 */
+  .aid-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 2px solid #0f172a;
+    padding-bottom: 12px;
+    margin-bottom: 18px;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .aid-title-wrap {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .aid-title {
+    font-size: 24px;
+    font-weight: 900;
+    color: #0f172a;
+    margin: 0;
+    letter-spacing: -0.5px;
+  }
+  .aid-subtitle {
+    font-size: 13px;
+    color: #64748b;
+    font-weight: 600;
+  }
+  .credits-tag {
+    font-size: 11px;
+    color: #475569;
+    background: #f1f5f9;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    padding: 4px 8px;
+    text-align: right;
+    line-height: 1.4;
+  }
+
+  /* 2단 그리드 */
+  .grid-2col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+  }
+  @media (max-width: 768px) {
+    .grid-2col {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* 섹션 블록 */
+  .section-box {
+    background: #f8fafc;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    padding: 12px 14px;
+    margin-bottom: 14px;
+  }
+  .section-title {
+    font-size: 14px;
+    font-weight: 800;
+    color: #0f172a;
+    margin: 0 0 8px 0;
+    padding-bottom: 5px;
+    border-bottom: 1.5px solid #d97706;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .sub-title {
+    font-size: 12.5px;
+    font-weight: 800;
+    color: #1e293b;
+    margin: 8px 0 4px 0;
+  }
+
+  /* 리스트 */
+  ul.aid-list, ol.aid-list {
+    margin: 4px 0 8px 0;
+    padding-left: 18px;
+  }
+  ul.aid-list li, ol.aid-list li {
+    margin-bottom: 4px;
+    font-size: 12.5px;
+  }
+
+  /* 배지 & 아이콘 */
+  .badge {
+    display: inline-block;
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1.3;
+  }
+  .b-day { background: #fef08a; color: #854d0e; }
+  .b-night { background: #1e293b; color: #f8fafc; }
+  .b-after { background: #e0e7ff; color: #3730a3; }
+  .b-red { background: #fee2e2; color: #991b1b; }
+  .b-green { background: #dcfce7; color: #166534; }
+  .b-blue { background: #dbeafe; color: #1e40af; }
+  .b-amber { background: #fef3c7; color: #b45309; }
+
+  /* 아이콘 해설 표 */
+  .icon-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 6px 0;
+    font-size: 12px;
+  }
+  .icon-table td {
+    padding: 4px 6px;
+    border-bottom: 1px solid #e2e8f0;
+    vertical-align: middle;
+  }
+  .icon-table tr:last-child td {
+    border-bottom: none;
+  }
+  .icon-td-symbol {
+    width: 32px;
+    font-size: 16px;
+    text-align: center;
+    white-space: nowrap;
+  }
+  .icon-td-name {
+    width: 90px;
+    font-weight: 800;
+    color: #0f172a;
+    white-space: nowrap;
+  }
+  .icon-td-desc {
+    color: #334155;
+    line-height: 1.4;
+  }
+
+  /* 콜아웃 */
+  .callout-box {
+    border-radius: 6px;
+    padding: 8px 12px;
+    margin: 8px 0;
+    font-size: 12px;
+    line-height: 1.5;
+  }
+  .callout-warn {
+    background: #fffbeb;
+    border-left: 3px solid #d97706;
+    color: #92400e;
+  }
+  .callout-alert {
+    background: #fef2f2;
+    border-left: 3px solid #ef4444;
+    color: #991b1b;
+  }
+
+  /* 인쇄 전용 */
+  @media print {
+    body {
+      background: #ffffff;
+      padding: 0;
+      font-size: 11px;
+    }
+    .top-nav-bar {
+      display: none !important;
+    }
+    .page-card {
+      box-shadow: none;
+      border: none;
+      padding: 0;
+      margin: 0;
+      max-width: 100%;
+    }
+    .page-divider {
+      page-break-before: always;
+      margin-top: 0;
+      padding-top: 15px;
+    }
+  }
+</style>
+</head>
+<body>
+
+  <!-- 상단 네비게이션 -->
+  <div class="top-nav-bar">
+    <div class="top-nav-inner">
+      <div style="display:flex; align-items:center; gap:8px;">
+        <a href="index.html" class="btn-home">← 참조표 목록</a>
+        <a href="RockHard1977.html" class="btn-home" style="background:#d97706; border-color:#b45309; color:#fff;">🎸 종합 관리 페이지</a>
+      </div>
+
+      <div class="search-box">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="searchInput" placeholder="플레이어 에이드 내용 검색..." autocomplete="off">
+        <span id="searchCount" class="search-count"></span>
+        <button type="button" id="prevMatch" class="search-nav-btn" disabled>▲</button>
+        <button type="button" id="nextMatch" class="search-nav-btn" disabled>▼</button>
+        <button type="button" id="clearSearch" class="search-clear-btn">✕</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- [PAGE 1] -->
+  <div class="page-card">
+    <div class="aid-header">
+      <div class="aid-title-wrap">
+        <h1 class="aid-title">🎸 ROCK HARD -1977-</h1>
+        <span class="aid-subtitle">플레이어 에이드 (Player Aid v1.2.0 KO)</span>
+      </div>
+      <div class="credits-tag">
+        <strong>Jackie Fox</strong> | <strong>Jennifer Giner</strong> | <strong>DEVIR</strong><br>
+        V1.2.0 by SIKMAG (한국어 공식 용어 번역)
+      </div>
+    </div>
+
+    <div class="grid-2col">
+      <!-- 좌측 열: 게임 페이즈 1~5 -->
+      <div>
+        <!-- 1.0 준비 페이즈 -->
+        <div class="section-box">
+          <div class="section-title">
+            <span>1.0 준비 페이즈 (Prep Phase, p.12)</span>
+            <span class="badge b-amber">라운드 시작</span>
+          </div>
+          <ul class="aid-list">
+            <li><strong>1.1 새 이벤트 카드 공개:</strong> 이번 라운드에 일어난 사건을 설명하며, 플레이에 영향을 주는 혜택이나 제약 조건이 적혀 있습니다.</li>
+            <li><strong>1.2 새 랜덤 긱 카드 공개:</strong> 평소에 갈 수 없는 의외의 장소에서 공연할 기회를 주며, 특별한 보상을 얻습니다.</li>
+            <li><strong>1.3 변동 근무제 직업 주사위 굴림:</strong> 변동 근무제(Variable Shift) 직업을 가진 플레이어는 주사위를 굴려 이번 라운드 출근 페이즈를 확인합니다. <br>
+              <span class="badge b-day">⚀/⚁ 낮</span> <span class="badge b-night">⚂/⚃ 밤</span> <span class="badge b-after">⚄/⚅ 심야</span> (직업 카드 해당 칸 옆에 큐브를 놓아 기억)</li>
+            <li><strong>1.4 닥 사파이어 특수 능력:</strong> '닥 사파이어' 캐릭터는 자신의 능력 토큰 1개를 원하는 다른 플레이어에게 줄 수 있습니다. <em>(오직 이 타이밍에만 가능)</em></li>
+          </ul>
+        </div>
+
+        <!-- 액션 페이즈 공통 -->
+        <div class="section-box">
+          <div class="section-title">
+            <span>액션 페이즈 공통 (2.0, 3.0, 4.0)</span>
+            <span class="badge b-blue">턴 순서대로</span>
+          </div>
+          <p style="margin:0 0 6px 0; font-size:12.5px;">각 액션 페이즈 동안 각 플레이어는 자신의 턴에:</p>
+          <ul class="aid-list">
+            <li><strong>A. 캔디 섭취 (선택):</strong> 차례 전, <strong>캔디(Candy) 1개를 1회</strong> 섭취할 수 있습니다.</li>
+            <li><strong>B. 행동 수행:</strong> <strong>기본 행동 1회</strong> + 캔디, 카드 효과, 캐릭터 특수 능력으로 얻은 <strong>추가 행동(Extra Actions)</strong>을 수행합니다.</li>
+          </ul>
+          <div class="callout-box callout-warn">
+            <strong>⚡ 추가 행동 규칙:</strong> 추가 행동은 일반 행동 직후에 발생합니다. 추가 행동을 위해 칸을 떠나면, 해당 칸은 즉시 비워져(Unblocked) 다른 플레이어가 사용할 수 있습니다.
+          </div>
+        </div>
+
+        <!-- 2.0 / 3.0 / 4.0 액션 페이즈 -->
+        <div class="section-box">
+          <div class="section-title">
+            <span>2.0 ~ 4.0 일꾼 배치 페이즈</span>
+          </div>
+          <ul class="aid-list">
+            <li><strong>2.0 낮 액션 페이즈 (p.14):</strong> 보드의 <span class="badge b-day">낮</span> 또는 <strong>상시</strong> 구역의 비어 있는 제한/오픈 칸에 스탠디를 놓고 해당 행동 수행.</li>
+            <li><strong>3.0 밤 액션 페이즈 (p.16):</strong> 보드의 <span class="badge b-night">밤</span> 또는 <strong>상시</strong> 구역의 비어 있는 제한/오픈 칸에 스탠디를 놓고 해당 행동 수행.</li>
+            <li><strong>4.0 심야 액션 페이즈 (p.18):</strong> 보드의 <span class="badge b-after">심야</span> 또는 <strong>상시</strong> 구역의 비어 있는 제한/오픈 칸에 스탠디를 놓고 해당 행동 수행.</li>
+          </ul>
+          <div class="callout-box callout-warn">
+            <strong># 턴 순서 결정:</strong> 심야 페이즈 종료 시, 보드 위에 놓인 스탠디 위치 번호가 <strong>다음 라운드의 턴 순서</strong>를 결정합니다. <strong>숫자가 낮을수록 선 플레이어</strong>가 됩니다.
+          </div>
+        </div>
+
+        <!-- 5.0 정리 페이즈 -->
+        <div class="section-box">
+          <div class="section-title">
+            <span>5.0 정리 페이즈 (Clean-Up Phase, p.21)</span>
+          </div>
+          <ul class="aid-list">
+            <li><strong>5.1 로열티 수령:</strong> 음반 계약(Record Deals)이 있는 플레이어는 돈($)과 명성(Fame)을 받습니다.</li>
+            <li><strong>5.2 매니저 급여 지급:</strong> 정해진 시기에 매니저 급여 지불. <br>
+              <span class="badge b-amber">6월 말: $1</span> <span class="badge b-amber">9월 말: $3</span> <span class="badge b-amber">게임 종료: $5</span><br>
+              돈이 부족하면 가진 돈을 내고, <strong>부족한 $1당 명성 3점 감점(-3 Fame)</strong>.</li>
+          </ul>
+          <div class="callout-box callout-alert">
+            <strong>🚨 게임 종료 조건:</strong> 지금이 <strong>12월</strong>이거나, 어떤 플레이어라도 <strong>50+ Fame</strong>에 도달하면 즉시 게임이 종료됩니다!
+          </div>
+          <ul class="aid-list">
+            <li><strong>5.3 새 턴 순서 정리:</strong> 점유된 각 # 공간 옆 번호에 따라 다음 라운드 기타 피크 마커(1~5) 배치 (낮은 번호가 선).</li>
+            <li><strong>5.4 스탠디 회수:</strong> 매니저 카드를 원래 방향으로 세움. 사용한 큐브/액션 토큰 회수. <em>(2~3인플: 라이징 스타 큐브 전진)</em></li>
+            <li><strong>5.5 저혈당 확인:</strong> 혈당 토큰이 <strong>ON</strong>이면 저혈당 상태입니다. <strong>다음 낮 행동 때 캐릭터 스탠디를 반드시 회복 칸(Recover Space)</strong>에 놓아야 합니다.</li>
+            <li><strong>5.6 슈가 러시 덱 셔플:</strong> 캔디를 섭취했거나 슈가 러시 카드를 보았다면 사용한 카드를 넣고 셔플.</li>
+            <li><strong>5.7 인기 행아웃 토큰 무작위 재배치:</strong> 토큰들을 회수하여 각 행아웃 장소에 앞면으로 무작위 재배치.</li>
+            <li><strong>5.8 라운드 마커 전진:</strong> 다음 달로 마커를 옮기고 새 라운드 시작.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- 우측 열: 아이콘 해설 -->
+      <div>
+        <div class="section-box" style="background:#ffffff;">
+          <div class="section-title">
+            <span>아이콘 해설 (Iconography)</span>
+          </div>
+
+          <table class="icon-table">
+            <tr>
+              <td class="icon-td-symbol">☀️ / 🌙 / 🍸</td>
+              <td class="icon-td-name">페이즈 구분</td>
+              <td class="icon-td-desc">슬래시(/)는 OR을 의미하며 선택 옵션을 구분합니다. 오직 하나의 옵션만 선택할 수 있습니다.</td>
+            </tr>
+            <tr>
+              <td class="icon-td-symbol">🎸 ⭐ 🎵 🏆</td>
+              <td class="icon-td-name">능력치 & 명성</td>
+              <td class="icon-td-desc"><strong>연주력(Chops)</strong>, <strong>평판(Reputation)</strong>, <strong>작곡력(Songs)</strong>. 게임 종료 시 <strong>가장 많은 명성(Fame)</strong>을 획득한 플레이어가 승리합니다.</td>
+            </tr>
+            <tr>
+              <td class="icon-td-symbol">🔟➯1️⃣1️⃣</td>
+              <td class="icon-td-name">최대 스탯 초과</td>
+              <td class="icon-td-desc">최대치(11)에 도달한 능력치를 올릴 때마다 대신 <strong>$1를 획득</strong>합니다.</td>
+            </tr>
+            <tr>
+              <td class="icon-td-symbol">📼 💿 👥</td>
+              <td class="icon-td-name">핵심 자산</td>
+              <td class="icon-td-desc"><strong>데모 테이프(Demo Tape)</strong>, <strong>음반 계약(Record Contract)</strong>, <strong>크루(Crew)</strong>.</td>
+            </tr>
+            <tr>
+              <td class="icon-td-symbol">⬇️</td>
+              <td class="icon-td-name">행동 칸</td>
+              <td class="icon-td-desc">아래 화살표는 일꾼을 놓을 수 있는 행동 칸을 나타냅니다.</td>
+            </tr>
+            <tr>
+              <td class="icon-td-symbol">💵 🍬 🚫🍬</td>
+              <td class="icon-td-name">돈 / 캔디 / 제한</td>
+              <td class="icon-td-desc">돈, 캔디. <strong>노 캔디(No-Candy)</strong>는 캔디 사용과 관련된 제한이 적용되는 칸입니다 (캔디를 써도 라운드당 1회만 이용 가능).</td>
+            </tr>
+            <tr>
+              <td class="icon-td-symbol">♾️</td>
+              <td class="icon-td-name">오픈 공간</td>
+              <td class="icon-td-desc">무한대 기호가 있는 행동 칸은 인원수 제한 없이 누구나 들어갈 수 있습니다.</td>
+            </tr>
+            <tr>
+              <td class="icon-td-symbol">♾️⬅️</td>
+              <td class="icon-td-name">밀기 오픈 공간</td>
+              <td class="icon-td-desc">밀기 아이콘이 있는 오픈 공간에 말을 놓을 때는 <strong>이미 놓인 말들의 왼쪽</strong>에 놓아야 합니다. 가장 왼쪽이 턴 순서에서 앞섭니다.</td>
+            </tr>
+            <tr>
+              <td class="icon-td-symbol">⚡</td>
+              <td class="icon-td-name">달성 즉시 목표</td>
+              <td class="icon-td-desc">조건이 충족되는 즉시 점수를 얻습니다. 이 카드는 <strong>모든 플레이어에게 항상 공개</strong>되어야 합니다.</td>
+            </tr>
+            <tr>
+              <td class="icon-td-symbol">📅</td>
+              <td class="icon-td-name">게임 종료 목표</td>
+              <td class="icon-td-desc">게임 끝에 달성 여부를 확인합니다. <strong>최종 점수 계산 전까지 비공개</strong>로 유지해야 합니다.</td>
+            </tr>
+          </table>
+
+          <div style="background:#f8fafc; border:1px solid #cbd5e1; border-radius:6px; padding:8px 10px; margin-top:10px;">
+            <div style="font-weight:800; font-size:12px; margin-bottom:4px; color:#0f172a;">아이콘 색상 규칙</div>
+            <div style="display:flex; gap:6px; font-size:11.5px; flex-wrap:wrap;">
+              <span class="badge b-blue">🟦 파란색 = 요구 조건 (Requirements)</span>
+              <span class="badge b-red">🟥 빨간색 = 지불 비용 (Costs)</span>
+              <span class="badge" style="background:#e2e8f0; color:#334155;">⬜ 회색 = 획득 혜택 (Benefits)</span>
+            </div>
+          </div>
+
+          <div class="callout-box" style="background:#f1f5f9; border:1px dashed #cbd5e1; margin-top:10px;">
+            <strong>예시 칸 해석:</strong> 이 칸을 이용하려면 <span style="color:#1d4ed8; font-weight:700;">데모 테이프(🟦)</span> 또는 <span style="color:#1d4ed8; font-weight:700;">음반 계약(🟦)</span>이 있어야 합니다. 충족 시 <span style="color:#b91c1c; font-weight:700;">$2(🟥)</span>를 지불하고 <span style="color:#475569; font-weight:700;">평판 2(⬜)</span>와 <span style="color:#475569; font-weight:700;">명성 1(⬜)</span>을 얻습니다.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- [PAGE 2] -->
+  <div class="page-card page-divider">
+    <div class="aid-header">
+      <div class="aid-title-wrap">
+        <h2 class="aid-title" style="font-size:20px;">🏆 게임 세부 시스템 & 종료 점수 계산</h2>
+      </div>
+      <div class="credits-tag">
+        Rock Hard: 1977 Player Aid (Page 2)
+      </div>
+    </div>
+
+    <div class="grid-2col">
+      <!-- 좌측 열: 점수 계산, 목표 카드, 인생 경험 -->
+      <div>
+        <!-- 게임 종료 점수 계산 -->
+        <div class="section-box">
+          <div class="section-title">
+            <span>게임 종료 점수 계산 (End-Game Scoring, p.22)</span>
+            <span class="badge b-red">최종 결산</span>
+          </div>
+          <ul class="aid-list">
+            <li><strong>저혈당 감점:</strong> 혈당 토큰이 <span class="badge b-red">ON</span> 상태라면 <strong>명성 5점 감점(-5 Fame)</strong>.</li>
+            <li><strong>11 능력치 보너스:</strong> 11에 도달한 각 기본 스탯당 <strong>명성 2점</strong>, 3개 스탯(연주력, 평판, 작곡력)이 <strong>모두 11이면 추가 2점</strong> <em>(전부 11 달성 시 총 8점)</em>.</li>
+            <li><strong>현금 환산:</strong> 보유 현금 <strong>$3당 명성 1점</strong> <em>(소수점 버림)</em>.</li>
+            <li><strong>보너스 카드:</strong> 달성한 게임 종료 퍼블리시티, 퍼포먼스, 프로덕션 보너스 점수. <em>(동점자는 다음 하위 점수 획득)</em></li>
+            <li><strong>개인 목표 카드:</strong> 달성한 개인 목표 카드 점수 획득.</li>
+          </ul>
+          <div class="callout-box callout-warn">
+            <strong>동점자 처리 (Tiebreakers, 높은 순서대로):</strong><br>
+            1. 보유 현금($) ➔ 2. 평판(Reputation) ➔ 3. 음반 로열티 등급(Royalty tier)
+          </div>
+        </div>
+
+        <!-- 개인 목표 & 공통 보너스 카드 -->
+        <div class="section-box">
+          <div class="section-title">
+            <span>목표 및 보너스 카드</span>
+          </div>
+          <p class="sub-title">🎯 개인 목표 카드 (Personal Goal Cards, p.11)</p>
+          <p style="font-size:12px; margin:0 0 6px 0; color:#475569;">게임 시작 시 3장을 받아 <strong>2장을 남기고 1장을 버립니다</strong>. 소유자만 점수를 얻으며, 달성 즉시 및 게임 종료 목표가 있습니다.</p>
+
+          <p class="sub-title">📢 프로덕션 / 퍼포먼스 / 퍼블리시티 보너스 카드 (p.10)</p>
+          <p style="font-size:12px; margin:0; color:#475569;">게임 시작 시 공개되어 끝까지 유지됩니다. 모든 플레이어에게 공통 적용됩니다.</p>
+        </div>
+
+        <!-- 인생 경험 & 세트 컬렉션 -->
+        <div class="section-box">
+          <div class="section-title">
+            <span>인생 경험, 행아웃 & 세트 컬렉션 (p.11, 18)</span>
+          </div>
+          <p style="font-size:12px; margin:0 0 6px 0;">시작 시 서로 다른 인생 경험 카드 2장을 받고 시작하며, 심야 행아웃에서 추가 획득합니다:</p>
+          <ul class="aid-list">
+            <li><strong>백스테이지 (Backstage, 로맨스):</strong> 평판 / 연주력</li>
+            <li><strong>후버스 (Hoover's, 재미):</strong> 연주력 / 돈</li>
+            <li><strong>버즈 (Bud's, 비즈니스):</strong> 규칙을 깨는 특수 혜택 (Rule Breaking Advantages)</li>
+            <li><strong>잭스 (Jax, 글래머):</strong> 명성 / 작곡력</li>
+            <li><strong>슬링키스 (Slinky's, 와일드):</strong> 조커 카드</li>
+          </ul>
+
+          <div style="background:#ffffff; border:1px solid #cbd5e1; border-radius:6px; padding:8px 10px; margin-top:8px;">
+            <div style="font-weight:800; font-size:12.5px; color:#0f172a; margin-bottom:4px;">🧩 세트 컬렉션 (Set Collection)</div>
+            <p style="font-size:12px; color:#334155; margin:0 0 4px 0;">
+              세트는 <strong>완전히 동일한 4장</strong> 또는 <strong>완전히 서로 다른 4장</strong>으로 구성됩니다.
+            </p>
+            <div class="callout-box callout-warn" style="margin:4px 0;">
+              세트 완성 시 <strong>즉시 선언하여 명성 5점(5 Fame)</strong>을 획득합니다! 묶인 카드는 다른 세트에 재사용할 수 없습니다.
+            </div>
+            <p style="font-size:11.5px; color:#64748b; margin:4px 0 0 0;">
+              ※ 슬링키스(와일드)는 세트 완성에 쓰이지만, 가장 많은 심볼 보유자를 가릴 때는 와일드로 인정되지 않습니다.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 우측 열: 직업, 캔디/혈당/회복, 라이징 스타 -->
+      <div>
+        <!-- 직업 관련 -->
+        <div class="section-box">
+          <div class="section-title">
+            <span>직업 관련 규칙 (Job-Related, p.9-10)</span>
+          </div>
+          <ul class="aid-list">
+            <li><strong>근무 일정 (Work Schedule):</strong> 일 행동을 할 수 있는 페이즈입니다. 변동 근무제는 라운드 시작 시 주사위로 결정합니다.</li>
+            <li><strong>수입 (Income):</strong> 지정된 페이즈에 일 행동 수행 시 받는 급여입니다. 일부 직업은 일 행동 후 주사위에 따른 변동 급여입니다.</li>
+            <li><strong>특수 혜택/불이익 (Perks/Liabilities):</strong> 직무에 따르는 고유한 장단점입니다.</li>
+          </ul>
+          <div class="callout-box callout-alert">
+            <strong>❌ 결근 (Missed Work):</strong> 지정된 페이즈에 일을 건너뛰면 급여가 없으며 <strong>결근 토큰</strong> 1개를 받습니다. <strong>3번째 토큰을 받으면 즉시 해고(또는 퇴사)</strong>당하며, 직업 카드를 버리고 더 이상 일 행동을 할 수 없습니다.
+          </div>
+        </div>
+
+        <!-- 캔디, 혈당 & 회복 -->
+        <div class="section-box">
+          <div class="section-title">
+            <span>캔디, 혈당 & 회복 (Candy, Blood Sugar & Recovery, p.13)</span>
+          </div>
+          <p style="font-size:12px; margin:0 0 6px 0;">캔디는 추가 행동을 주지만 저혈당 위험을 높입니다. <br>
+            <span class="badge b-amber">필수 조건:</span> 캔디로 추가 행동을 얻으려면 <strong>혈당 토큰이 OFF 상태</strong>여야 합니다.
+          </p>
+
+          <p class="sub-title">🍬 캔디 섭취 단계</p>
+          <ol class="aid-list">
+            <li><strong>A:</strong> 캔디 토큰 1개를 버리고 슈가 러시 카드 1장을 뽑으며, 표시된 만큼 <strong>갈망(Craving) 다이얼 상승</strong>.</li>
+            <li><strong>B:</strong> 주사위(D6)를 굴려 갈망 수치와 비교:
+              <ul>
+                <li><span style="color:#b91c1c; font-weight:700;">주사위 &lt; 갈망:</span> <strong>혈당 토큰을 ON으로 뒤집음</strong>.</li>
+                <li><span style="color:#166534; font-weight:700;">주사위 &ge; 갈망:</span> 갈망 충족. 혈당 토큰은 <strong>OFF 상태 유지</strong>.</li>
+              </ul>
+            </li>
+            <li><strong>C:</strong> 일반 행동 + 슈가 러시 카드의 추가 행동 수행. <br>
+              <span style="color:#b91c1c; font-weight:700;">※ 주의: B단계에서 혈당 토큰이 ON으로 뒤집혔다면 슈가 러시 추가 행동은 0개가 됩니다!</span></li>
+          </ol>
+
+          <p class="sub-title">🏥 저혈당 및 회복 (Recovery)</p>
+          <ul class="aid-list">
+            <li>정리 페이즈 종료 시 혈당 토큰이 <span class="badge b-red">ON</span>인 캐릭터는 <strong>다음 낮 행동 때 반드시 회복 칸(Recover Space)으로 이동</strong>해야 합니다.</li>
+            <li>회복 칸에 들어가면 <strong>혈당 토큰을 OFF로 뒤집고 갈망 수치를 1 낮춥니다</strong>.</li>
+            <li>자발적으로 회복 칸에 가서 갈망 수치를 1 낮출 수도 있습니다.</li>
+          </ul>
+        </div>
+
+        <!-- 라이징 스타 -->
+        <div class="section-box">
+          <div class="section-title">
+            <span>라이징 스타 (2~3인 플레이 규칙, p.23)</span>
+          </div>
+          <ul class="aid-list">
+            <li>2인플(또는 3인플 선택 시), 플레이하지 않는 색상의 <strong>큐브 3개</strong>로 라이징 스타를 표시합니다.</li>
+            <li><strong>세팅:</strong> 라이징 스타 카드의 #1(4월) 옆에 표시된 3개 공간에 큐브를 1개씩 놓아 3개 페이즈 동안 점유합니다.</li>
+            <li><strong>정리 페이즈:</strong> 라이징 스타 카드의 다음 라운드 번호에 맞는 보드 공간으로 큐브들을 이동시킵니다.</li>
+            <li><strong>효과:</strong> 라이징 스타 큐브는 제한 공간을 점유하여 <strong>다른 플레이어가 들어오지 못하도록 차단(Block)</strong>합니다. 턴 순서(1~5)에는 영향을 주지 않습니다.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      const searchInput = document.getElementById('searchInput');
+      const searchCount = document.getElementById('searchCount');
+      const prevBtn = document.getElementById('prevMatch');
+      const nextBtn = document.getElementById('nextMatch');
+      const clearBtn = document.getElementById('clearSearch');
+
+      let currentMatches = [];
+      let currentIndex = -1;
+
+      function clearHighlights() {
+        const highlights = document.querySelectorAll('mark.search-highlight');
+        highlights.forEach(mark => {
+          const parent = mark.parentNode;
+          if (parent) {
+            parent.replaceChild(document.createTextNode(mark.textContent), mark);
+            parent.normalize();
+          }
+        });
+      }
+
+      function highlightText(rootNode, query) {
+        if (!query) return [];
+        const matches = [];
+        const queryLower = query.toLowerCase();
+
+        const treeWalker = document.createTreeWalker(
+          rootNode,
+          NodeFilter.SHOW_TEXT,
+          {
+            acceptNode: function(node) {
+              if (!node.textContent || !node.textContent.trim()) return NodeFilter.FILTER_REJECT;
+              let parent = node.parentElement;
+              while (parent && parent !== rootNode) {
+                if (parent.classList.contains('top-nav-bar') || parent.tagName === 'SCRIPT' || parent.tagName === 'STYLE') {
+                  return NodeFilter.FILTER_REJECT;
+                }
+                parent = parent.parentElement;
+              }
+              return NodeFilter.FILTER_ACCEPT;
+            }
+          }
+        );
+
+        const textNodes = [];
+        while (treeWalker.nextNode()) {
+          textNodes.push(treeWalker.currentNode);
+        }
+
+        textNodes.forEach(textNode => {
+          const text = textNode.textContent;
+          const textLower = text.toLowerCase();
+          let index = textLower.indexOf(queryLower);
+          if (index === -1) return;
+
+          const fragment = document.createDocumentFragment();
+          let lastIndex = 0;
+
+          while (index !== -1) {
+            if (index > lastIndex) {
+              fragment.appendChild(document.createTextNode(text.substring(lastIndex, index)));
+            }
+            const mark = document.createElement('mark');
+            mark.className = 'search-highlight';
+            mark.textContent = text.substring(index, index + query.length);
+            matches.push(mark);
+            fragment.appendChild(mark);
+
+            lastIndex = index + query.length;
+            index = textLower.indexOf(queryLower, lastIndex);
+          }
+
+          if (lastIndex < text.length) {
+            fragment.appendChild(document.createTextNode(text.substring(lastIndex)));
+          }
+
+          if (textNode.parentNode) {
+            textNode.parentNode.replaceChild(fragment, textNode);
+          }
+        });
+
+        return matches;
+      }
+
+      function updateMatchUI() {
+        const query = searchInput.value.trim();
+        clearBtn.style.display = query ? 'inline-block' : 'none';
+
+        if (!query) {
+          searchCount.textContent = '';
+          prevBtn.disabled = true;
+          nextBtn.disabled = true;
+          return;
+        }
+
+        if (currentMatches.length === 0) {
+          searchCount.textContent = '0건';
+          prevBtn.disabled = true;
+          nextBtn.disabled = true;
+          return;
+        }
+
+        searchCount.textContent = `${currentIndex + 1}/${currentMatches.length}`;
+        prevBtn.disabled = false;
+        nextBtn.disabled = false;
+      }
+
+      function goToMatch(index) {
+        if (currentMatches.length === 0) return;
+        if (currentIndex >= 0 && currentMatches[currentIndex]) {
+          currentMatches[currentIndex].classList.remove('active-match');
+        }
+        currentIndex = (index + currentMatches.length) % currentMatches.length;
+        const target = currentMatches[currentIndex];
+        target.classList.add('active-match');
+        target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        updateMatchUI();
+      }
+
+      function performSearch(query) {
+        clearHighlights();
+        currentMatches = [];
+        currentIndex = -1;
+
+        const trimmed = (query || '').trim();
+        if (!trimmed) {
+          updateMatchUI();
+          return;
+        }
+
+        const cards = document.querySelectorAll('.page-card');
+        cards.forEach(card => {
+          const matches = highlightText(card, trimmed);
+          currentMatches = currentMatches.concat(matches);
+        });
+
+        if (currentMatches.length > 0) {
+          goToMatch(0);
+        } else {
+          updateMatchUI();
+        }
+      }
+
+      searchInput.addEventListener('input', (e) => performSearch(e.target.value));
+      searchInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          if (e.shiftKey) goToMatch(currentIndex - 1);
+          else goToMatch(currentIndex + 1);
+        } else if (e.key === 'Escape') {
+          searchInput.value = '';
+          performSearch('');
+          searchInput.blur();
+        }
+      });
+      prevBtn.addEventListener('click', () => goToMatch(currentIndex - 1));
+      nextBtn.addEventListener('click', () => goToMatch(currentIndex + 1));
+      clearBtn.addEventListener('click', () => {
+        searchInput.value = '';
+        performSearch('');
+        searchInput.focus();
+      });
+
+      window.addEventListener('DOMContentLoaded', () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const q = urlParams.get('q');
+        if (q) {
+          searchInput.value = q;
+          performSearch(q);
+        }
+      });
+    })();
+  </script>
+</body>
+</html>
