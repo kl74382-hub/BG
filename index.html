@@ -436,7 +436,7 @@
     <div id="contentArea"></div>
   </div>
 
-  <script src="search-data.js"></script>
+  <script src="search-data.js?v=1.2.1"></script>
   <script>
     (function() {
       // DOM 요소
@@ -499,6 +499,7 @@
           `;
         } else {
           filteredBooks.forEach(b => {
+            const aidFile = b.aidFile || (b.id === 'recall' ? 'Recall_player_aid_v1.2_KO.html' : (b.id === 'rock-hard-1977' ? 'RockHard_player_aid_v1.2_KO.html' : ''));
             html += `
               <div class="game-card">
                 <div class="game-header">
@@ -521,7 +522,7 @@
                     `).join('')}
                   </div>
                   <div style="display:flex; gap:6px; align-items:center; flex-wrap:wrap;">
-                    ${b.aidFile ? `<a href="${b.aidFile}" class="btn-view-all" style="background:#475569;" title="인쇄용 2페이지 플레이어 에이드">📄 인쇄용 에이드</a>` : ''}
+                    ${aidFile ? `<a href="${aidFile}" class="btn-view-all" style="background:#475569;" title="인쇄용 2페이지 플레이어 에이드">📄 인쇄용 에이드</a>` : ''}
                     <a href="${b.file}" class="btn-view-all">참조표 열기 ↗</a>
                   </div>
                 </div>
