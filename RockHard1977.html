@@ -1101,12 +1101,19 @@
             <input type="number" id="calcTrackFame" class="form-input" style="width:100%;" value="0" min="0">
           </div>
           <div>
-            <label style="font-size:12px; font-weight:700; color:#475569; display:block; margin-bottom:4px;">11 달성 스탯 개수 (각 +Fame)</label>
+            <label style="font-size:12px; font-weight:700; color:#475569; display:block; margin-bottom:4px;">11 달성 스탯 (각 +2점, 올11시 +8점)</label>
             <select id="calcElevenCount" class="form-select" style="width:100%;">
-              <option value="0">0개 (0점)</option>
-              <option value="5">1개 달성 (+5점)</option>
-              <option value="10">2개 달성 (+10점)</option>
-              <option value="15">3개 올맥스 (+15점)</option>
+              <option value="0">0개 달성 (0점)</option>
+              <option value="2">1개 달성 (+2점)</option>
+              <option value="4">2개 달성 (+4점)</option>
+              <option value="8">3개 올맥스 달성 (+8점)</option>
+            </select>
+          </div>
+          <div>
+            <label style="font-size:12px; font-weight:700; color:#475569; display:block; margin-bottom:4px;">혈당 토큰 상태 (ON일 때 감점)</label>
+            <select id="calcLowSugar" class="form-select" style="width:100%;">
+              <option value="0">OFF 상태 (정상: 0점)</option>
+              <option value="-5">ON 상태 (저혈당: -5점 감점)</option>
             </select>
           </div>
           <div>
@@ -1114,7 +1121,7 @@
             <input type="number" id="calcGoalFame" class="form-input" style="width:100%;" value="0" min="0">
           </div>
           <div>
-            <label style="font-size:12px; font-weight:700; color:#475569; display:block; margin-bottom:4px;">보너스 및 잔여 자원 점수</label>
+            <label style="font-size:12px; font-weight:700; color:#475569; display:block; margin-bottom:4px;">보너스 및 현금/자원 환산 점수</label>
             <input type="number" id="calcBonusFame" class="form-input" style="width:100%;" value="0" min="0">
           </div>
         </div>
@@ -1401,6 +1408,7 @@
       // 4. 간이 점수 계산기 로직
       const calcTrackFame = document.getElementById('calcTrackFame');
       const calcElevenCount = document.getElementById('calcElevenCount');
+      const calcLowSugar = document.getElementById('calcLowSugar');
       const calcGoalFame = document.getElementById('calcGoalFame');
       const calcBonusFame = document.getElementById('calcBonusFame');
       const calcTotalFame = document.getElementById('calcTotalFame');
@@ -1408,12 +1416,14 @@
       function updateTotalFame() {
         const track = parseInt(calcTrackFame.value, 10) || 0;
         const eleven = parseInt(calcElevenCount.value, 10) || 0;
+        const lowSugar = parseInt(calcLowSugar.value, 10) || 0;
         const goal = parseInt(calcGoalFame.value, 10) || 0;
         const bonus = parseInt(calcBonusFame.value, 10) || 0;
-        calcTotalFame.textContent = `${track + eleven + goal + bonus}점`;
+        const total = Math.max(0, track + eleven + lowSugar + goal + bonus);
+        calcTotalFame.textContent = `${total}점`;
       }
 
-      [calcTrackFame, calcElevenCount, calcGoalFame, calcBonusFame].forEach(el => {
+      [calcTrackFame, calcElevenCount, calcLowSugar, calcGoalFame, calcBonusFame].forEach(el => {
         el.addEventListener('input', updateTotalFame);
         el.addEventListener('change', updateTotalFame);
       });
