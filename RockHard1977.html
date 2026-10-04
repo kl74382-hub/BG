@@ -736,6 +736,7 @@
     <div class="top-nav-inner">
       <div class="nav-left">
         <a href="index.html" class="btn-home" title="보드게임 참조표 허브로 이동">← 참조표 목록</a>
+        <a href="RockHard_player_aid_v1.2_KO.html" class="btn-home" style="background:#d97706; border-color:#b45309; color:#fff;" title="인쇄용 2페이지 플레이어 에이드 열기">📄 인쇄용 에이드 v1.2</a>
         <span class="badge-rock">🎸 Rock Hard: 1977</span>
       </div>
 
@@ -1068,17 +1069,12 @@
         <div class="sim-controls">
           <span class="sim-label">현재 갈망(Craving) 다이얼:</span>
           <select id="simCravingSelect" class="dial-select">
-            <option value="1">1 (완전 안전: 0%)</option>
-            <option value="2">2 (위험도: 16.7%)</option>
-            <option value="3">3 (위험도: 33.3%)</option>
-            <option value="4" selected>4 (위험도: 50.0%)</option>
-            <option value="5">5 (위험도: 66.7%)</option>
-            <option value="6">6 (위험도: 83.3%)</option>
-            <option value="7">7 (극도로 위험)</option>
-            <option value="8">8 (극도로 위험)</option>
-            <option value="9">9 (극도로 위험)</option>
-            <option value="10">10 (치명적)</option>
-            <option value="11">11 (최대 한계치)</option>
+            <option value="1">1 (완전 안전: 0% 크래시)</option>
+            <option value="2">2 (위험도: 16.7% - 주사위 1만 크래시)</option>
+            <option value="3">3 (위험도: 33.3% - 주사위 1~2 크래시)</option>
+            <option value="4" selected>4 (위험도: 50.0% - 주사위 1~3 크래시)</option>
+            <option value="5">5 (위험도: 66.7% - 주사위 1~4 크래시)</option>
+            <option value="6">6 (최대치: 83.3% - 주사위 6만 안전!)</option>
           </select>
           <button type="button" id="btnRollDice" class="btn-roll">
             <span>🎲 주사위 굴리기 (Roll D6)</span>
