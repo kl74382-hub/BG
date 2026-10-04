@@ -1,590 +1,1142 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>리콜 (Recall) – 개인 참조표 v1.0</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
-<style>
-  @page {
-    size: A4 portrait;
-    margin: 15mm;
-  }
-  * {
-    box-sizing: border-box;
-  }
-  body {
-    font-family: 'Noto Sans KR', sans-serif;
-    font-size: 13.5px;
-    line-height: 1.6;
-    color: #1e293b;
-    background-color: #f1f5f9;
-    margin: 0;
-    padding: 16px;
-  }
-  
-  /* 상단 고정 내비게이션 & 검색창 */
-  .top-nav-bar {
-    position: sticky;
-    top: 10px;
-    z-index: 1000;
-    max-width: 820px;
-    margin: 0 auto 16px auto;
-  }
-  .top-nav-inner {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 10px;
-    background: rgba(255, 255, 255, 0.96);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    padding: 8px 14px;
-    border-radius: 10px;
-    border: 1px solid #cbd5e1;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  }
-  .btn-home {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 6px 12px;
-    background-color: #f1f5f9;
-    color: #334155;
-    text-decoration: none;
-    font-size: 13px;
-    font-weight: 700;
-    border-radius: 6px;
-    border: 1px solid #cbd5e1;
-    transition: all 0.2s ease;
-    white-space: nowrap;
-    flex-shrink: 0;
-  }
-  .btn-home:hover {
-    background-color: #e2e8f0;
-    color: #0f172a;
-    border-color: #94a3b8;
-  }
-  .search-box {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    background: #f8fafc;
-    border: 1px solid #cbd5e1;
-    border-radius: 6px;
-    padding: 3px 8px;
-    flex: 1;
-    max-width: 460px;
-    transition: all 0.2s;
-  }
-  .search-box:focus-within {
-    border-color: #0284c7;
-    background: #ffffff;
-    box-shadow: 0 0 0 2px rgba(2, 132, 199, 0.15);
-  }
-  .search-icon {
-    font-size: 13px;
-    color: #64748b;
-    user-select: none;
-  }
-  #searchInput {
-    border: none;
-    background: transparent;
-    outline: none;
-    font-family: inherit;
-    font-size: 13px;
-    color: #0f172a;
-    width: 100%;
-    min-width: 80px;
-  }
-  .search-count {
-    font-size: 11px;
-    color: #0284c7;
-    font-weight: 700;
-    white-space: nowrap;
-    user-select: none;
-  }
-  .search-nav-btn {
-    border: 1px solid #cbd5e1;
-    background: #ffffff;
-    border-radius: 4px;
-    cursor: pointer;
-    padding: 2px 6px;
-    font-size: 10px;
-    color: #334155;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    line-height: 1;
-    height: 22px;
-    transition: all 0.15s;
-  }
-  .search-nav-btn:hover:not(:disabled) {
-    background: #e0f2fe;
-    border-color: #0284c7;
-    color: #0284c7;
-  }
-  .search-nav-btn:disabled {
-    opacity: 0.3;
-    cursor: not-allowed;
-  }
-  .search-clear-btn {
-    border: none;
-    background: transparent;
-    color: #94a3b8;
-    cursor: pointer;
-    font-size: 14px;
-    padding: 0 2px;
-    display: none;
-    line-height: 1;
-  }
-  .search-clear-btn:hover {
-    color: #ef4444;
-  }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>리콜 (Recall) – 웹 매뉴얼 & 개인 참조표 v1.2</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    @page {
+      size: A4 portrait;
+      margin: 15mm;
+    }
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Noto Sans KR', sans-serif;
+      font-size: 13.5px;
+      line-height: 1.6;
+      color: #1e293b;
+      background-color: #f1f5f9;
+      margin: 0;
+      padding: 16px;
+    }
 
-  /* 검색어 하이라이트 */
-  mark.search-highlight {
-    background-color: #fef08a;
-    color: #854d0e;
-    padding: 1px 3px;
-    border-radius: 3px;
-    transition: background-color 0.2s;
-  }
-  mark.search-highlight.active-match {
-    background-color: #f97316;
-    color: #ffffff;
-    outline: 2px solid #ea580c;
-  }
+    /* 상단 고정 내비게이션 & 검색창 */
+    .top-nav-bar {
+      position: sticky;
+      top: 10px;
+      z-index: 1000;
+      max-width: 860px;
+      margin: 0 auto 16px auto;
+    }
+    .top-nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      background: rgba(255, 255, 255, 0.97);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      padding: 8px 14px;
+      border-radius: 12px;
+      border: 1px solid #cbd5e1;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+      flex-wrap: wrap;
+    }
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .btn-home {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      background-color: #0f172a;
+      color: #f8fafc;
+      text-decoration: none;
+      font-size: 12.5px;
+      font-weight: 700;
+      border-radius: 7px;
+      border: 1px solid #334155;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+    .btn-home:hover {
+      background-color: #1e293b;
+      color: #38bdf8;
+      border-color: #0284c7;
+      transform: translateY(-1px);
+    }
+    .btn-aid {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      background-color: #0284c7;
+      color: #ffffff;
+      text-decoration: none;
+      font-size: 12.5px;
+      font-weight: 700;
+      border-radius: 7px;
+      border: 1px solid #0369a1;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+    .btn-aid:hover {
+      background-color: #0369a1;
+      color: #f8fafc;
+      transform: translateY(-1px);
+    }
+    .badge-recall {
+      background: #e0f2fe;
+      color: #0369a1;
+      border: 1px solid #bae6fd;
+      font-size: 11px;
+      font-weight: 800;
+      padding: 2px 7px;
+      border-radius: 4px;
+      white-space: nowrap;
+    }
 
-  /* 앵커 점프 스크롤 위치 및 강조 */
-  :target {
-    scroll-margin-top: 72px;
-    animation: target-flash 1.8s ease;
-  }
-  @keyframes target-flash {
-    0% { background-color: rgba(186, 230, 253, 0.8); }
-    100% { background-color: transparent; }
-  }
+    .search-box {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      border-radius: 7px;
+      padding: 3px 8px;
+      flex: 1;
+      min-width: 200px;
+      max-width: 380px;
+      transition: all 0.2s;
+    }
+    .search-box:focus-within {
+      border-color: #0284c7;
+      background: #ffffff;
+      box-shadow: 0 0 0 2px rgba(2, 132, 199, 0.15);
+    }
+    .search-icon {
+      font-size: 13px;
+      color: #64748b;
+      user-select: none;
+    }
+    #searchInput {
+      border: none;
+      background: transparent;
+      outline: none;
+      font-family: inherit;
+      font-size: 13px;
+      color: #0f172a;
+      width: 100%;
+      min-width: 70px;
+    }
+    .search-count {
+      font-size: 11px;
+      color: #0284c7;
+      font-weight: 700;
+      white-space: nowrap;
+      user-select: none;
+    }
+    .search-nav-btn {
+      border: 1px solid #cbd5e1;
+      background: #ffffff;
+      border-radius: 4px;
+      cursor: pointer;
+      padding: 2px 6px;
+      font-size: 10px;
+      color: #334155;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
+      height: 22px;
+      transition: all 0.15s;
+    }
+    .search-nav-btn:hover:not(:disabled) {
+      background: #e0f2fe;
+      border-color: #0284c7;
+      color: #0284c7;
+    }
+    .search-nav-btn:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+    .search-clear-btn {
+      border: none;
+      background: transparent;
+      color: #94a3b8;
+      cursor: pointer;
+      font-size: 14px;
+      padding: 0 2px;
+      display: none;
+      line-height: 1;
+    }
+    .search-clear-btn:hover {
+      color: #ef4444;
+    }
 
-  .card {
-    background: #ffffff;
-    max-width: 820px;
-    margin: 0 auto 24px auto;
-    padding: 32px 36px;
-    border-radius: 12px;
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
-    border: 1px solid #e2e8f0;
-  }
-  h1 {
-    font-size: 24px;
-    font-weight: 900;
-    color: #0f172a;
-    border-bottom: 2px solid #334155;
-    padding-bottom: 8px;
-    margin: 0 0 16px 0;
-  }
-  .banner {
-    background: #e0f2fe;
-    border-left: 4px solid #0284c7;
-    padding: 10px 14px;
-    border-radius: 4px;
-    font-weight: 600;
-    color: #0369a1;
-    margin-bottom: 20px;
-  }
-  h2 {
-    font-size: 17px;
-    font-weight: 800;
-    color: #1d4ed8;
-    margin-top: 20px;
-    margin-bottom: 10px;
-    border-left: 4px solid #3b82f6;
-    padding-left: 8px;
-  }
-  h3 {
-    font-size: 14.5px;
-    font-weight: 700;
-    color: #334155;
-    margin-top: 14px;
-    margin-bottom: 6px;
-  }
-  ul {
-    margin: 6px 0 12px 0;
-    padding-left: 20px;
-  }
-  li {
-    margin-bottom: 6px;
-  }
-  .box-grid {
-    background: #f8fafc;
-    border: 1px solid #cbd5e1;
-    border-radius: 8px;
-    padding: 12px 16px;
-    margin: 10px 0;
-  }
-  .box-row {
-    padding: 6px 0;
-    border-bottom: 1px dashed #e2e8f0;
-  }
-  .box-row:last-child {
-    border-bottom: none;
-  }
-  .badge {
-    display: inline-block;
-    padding: 1px 6px;
-    border-radius: 4px;
-    font-size: 12px;
-    font-weight: 700;
-  }
-  .b-white { background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; }
-  .b-red { background: #fee2e2; color: #b91c1c; }
-  .b-purple { background: #f3e8ff; color: #7e22ce; }
-  .b-yellow { background: #f1c40f; color: #000; }
-  .b-green  { background: #2ecc71; color: #fff; }
-  .b-gray   { background: #7f8c8d; color: #fff; }
-  .callout {
-    background: #fffbeb;
-    border-left: 4px solid #f59e0b;
-    padding: 10px 14px;
-    margin: 12px 0;
-    border-radius: 0 6px 6px 0;
-    font-size: 13px;
-    color: #92400e;
-  }
-  .group-box {
-    background: #f8fafc;
-    border: 1px solid #e2e8f0;
-    border-radius: 8px;
-    padding: 12px 16px;
-    margin: 8px 0;
-  }
-  .tag-title {
-    font-weight: 700;
-    color: #0f766e;
-  }
+    /* 탭 메뉴 */
+    .tab-bar {
+      display: flex;
+      gap: 6px;
+      max-width: 860px;
+      margin: 0 auto 16px auto;
+      overflow-x: auto;
+      padding-bottom: 2px;
+    }
+    .tab-btn {
+      padding: 8px 14px;
+      border: 1px solid #cbd5e1;
+      background: #ffffff;
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 700;
+      color: #475569;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .tab-btn:hover {
+      background: #f8fafc;
+      color: #0f172a;
+      border-color: #94a3b8;
+    }
+    .tab-btn.active {
+      background: #0f172a;
+      color: #38bdf8;
+      border-color: #0f172a;
+      box-shadow: 0 2px 8px rgba(15, 23, 42, 0.2);
+    }
+    .tab-count {
+      font-size: 11px;
+      padding: 1px 5px;
+      border-radius: 10px;
+      background: #e2e8f0;
+      color: #475569;
+    }
+    .tab-btn.active .tab-count {
+      background: #0284c7;
+      color: #ffffff;
+    }
 
-  @media (max-width: 600px) {
-    body { padding: 10px 8px; }
-    .card { padding: 20px 16px; }
-    .top-nav-inner { flex-direction: column; align-items: stretch; gap: 8px; }
-    .search-box { max-width: 100%; }
-  }
+    /* 카드 컨테이너 */
+    .card {
+      background: #ffffff;
+      max-width: 860px;
+      margin: 0 auto 24px auto;
+      padding: 32px 36px;
+      border-radius: 14px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+      border: 1px solid #e2e8f0;
+    }
 
-  @media print {
-    body { background: #ffffff; padding: 0; }
-    .card { box-shadow: none; border: none; padding: 0; margin: 0; page-break-after: always; }
-    .card:last-child { page-break-after: avoid; }
-    .top-nav-bar { display: none !important; }
-    mark.search-highlight { background: transparent !important; color: inherit !important; outline: none !important; }
-  }
-</style>
+    /* 히어로 헤더 */
+    .game-hero {
+      border-bottom: 2px solid #0f172a;
+      padding-bottom: 18px;
+      margin-bottom: 24px;
+    }
+    .game-hero-title {
+      font-size: 26px;
+      font-weight: 900;
+      color: #0f172a;
+      margin: 0 0 6px 0;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .game-hero-subtitle {
+      font-size: 13.5px;
+      color: #64748b;
+      margin: 0 0 12px 0;
+      line-height: 1.5;
+    }
+    .meta-pills {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .pill {
+      font-size: 11.5px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 6px;
+      background: #f1f5f9;
+      color: #334155;
+      border: 1px solid #e2e8f0;
+    }
+    .pill.accent {
+      background: #e0f2fe;
+      color: #0369a1;
+      border-color: #bae6fd;
+    }
+    .pill.blue {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+
+    /* 숏컷 네비게이션 */
+    .shortcut-nav {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 12px 14px;
+      margin-bottom: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .shortcut-nav-title {
+      font-size: 12px;
+      font-weight: 800;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .shortcut-chips-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .chip-link {
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      padding: 4px 10px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #334155;
+      text-decoration: none;
+      transition: all 0.15s ease;
+    }
+    .chip-link:hover {
+      background: #e0f2fe;
+      border-color: #0284c7;
+      color: #0284c7;
+      transform: translateY(-1px);
+    }
+
+    /* 본문 공통 스타일 */
+    h2.section-header {
+      font-size: 18px;
+      font-weight: 800;
+      color: #0f172a;
+      margin: 28px 0 14px 0;
+      padding-bottom: 6px;
+      border-bottom: 2px solid #0284c7;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    h3 {
+      font-size: 15px;
+      font-weight: 800;
+      color: #1e293b;
+      margin: 18px 0 8px 0;
+    }
+    ul.rule-list {
+      margin: 6px 0 14px 0;
+      padding-left: 20px;
+    }
+    ul.rule-list li {
+      margin-bottom: 6px;
+    }
+
+    /* 배너 및 콜아웃 */
+    .banner {
+      background: #e0f2fe;
+      border-left: 4px solid #0284c7;
+      padding: 12px 16px;
+      border-radius: 6px;
+      font-weight: 600;
+      color: #0369a1;
+      margin-bottom: 22px;
+      font-size: 14px;
+    }
+    .callout {
+      background: #fffbeb;
+      border-left: 4px solid #f59e0b;
+      padding: 12px 16px;
+      margin: 14px 0;
+      border-radius: 0 8px 8px 0;
+      font-size: 13px;
+      color: #92400e;
+    }
+
+    /* 행동 상자 그리드 */
+    .box-grid {
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      border-radius: 10px;
+      padding: 14px 18px;
+      margin: 12px 0 20px 0;
+    }
+    .box-row {
+      padding: 8px 0;
+      border-bottom: 1px dashed #e2e8f0;
+      font-size: 13.5px;
+    }
+    .box-row:last-child {
+      border-bottom: none;
+    }
+
+    /* 뱃지 */
+    .badge {
+      display: inline-block;
+      padding: 1px 7px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .b-white { background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; }
+    .b-red { background: #fee2e2; color: #b91c1c; }
+    .b-purple { background: #f3e8ff; color: #7e22ce; }
+    .b-yellow { background: #fef08a; color: #854d0e; }
+    .b-green  { background: #dcfce7; color: #166534; }
+    .b-gray   { background: #e2e8f0; color: #334155; }
+
+    /* 그룹 박스 */
+    .group-box {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 12px 16px;
+      margin: 10px 0;
+    }
+    .tag-title {
+      font-weight: 700;
+      color: #0284c7;
+    }
+
+    /* 검색어 하이라이트 */
+    mark.search-highlight {
+      background-color: #fef08a;
+      color: #854d0e;
+      padding: 1px 3px;
+      border-radius: 3px;
+      transition: background-color 0.2s;
+    }
+    mark.search-highlight.active-match {
+      background-color: #0284c7;
+      color: #ffffff;
+      outline: 2px solid #0369a1;
+    }
+
+    /* 앵커 타겟 하이라이트 */
+    :target {
+      scroll-margin-top: 80px;
+      animation: target-flash 1.8s ease;
+    }
+    @keyframes target-flash {
+      0% { background-color: rgba(186, 230, 253, 0.8); }
+      100% { background-color: transparent; }
+    }
+
+    /* 메모 관리 탭 스타일 */
+    .note-form {
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      border-radius: 10px;
+      padding: 18px;
+      margin-bottom: 24px;
+    }
+    .form-row {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+    .form-input, .form-select, .form-textarea {
+      font-family: inherit;
+      font-size: 13.5px;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      padding: 8px 12px;
+      background: #ffffff;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .form-input:focus, .form-select:focus, .form-textarea:focus {
+      border-color: #0284c7;
+      box-shadow: 0 0 0 2px rgba(2, 132, 199, 0.15);
+    }
+    .form-textarea {
+      width: 100%;
+      min-height: 80px;
+      resize: vertical;
+    }
+    .btn-save-note {
+      background: #0f172a;
+      color: #38bdf8;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s;
+    }
+    .btn-save-note:hover {
+      background: #1e293b;
+      transform: translateY(-1px);
+    }
+    .notes-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .note-item {
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 14px 16px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+    }
+    .note-item-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+    .note-item-title {
+      font-size: 14px;
+      font-weight: 800;
+      color: #0f172a;
+    }
+    .btn-delete-note {
+      background: none;
+      border: none;
+      color: #94a3b8;
+      cursor: pointer;
+      font-size: 12px;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+    .btn-delete-note:hover {
+      color: #ef4444;
+      background: #fee2e2;
+    }
+    .note-meta {
+      font-size: 11.5px;
+      color: #64748b;
+      margin-bottom: 6px;
+    }
+    .note-content-text {
+      font-size: 13px;
+      color: #334155;
+      white-space: pre-wrap;
+      line-height: 1.5;
+    }
+
+    /* 인쇄 전용 스타일 */
+    @media print {
+      body {
+        background: #ffffff;
+        padding: 0;
+        font-size: 12px;
+      }
+      .top-nav-bar, .tab-bar, .shortcut-nav, .note-form, .btn-delete-note, .search-nav-btn, .search-clear-btn {
+        display: none !important;
+      }
+      .card {
+        box-shadow: none;
+        border: none;
+        padding: 0;
+        margin: 0;
+        max-width: 100%;
+      }
+      .tab-content {
+        display: block !important;
+      }
+      h2.section-header {
+        page-break-before: auto;
+      }
+    }
+
+    @media (max-width: 600px) {
+      body { padding: 8px; }
+      .card { padding: 20px 16px; }
+      .top-nav-inner { flex-direction: column; align-items: stretch; }
+      .search-box { max-width: 100%; }
+    }
+  </style>
 </head>
 <body>
 
-<div class="top-nav-bar">
-  <div class="top-nav-inner">
-    <a href="index.html" class="btn-home">⬅ 보드게임 목록</a>
-    <div class="search-box">
-      <span class="search-icon">🔍</span>
-      <input type="text" id="searchInput" placeholder="참조표 내 규칙/키워드 검색 (예: 발굴, 물 이동)" autocomplete="off">
-      <span id="searchCount" class="search-count"></span>
-      <button type="button" id="prevBtn" class="search-nav-btn" title="이전 (Shift+Enter)" disabled>▲</button>
-      <button type="button" id="nextBtn" class="search-nav-btn" title="다음 (Enter)" disabled>▼</button>
-      <button type="button" id="clearBtn" class="search-clear-btn" title="지우기 (Esc)">✕</button>
+  <!-- 상단 고정 내비게이션 & 검색창 -->
+  <div class="top-nav-bar">
+    <div class="top-nav-inner">
+      <div class="nav-left">
+        <a href="index.html" class="btn-home" title="보드게임 참조표 허브로 이동">← 참조표 목록</a>
+        <a href="Recall_player_aid_v1.2_KO.html" class="btn-aid" title="인쇄용 플레이어 에이드 열기">📄 인쇄용 에이드 v1.2</a>
+        <span class="badge-recall">⏳ Recall</span>
+      </div>
+
+      <div class="search-box">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="searchInput" placeholder="키카드, 리콜, 발굴, 개발 검색..." autocomplete="off">
+        <span id="searchCount" class="search-count"></span>
+        <button type="button" id="prevMatch" class="search-nav-btn" title="이전 결과 (Shift+Enter)" disabled>▲</button>
+        <button type="button" id="nextMatch" class="search-nav-btn" title="다음 결과 (Enter)" disabled>▼</button>
+        <button type="button" id="clearSearch" class="search-clear-btn" title="검색어 지우기">✕</button>
+      </div>
     </div>
   </div>
-</div>
 
-<div class="card">
-  <h1>Recall (리콜) – 개인 참조표 <span style="font-size: 14px; color: #64748b; font-weight: normal;">v1.0</span></h1>
-  <div class="banner">
-    자신의 차례가 되면 다음 중 <strong>반드시 하나</strong>를 수행해야 합니다: <strong>키카드 사용</strong> 또는 <strong>리콜</strong>
+  <!-- 탭 메뉴 -->
+  <div class="tab-bar">
+    <button type="button" class="tab-btn active" data-tab="tab-manual">
+      <span>📖 규칙 및 참조표</span>
+    </button>
+    <button type="button" class="tab-btn" data-tab="tab-notes">
+      <span>📝 하우스 룰 & 메모</span>
+      <span id="notesBadge" class="tab-count">0</span>
+    </button>
   </div>
 
-  <h2 id="sec-keycard">1. 키카드 사용</h2>
-  <ul>
-    <li>사용 가능한 키카드 1장을 개인판의 빈 공간에 꽂습니다.</li>
-    <li><strong>키카드의 효과</strong>와 해당 슬롯 위의 <strong>행동 상자 효과</strong>를 모두 활성화합니다.</li>
-    <li>모든 효과는 <strong>선택 사항</strong>이며, <strong>원하는 순서대로</strong> 처리할 수 있습니다.</li>
-  </ul>
+  <div class="card">
+    <!-- 히어로 헤더 -->
+    <div class="game-hero">
+      <h1 class="game-hero-title">
+        <span>⏳ 리콜 (Recall)</span>
+        <span style="font-size: 18px; color:#64748b; font-weight:700;">– 개인 참조표 v1.2</span>
+      </h1>
+      <p class="game-hero-subtitle">미지의 행성에서 펼쳐지는 시간 역행과 자원 채굴, 고대 기술 발굴의 전략 여정</p>
+      <div class="meta-pills">
+        <span class="pill">👥 1~4인</span>
+        <span class="pill">⏱️ 60~90분</span>
+        <span class="pill">🎯 엔진빌딩 / 키카드 슬롯 / 일꾼 회수</span>
+        <span class="pill accent">⚡ 디자이너: Phil Walker-Harding</span>
+        <span class="pill blue">📜 공식 룰북 v1.2 기준</span>
+      </div>
+    </div>
 
-  <h3 id="sec-action-box">행동 상자 효과 (기본 게임)</h3>
-  <div class="box-grid">
-    <div class="box-row"><strong style="color:#2563eb;">A:</strong> <strong>추종자 2명 획득</strong>; (선택) 수정을 지불하여 추종자를 최대 4명까지 추가 획득 <br><small style="color:#64748b; margin-left: 20px;">*(보드 위의 추종자를 제거하여 흰색 수정을 얻을 수도 있음)*</small></div>
-    <div class="box-row"><strong style="color:#2563eb;">B:</strong> <strong>2회 이동</strong>(또는 <span class="badge b-white">흰색</span>/<span class="badge b-red">빨간색</span>/<span class="badge b-purple">보라색</span> 수정 1개를 지불하여 <strong>3/4/5회 이동</strong>) 및 <strong>개발 액션 1회</strong> 수행</div>
-    <div class="box-row"><strong style="color:#2563eb;">C:</strong> <strong>물 이동 1회</strong> 및 <strong>개발 액션 1회</strong> 수행</div>
-    <div class="box-row"><strong style="color:#2563eb;">D:</strong> <strong>2회 이동</strong> / <strong>개발 액션 2회</strong> / <strong>1회 이동 & 개발 액션 1회</strong> 중 택1</div>
-    <div class="box-row"><strong style="color:#2563eb;">E:</strong> <strong>1회 이동</strong>, <strong>개발 액션 1회</strong> 수행, 내 영향력(추종자 또는 건물)이 있는 인접 <strong>지역 타일 1개 공개</strong> <br><small style="color:#64748b; margin-left: 20px;">*(새로 공개된 타일에 인접한 지역 타일에 영향력이 있는 플레이어마다 1점씩 획득)*</small></div>
-    <div class="box-row"><strong style="color:#2563eb;">F:</strong> <span class="badge b-white">흰색 수정 1개</span>를 지불하여 이미 키카드로 사용한 행동 상자 1개의 효과를 복사</div>
-  </div>
+    <!-- TAB 1: 규칙 및 참조표 -->
+    <div id="tab-manual" class="tab-content">
+      <!-- 목차 바로가기 -->
+      <div class="shortcut-nav">
+        <div class="shortcut-nav-title">⚡ 빠른 섹션 바로가기:</div>
+        <div class="shortcut-chips-wrap">
+          <a href="#sec-keycard" class="chip-link">1. 키카드 사용</a>
+          <a href="#sec-action-box" class="chip-link">행동 상자 (A~F)</a>
+          <a href="#sec-recall" class="chip-link">2. 리콜 & 생산</a>
+          <a href="#sec-free-actions" class="chip-link">자유 행동 (캡슐/크리스탈)</a>
+          <a href="#sec-develop" class="chip-link">개발 (건설 & 발굴)</a>
+          <a href="#sec-movement" class="chip-link">이동 & 유물 큐브</a>
+          <a href="#sec-end-of-round" class="chip-link">라운드 종료 & 특별 라운드</a>
+        </div>
+      </div>
 
-  <h2 id="sec-recall">2. 리콜</h2>
-  <ul>
-    <li>사용한 모든 <strong>키카드를 회수</strong>합니다.</li>
-    <li>회수한 키카드 1장당 개인판의 <strong>공개된 생산 칸(<span style="color:#dc2626; font-weight:700;">빨간색 칸</span>) 1곳을 활성화</strong>합니다. <small style="color:#64748b;">(리콜당 각 칸 1회만 활성화 가능; 초록색 큐브로 표시)</small></li>
-    <li>모든 <strong>능력석을 개인판의 지정된 위치로 반환</strong>합니다.</li>
-  </ul>
-  <div class="callout">
-    <strong>참고:</strong> 리콜 도중에도 능력석 사용을 포함한 모든 자유 행동을 수행할 수 있습니다. 단, 능력석이 재충전(반환)된 후에는 이번 턴에 다시 사용할 수 없습니다.
-  </div>
+      <div class="banner">
+        자신의 차례가 되면 다음 중 <strong>반드시 하나</strong>를 수행해야 합니다: <strong>키카드 사용</strong> 또는 <strong>리콜</strong>
+      </div>
 
-  <h2 id="sec-free-actions">자유 행동(<span style="font-size:13px; color:#64748b; font-weight:normal;">언제든, 횟수 제한 없음</span>)</h2>
-  <ul>
-    <li><strong>캡슐 사용:</strong> 캡슐 타일 1개를 공개하여 효과를 적용한 후 버립니다.</li>
-    <li><strong>크리스탈 교환:</strong> 한 종류 수정 3개 &rarr; 다음 상위 등급 수정 1개; 또는 수정을 1단계 하위 등급으로 낮추고 + 흰색 수정 1개 추가 획득</li>
-    <li><strong>능력석 사용:</strong> 능력석을 배치하여 <strong>부족</strong>, <strong>장치</strong>, 해금된 <strong>고대 부족 능력</strong>을 활성화합니다. <br><small style="color:#64748b;">동일 능력을 반복 활성화할 때마다 능력석이 1개씩 추가 소모됩니다 (리콜 후 초기화). 일부 능력은 항상 능력석 1개만 소모합니다.</small></li>
-  </ul>
-</div>
-
-<div class="card">
-  <h2 id="sec-develop">개발 액션</h2>
-  <ul>
-    <li>
-      <strong>내 추종자가 있는 칸에서 건설 또는 발굴 수행:</strong>
-      <div class="group-box">
-        <p id="sec-build" style="margin: 0 0 6px 0; font-weight: 700;">👷 건설: <span style="font-weight: normal;">추종자 1명 제거 (해당 칸의 다른 플레이어 건물 1개당 +1명 추가 제거; 해당 플레이어는 그곳에 추종자 1명 획득); 필요시 수정 비용 지불</span></p>
-        <ul style="margin-bottom:0;">
-          <li><span class="tag-title">볼트:</span> 원하는 볼트 배치 및 보상 획득 (유물 큐브 보상 선택 시 메인보드 우측 하단에서 획득)</li>
-          <li><span class="tag-title">작업장:</span> 선택 지형(<span class="badge b-yellow">평야</span>, <span class="badge b-green">숲</span>, <span class="badge b-gray">산</span>)의 가장 아래쪽 작업장을 배치, 크리스탈 비용 지불, 일치하는 키카드 획득</li>
-          <li><span class="tag-title">기념비:</span> 가장 아래쪽 기념비 배치, 증가하는 <span class="badge b-purple">보라색 수정</span> 비용 지불, 보상 또는 게임 종료 점수 획득 <br><small style="color:#64748b;">- 미리 인쇄된 칸: 게임 종료 점수 / 지역 타일 칸: 첫 번째 배치 시 기념비 타일 및 보상</small></li>
-          <li><span class="tag-title">캠프:</span> 캠프 인접칸 건설 시 보상 획득. 건물 인접칸에 새 캠프 공개 시 소유자가 즉시 획득 (플레이어당 각 캠프에서 1회만)</li>
+      <!-- 1. 키카드 사용 -->
+      <section id="sec-keycard">
+        <h2 class="section-header">1. 키카드 사용 (Use a Keycard)</h2>
+        <ul class="rule-list">
+          <li>사용 가능한 <strong>키카드 1장</strong>을 개인판의 빈 공간에 꽂습니다.</li>
+          <li><strong>키카드의 효과</strong>와 해당 슬롯 위의 <strong>행동 상자 효과</strong>를 모두 활성화합니다.</li>
+          <li>모든 효과는 <strong>선택 사항</strong>이며, <strong>원하는 순서대로</strong> 처리할 수 있습니다.</li>
         </ul>
+
+        <h3 id="sec-action-box">행동 상자 효과 (기본 게임 A~F)</h3>
+        <div class="box-grid">
+          <div class="box-row"><strong style="color:#0284c7;">A:</strong> <strong>추종자 2명 획득</strong>; (선택) 수정을 지불하여 추종자를 최대 4명까지 추가 획득 <br><small style="color:#64748b; margin-left: 20px;">*(보드 위의 추종자를 제거하여 흰색 수정을 얻을 수도 있음)*</small></div>
+          <div class="box-row"><strong style="color:#0284c7;">B:</strong> <strong>2회 이동</strong>(또는 <span class="badge b-white">흰색</span>/<span class="badge b-red">빨간색</span>/<span class="badge b-purple">보라색</span> 수정 1개를 지불하여 <strong>3/4/5회 이동</strong>) 및 <strong>개발 액션 1회</strong> 수행</div>
+          <div class="box-row"><strong style="color:#0284c7;">C:</strong> <strong>물 이동 1회</strong> 및 <strong>개발 액션 1회</strong> 수행</div>
+          <div class="box-row"><strong style="color:#0284c7;">D:</strong> <strong>2회 이동</strong> / <strong>개발 액션 2회</strong> / <strong>1회 이동 & 개발 액션 1회</strong> 중 택1</div>
+          <div class="box-row"><strong style="color:#0284c7;">E:</strong> <strong>1회 이동</strong>, <strong>개발 액션 1회</strong> 수행, 내 영향력(추종자 또는 건물)이 있는 인접 <strong>지역 타일 1개 공개</strong> <br><small style="color:#64748b; margin-left: 20px;">*(새로 공개된 타일에 인접한 지역 타일에 영향력이 있는 플레이어마다 1점씩 획득)*</small></div>
+          <div class="box-row"><strong style="color:#0284c7;">F:</strong> <span class="badge b-white">흰색 수정 1개</span>를 지불하여 이미 키카드로 사용한 행동 상자 1개의 효과를 복사</div>
+        </div>
+      </section>
+
+      <!-- 2. 리콜 -->
+      <section id="sec-recall">
+        <h2 class="section-header">2. 리콜 (Recall - 키카드 회수 & 생산)</h2>
+        <ul class="rule-list">
+          <li>사용한 모든 <strong>키카드를 회수</strong>합니다.</li>
+          <li>회수한 키카드 1장당 개인판의 <strong>공개된 생산 칸(<span style="color:#dc2626; font-weight:700;">빨간색 칸</span>) 1곳을 활성화</strong>합니다. <small style="color:#64748b;">(리콜당 각 칸 1회만 활성화 가능; 초록색 큐브로 표시)</small></li>
+          <li>모든 <strong>능력석을 개인판의 지정된 위치로 반환</strong>합니다.</li>
+        </ul>
+        <div class="callout">
+          <strong>💡 중요 리콜 팁:</strong> 리콜 도중에도 능력석 사용을 포함한 모든 자유 행동을 수행할 수 있습니다. 단, 능력석이 재충전(반환)된 후에는 이번 턴에 다시 사용할 수 없습니다.
+        </div>
+      </section>
+
+      <!-- 자유 행동 -->
+      <section id="sec-free-actions">
+        <h2 class="section-header">자유 행동 (Free Actions - 언제든, 횟수 제한 없음)</h2>
+        <ul class="rule-list">
+          <li><strong>캡슐 사용:</strong> 캡슐 타일 1개를 공개하여 효과를 적용한 후 버립니다.</li>
+          <li><strong>크리스탈 교환:</strong> 한 종류 수정 3개 &rarr; 다음 상위 등급 수정 1개; 또는 수정을 1단계 하위 등급으로 낮추고 + 흰색 수정 1개 추가 획득.</li>
+          <li><strong>능력석 사용:</strong> 능력석을 배치하여 <strong>부족</strong>, <strong>장치</strong>, 해금된 <strong>고대 부족 능력</strong>을 활성화합니다. <br><small style="color:#64748b;">동일 능력을 반복 활성화할 때마다 능력석이 1개씩 추가 소모됩니다 (리콜 후 초기화). 일부 능력은 항상 능력석 1개만 소모합니다.</small></li>
+        </ul>
+      </section>
+
+      <!-- 개발 액션 -->
+      <section id="sec-develop">
+        <h2 class="section-header">개발 액션 (Develop Actions - 건설 & 발굴)</h2>
+        <ul class="rule-list">
+          <li>
+            <strong>내 추종자가 있는 칸에서 건설 또는 발굴 수행:</strong>
+            
+            <div class="group-box">
+              <p id="sec-build" style="margin: 0 0 8px 0; font-weight: 700; color: #0f172a;">
+                👷 건설 (Build): <span style="font-weight: normal; color:#334155;">추종자 1명 제거 (해당 칸의 다른 플레이어 건물 1개당 +1명 추가 제거; 해당 플레이어는 그곳에 추종자 1명 획득); 필요시 수정 비용 지불</span>
+              </p>
+              <ul style="margin-bottom:0; padding-left: 18px;">
+                <li><span class="tag-title">볼트 (Vault):</span> 원하는 볼트 배치 및 보상 획득 (유물 큐브 보상 선택 시 메인보드 우측 하단에서 획득)</li>
+                <li><span class="tag-title">작업장 (Workshop):</span> 선택 지형(<span class="badge b-yellow">평야</span>, <span class="badge b-green">숲</span>, <span class="badge b-gray">산</span>)의 가장 아래쪽 작업장을 배치, 크리스탈 비용 지불, 일치하는 키카드 획득</li>
+                <li><span class="tag-title">기념비 (Monument):</span> 가장 아래쪽 기념비 배치, 증가하는 <span class="badge b-purple">보라색 수정</span> 비용 지불, 보상 또는 게임 종료 점수 획득 <br><small style="color:#64748b;">- 미리 인쇄된 칸: 게임 종료 점수 / 지역 타일 칸: 첫 번째 배치 시 기념비 타일 및 보상</small></li>
+                <li><span class="tag-title">캠프 (Camp):</span> 캠프 인접칸 건설 시 보상 획득. 건물 인접칸에 새 캠프 공개 시 소유자가 즉시 획득 (플레이어당 각 캠프에서 1회만)</li>
+              </ul>
+            </div>
+
+            <div class="group-box">
+              <p id="sec-excavate" style="margin: 0; font-weight: 700; color: #0f172a;">
+                ⛏️ 발굴 (Excavate): <span style="font-weight: normal; color:#334155;">추종자 1명 제거, 남은 스톤이 3/2/1개일 때 <span class="badge b-white">흰색</span>/<span class="badge b-red">빨간색</span>/<span class="badge b-purple">보라색</span> 수정 1개 지불, 능력석 1개 획득, 능력석과 색이 일치하는 <strong>지식 트랙에서 2/3/4칸 전진</strong></span>
+              </p>
+            </div>
+          </li>
+          <li style="margin-top: 8px;"><strong>크리스탈 업그레이드:</strong> 건설/발굴 대신 수정 1개를 다음 상위 등급으로 업그레이드합니다.</li>
+        </ul>
+      </section>
+
+      <!-- 이동 -->
+      <section id="sec-movement">
+        <h2 class="section-header">이동 (Movement & Relicubes)</h2>
+        <ul class="rule-list">
+          <li>한 칸에서 인접한 칸으로 추종자 무리를 이동합니다 (전부 또는 일부).</li>
+          <li>숫자는 총 이동 횟수를 나타냅니다 (원하는 대로 분할 이동 가능, 이동 중 다른 효과 처리 후 이동 안 됨).</li>
+          <li>허용되지 않는 한 물, 화산, 미공개 타일로는 이동할 수 없습니다.</li>
+          <li><strong>물 이동:</strong> 연결된 물 칸을 가로질러 이동합니다 (한 무리는 함께 이동, <strong>특별 물 이동</strong> 시에만 나누어 이동 가능).</li>
+          <li><strong>유물 큐브:</strong> 해당 칸으로 처음 이동해 들어갈 때 추종자를 제거하여 <strong>반드시</strong> 획득해야 합니다 (충분한 추종자가 없다면 통과 불가).</li>
+        </ul>
+      </section>
+
+      <!-- 라운드 종료 -->
+      <section id="sec-end-of-round">
+        <h2 class="section-header">라운드 종료 & 특별 라운드</h2>
+        <ul class="rule-list">
+          <li>모래시계를 전진시키고, 수정 보관 한도(종류당 최대 6개) 확인, 액션 표시 초록색 큐브를 모두 제거합니다.</li>
+          <li><strong>특별 라운드:</strong> 모래시계가 갈색 칸에 도달하면 진행:
+            <ul style="margin-top: 6px; padding-left: 18px;">
+              <li><strong>길 선택:</strong> 각 플레이어(시계 방향)는 길 카드 2장 중 1장을 선택하고 연결된 보너스 칩 보상을 즉시 획득합니다.</li>
+              <li><strong>목표 카드 버리기:</strong> 각 플레이어(시계 방향)는 목표 카드 2장 중 1장을 버리고 하단에 표시된 보상을 즉시 받습니다.</li>
+            </ul>
+          </li>
+        </ul>
+      </section>
+    </div>
+
+    <!-- TAB 2: 하우스 룰 & 메모 관리 -->
+    <div id="tab-notes" class="tab-content" style="display:none;">
+      <div class="note-form">
+        <h3 style="margin-top:0; color:#0f172a;">📝 하우스 룰 & 플레이 메모 추가</h3>
+        <p style="font-size:12.5px; color:#64748b; margin-bottom:12px;">모임 고유의 하우스 룰, 세팅 팁, 자주 헷갈리는 FAQ를 브라우저에 영구 저장하세요.</p>
+        
+        <div class="form-row">
+          <input type="text" id="noteTitle" class="form-input" placeholder="메모 제목 (예: 초심자 추천 생산칸 우선순위)" style="flex:2; min-width:200px;">
+          <select id="noteCategory" class="form-select" style="flex:1; min-width:140px;">
+            <option value="하우스 룰">🏠 하우스 룰</option>
+            <option value="에라타 메모">⚠️ 에라타 메모</option>
+            <option value="세팅 팁">⚙️ 세팅 팁</option>
+            <option value="전략/참고">💡 전략/참고</option>
+          </select>
+        </div>
+        <textarea id="noteContent" class="form-textarea" placeholder="상세 내용을 입력하세요..."></textarea>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:8px; flex-wrap:wrap; gap:8px;">
+          <button type="button" id="btnSaveNote" class="btn-save-note">💾 메모 저장하기</button>
+          <div style="display:flex; gap:6px;">
+            <button type="button" id="btnExportNotes" class="search-nav-btn" style="height:28px; padding:0 10px;">JSON 백업</button>
+            <button type="button" id="btnImportNotes" class="search-nav-btn" style="height:28px; padding:0 10px;">JSON 복원</button>
+            <input type="file" id="importFileInput" accept=".json" style="display:none;">
+          </div>
+        </div>
       </div>
 
-      <div class="group-box">
-        <p id="sec-excavate" style="margin: 0; font-weight: 700;">⛏️ 발굴 : <span style="font-weight: normal;">추종자 1명 제거, 남은 스톤이 3/2/1개일 때 <span class="badge b-white">흰색</span>/<span class="badge b-red">빨간색</span>/<span class="badge b-purple">보라색</span> 수정 1개 지불, 능력석 1개 획득, 능력석과 색이 일치하는 <strong>지식 트랙에서 2/3/4칸 전진</strong></span></p>
+      <div id="notesContainer" class="notes-list">
+        <!-- 동적 렌더링 -->
       </div>
-    </li>
-    <li style="margin-top: 8px;"><strong>크리스탈 업그레이드:</strong> 건설/발굴 대신 수정 1개를 다음 상위 등급으로 업그레이드합니다.</li>
-  </ul>
+    </div>
+  </div>
 
-  <h2 id="sec-movement">이동 </h2>
-  <ul>
-    <li>한 칸에서 인접한 칸으로 추종자 무리를 이동합니다(전부 또는 일부).</li>
-    <li>숫자는 총 이동 횟수를 나타냅니다 (원하는 대로 분할 이동 가능, 이동 중 다른 효과 처리 후 이동 안됨).</li>
-    <li>허용되지 않는 한 물, 화산, 미공개 타일로는 이동할 수 없습니다.</li>
-    <li><strong>물 이동:</strong> 연결된 물 칸를 가로질러 이동합니다(한 무리는 함께 이동, <strong>특별 물 이동</strong>시에만 나누어 이동 가능).</li>
-    <li><strong>유물 큐브:</strong> 해당 칸으로 처음 이동해 들어갈 때 추종자를 제거하여 <strong>반드시</strong> 획득해야 합니다(충분한 추종자가 없다면 통과 안됨).</li>
-  </ul>
+  <script>
+    (function() {
+      // 1. 탭 전환 제어
+      const tabBtns = document.querySelectorAll('.tab-btn');
+      const tabContents = document.querySelectorAll('.tab-content');
 
-  <h2 id="sec-end-of-round">라운드 종료 </h2>
-  <ul>
-    <li>모래시계를 전진시키고, 수정 보관 한도(종류당 최대 6개) 확인, 액션 표시 초록색 큐브를 모두 제거합니다.</li>
-    <li><strong>특별 라운드:</strong> 갈색  칸에 도달하면 진행
-      <ul style="margin-top: 4px;">
-        <li><strong>길 선택 :</strong> 각 플레이어(시계 방향)는 길 카드 2장 중 1장을 선택하고 연결된 보너스 칩 보상을 즉시 획득합니다.</li>
-        <li><strong>목표 카드 버리기 :</strong> 각 플레이어(시계 방향)는 목표 카드 2장 중 1장을 버리고 하단에 표시된 보상을 즉시 받습니다.</li>
-      </ul>
-    </li>
-  </ul>
-</div>
-
-<script>
-(function() {
-  const searchInput = document.getElementById('searchInput');
-  const searchCount = document.getElementById('searchCount');
-  const prevBtn = document.getElementById('prevBtn');
-  const nextBtn = document.getElementById('nextBtn');
-  const clearBtn = document.getElementById('clearBtn');
-
-  let currentMatches = [];
-  let currentIndex = -1;
-
-  // 하이라이트 제거 및 텍스트 노드 병합
-  function clearHighlights() {
-    const highlights = document.querySelectorAll('mark.search-highlight');
-    highlights.forEach(mark => {
-      const parent = mark.parentNode;
-      if (parent) {
-        parent.replaceChild(document.createTextNode(mark.textContent), mark);
-        parent.normalize();
+      function switchTab(tabId) {
+        tabBtns.forEach(btn => {
+          btn.classList.toggle('active', btn.dataset.tab === tabId);
+        });
+        tabContents.forEach(content => {
+          content.style.display = (content.id === tabId) ? 'block' : 'none';
+        });
       }
-    });
-  }
 
-  // 텍스트 노드 순회 하이라이트 생성
-  function highlightText(rootNode, query) {
-    if (!query) return [];
-    const matches = [];
-    const queryLower = query.toLowerCase();
+      tabBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          switchTab(btn.dataset.tab);
+        });
+      });
 
-    const treeWalker = document.createTreeWalker(
-      rootNode,
-      NodeFilter.SHOW_TEXT,
-      {
-        acceptNode: function(node) {
-          if (!node.textContent || !node.textContent.trim()) return NodeFilter.FILTER_REJECT;
-          let parent = node.parentElement;
-          while (parent && parent !== rootNode) {
-            if (parent.classList.contains('top-nav-bar') || parent.tagName === 'SCRIPT' || parent.tagName === 'STYLE') {
-              return NodeFilter.FILTER_REJECT;
-            }
-            parent = parent.parentElement;
+      // 2. 텍스트 검색 및 하이라이트 시스템
+      const searchInput = document.getElementById('searchInput');
+      const searchCount = document.getElementById('searchCount');
+      const prevBtn = document.getElementById('prevMatch');
+      const nextBtn = document.getElementById('nextMatch');
+      const clearBtn = document.getElementById('clearSearch');
+
+      let currentMatches = [];
+      let currentIndex = -1;
+
+      function clearHighlights() {
+        const highlights = document.querySelectorAll('mark.search-highlight');
+        highlights.forEach(mark => {
+          const parent = mark.parentNode;
+          if (parent) {
+            parent.replaceChild(document.createTextNode(mark.textContent), mark);
+            parent.normalize();
           }
-          return NodeFilter.FILTER_ACCEPT;
+        });
+      }
+
+      function highlightText(rootNode, query) {
+        if (!query) return [];
+        const matches = [];
+        const queryLower = query.toLowerCase();
+
+        const treeWalker = document.createTreeWalker(
+          rootNode,
+          NodeFilter.SHOW_TEXT,
+          {
+            acceptNode: function(node) {
+              if (!node.textContent || !node.textContent.trim()) return NodeFilter.FILTER_REJECT;
+              let parent = node.parentElement;
+              while (parent && parent !== rootNode) {
+                if (parent.classList.contains('top-nav-bar') || parent.classList.contains('tab-bar') || parent.tagName === 'SCRIPT' || parent.tagName === 'STYLE') {
+                  return NodeFilter.FILTER_REJECT;
+                }
+                parent = parent.parentElement;
+              }
+              return NodeFilter.FILTER_ACCEPT;
+            }
+          }
+        );
+
+        const textNodes = [];
+        while (treeWalker.nextNode()) {
+          textNodes.push(treeWalker.currentNode);
+        }
+
+        textNodes.forEach(textNode => {
+          const text = textNode.textContent;
+          const textLower = text.toLowerCase();
+          let index = textLower.indexOf(queryLower);
+          if (index === -1) return;
+
+          const fragment = document.createDocumentFragment();
+          let lastIndex = 0;
+
+          while (index !== -1) {
+            if (index > lastIndex) {
+              fragment.appendChild(document.createTextNode(text.substring(lastIndex, index)));
+            }
+            const mark = document.createElement('mark');
+            mark.className = 'search-highlight';
+            mark.textContent = text.substring(index, index + query.length);
+            matches.push(mark);
+            fragment.appendChild(mark);
+
+            lastIndex = index + query.length;
+            index = textLower.indexOf(queryLower, lastIndex);
+          }
+
+          if (lastIndex < text.length) {
+            fragment.appendChild(document.createTextNode(text.substring(lastIndex)));
+          }
+
+          if (textNode.parentNode) {
+            textNode.parentNode.replaceChild(fragment, textNode);
+          }
+        });
+
+        return matches;
+      }
+
+      function updateMatchUI() {
+        const query = searchInput.value.trim();
+        clearBtn.style.display = query ? 'inline-block' : 'none';
+
+        if (!query) {
+          searchCount.textContent = '';
+          prevBtn.disabled = true;
+          nextBtn.disabled = true;
+          return;
+        }
+
+        if (currentMatches.length === 0) {
+          searchCount.textContent = '0건';
+          prevBtn.disabled = true;
+          nextBtn.disabled = true;
+          return;
+        }
+
+        searchCount.textContent = `${currentIndex + 1}/${currentMatches.length}`;
+        prevBtn.disabled = false;
+        nextBtn.disabled = false;
+      }
+
+      function goToMatch(index) {
+        if (currentMatches.length === 0) return;
+        if (currentIndex >= 0 && currentMatches[currentIndex]) {
+          currentMatches[currentIndex].classList.remove('active-match');
+        }
+        currentIndex = (index + currentMatches.length) % currentMatches.length;
+        const target = currentMatches[currentIndex];
+        target.classList.add('active-match');
+
+        // 해당 매칭이 속한 탭을 자동으로 활성화
+        let parentTab = target.closest('.tab-content');
+        if (parentTab && parentTab.style.display === 'none') {
+          switchTab(parentTab.id);
+        }
+
+        target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        updateMatchUI();
+      }
+
+      function performSearch(query) {
+        clearHighlights();
+        currentMatches = [];
+        currentIndex = -1;
+
+        const trimmed = (query || '').trim();
+        if (!trimmed) {
+          updateMatchUI();
+          return;
+        }
+
+        const cards = document.querySelectorAll('.card');
+        cards.forEach(card => {
+          const matches = highlightText(card, trimmed);
+          currentMatches = currentMatches.concat(matches);
+        });
+
+        if (currentMatches.length > 0) {
+          goToMatch(0);
+        } else {
+          updateMatchUI();
         }
       }
-    );
 
-    const textNodes = [];
-    while (treeWalker.nextNode()) {
-      textNodes.push(treeWalker.currentNode);
-    }
-
-    textNodes.forEach(textNode => {
-      const text = textNode.textContent;
-      const textLower = text.toLowerCase();
-      let index = textLower.indexOf(queryLower);
-      if (index === -1) return;
-
-      const fragment = document.createDocumentFragment();
-      let lastIndex = 0;
-
-      while (index !== -1) {
-        if (index > lastIndex) {
-          fragment.appendChild(document.createTextNode(text.substring(lastIndex, index)));
+      searchInput.addEventListener('input', (e) => performSearch(e.target.value));
+      searchInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          if (e.shiftKey) goToMatch(currentIndex - 1);
+          else goToMatch(currentIndex + 1);
+        } else if (e.key === 'Escape') {
+          searchInput.value = '';
+          performSearch('');
+          searchInput.blur();
         }
-        const mark = document.createElement('mark');
-        mark.className = 'search-highlight';
-        mark.textContent = text.substring(index, index + query.length);
-        matches.push(mark);
-        fragment.appendChild(mark);
+      });
 
-        lastIndex = index + query.length;
-        index = textLower.indexOf(queryLower, lastIndex);
+      prevBtn.addEventListener('click', () => goToMatch(currentIndex - 1));
+      nextBtn.addEventListener('click', () => goToMatch(currentIndex + 1));
+
+      clearBtn.addEventListener('click', () => {
+        searchInput.value = '';
+        performSearch('');
+        searchInput.focus();
+      });
+
+      window.addEventListener('keydown', (e) => {
+        if (e.key === '/' && document.activeElement !== searchInput && document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA') {
+          e.preventDefault();
+          searchInput.focus();
+          searchInput.select();
+        }
+      });
+
+      // 3. 로컬스토리지 메모 및 하우스 룰 관리
+      const STORAGE_KEY = 'recall_user_notes';
+      const noteTitle = document.getElementById('noteTitle');
+      const noteCategory = document.getElementById('noteCategory');
+      const noteContent = document.getElementById('noteContent');
+      const btnSaveNote = document.getElementById('btnSaveNote');
+      const notesContainer = document.getElementById('notesContainer');
+      const notesBadge = document.getElementById('notesBadge');
+      const btnExportNotes = document.getElementById('btnExportNotes');
+      const btnImportNotes = document.getElementById('btnImportNotes');
+      const importFileInput = document.getElementById('importFileInput');
+
+      function loadNotes() {
+        try {
+          return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+        } catch (e) {
+          return [];
+        }
       }
 
-      if (lastIndex < text.length) {
-        fragment.appendChild(document.createTextNode(text.substring(lastIndex)));
+      function saveNotes(notes) {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(notes));
+        renderNotes();
       }
 
-      if (textNode.parentNode) {
-        textNode.parentNode.replaceChild(fragment, textNode);
+      function renderNotes() {
+        const notes = loadNotes();
+        notesBadge.textContent = notes.length;
+
+        if (notes.length === 0) {
+          notesContainer.innerHTML = `
+            <div style="text-align:center; padding:30px; background:#f8fafc; border:1px dashed #cbd5e1; border-radius:8px; color:#64748b;">
+              등록된 메모나 하우스 룰이 없습니다. 상단에서 첫 번째 메모를 작성해보세요!
+            </div>
+          `;
+          return;
+        }
+
+        notesContainer.innerHTML = notes.map((n, idx) => `
+          <div class="note-item">
+            <div class="note-item-header">
+              <span class="note-item-title">${escapeHtml(n.title)}</span>
+              <button type="button" class="btn-delete-note" data-index="${idx}">삭제</button>
+            </div>
+            <div class="note-meta">
+              <span class="pill" style="font-size:10.5px; padding:1px 6px;">${escapeHtml(n.category)}</span>
+              <span>• ${n.date}</span>
+            </div>
+            <div class="note-content-text">${escapeHtml(n.content)}</div>
+          </div>
+        `).join('');
+
+        document.querySelectorAll('.btn-delete-note').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            const index = parseInt(e.target.dataset.index, 10);
+            const notes = loadNotes();
+            notes.splice(index, 1);
+            saveNotes(notes);
+          });
+        });
       }
-    });
 
-    return matches;
-  }
+      btnSaveNote.addEventListener('click', () => {
+        const title = noteTitle.value.trim();
+        const content = noteContent.value.trim();
+        const category = noteCategory.value;
 
-  function updateMatchUI() {
-    const query = searchInput.value.trim();
-    clearBtn.style.display = query ? 'inline-block' : 'none';
+        if (!title || !content) {
+          alert('제목과 내용을 모두 입력해주세요.');
+          return;
+        }
 
-    if (!query) {
-      searchCount.textContent = '';
-      prevBtn.disabled = true;
-      nextBtn.disabled = true;
-      return;
-    }
+        const notes = loadNotes();
+        const now = new Date();
+        const dateStr = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
 
-    if (currentMatches.length === 0) {
-      searchCount.textContent = '0건';
-      prevBtn.disabled = true;
-      nextBtn.disabled = true;
-      return;
-    }
+        notes.unshift({ title, category, content, date: dateStr });
+        saveNotes(notes);
 
-    searchCount.textContent = `${currentIndex + 1}/${currentMatches.length}`;
-    prevBtn.disabled = false;
-    nextBtn.disabled = false;
-  }
+        noteTitle.value = '';
+        noteContent.value = '';
+      });
 
-  function goToMatch(index) {
-    if (currentMatches.length === 0) return;
-    if (currentIndex >= 0 && currentMatches[currentIndex]) {
-      currentMatches[currentIndex].classList.remove('active-match');
-    }
-    currentIndex = (index + currentMatches.length) % currentMatches.length;
-    const target = currentMatches[currentIndex];
-    target.classList.add('active-match');
-    target.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    updateMatchUI();
-  }
+      btnExportNotes.addEventListener('click', () => {
+        const notes = loadNotes();
+        const blob = new Blob([JSON.stringify(notes, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `recall_notes_${Date.now()}.json`;
+        a.click();
+        URL.revokeObjectURL(url);
+      });
 
-  function performSearch(query) {
-    clearHighlights();
-    currentMatches = [];
-    currentIndex = -1;
+      btnImportNotes.addEventListener('click', () => importFileInput.click());
+      importFileInput.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          try {
+            const imported = JSON.parse(event.target.result);
+            if (Array.isArray(imported)) {
+              saveNotes(imported);
+              alert('메모가 성공적으로 복원되었습니다.');
+            } else {
+              alert('올바른 메모 JSON 파일 형식이 아닙니다.');
+            }
+          } catch (err) {
+            alert('JSON 파일을 읽는 중 오류가 발생했습니다.');
+          }
+        };
+        reader.readAsText(file);
+      });
 
-    const trimmed = (query || '').trim();
-    if (!trimmed) {
-      updateMatchUI();
-      return;
-    }
-
-    const cards = document.querySelectorAll('.card');
-    cards.forEach(card => {
-      const matches = highlightText(card, trimmed);
-      currentMatches = currentMatches.concat(matches);
-    });
-
-    if (currentMatches.length > 0) {
-      goToMatch(0);
-    } else {
-      updateMatchUI();
-    }
-  }
-
-  // 이벤트 연결
-  searchInput.addEventListener('input', (e) => {
-    performSearch(e.target.value);
-  });
-
-  searchInput.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      if (e.shiftKey) {
-        goToMatch(currentIndex - 1);
-      } else {
-        goToMatch(currentIndex + 1);
+      function escapeHtml(str) {
+        return (str || '')
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#039;');
       }
-    } else if (e.key === 'Escape') {
-      searchInput.value = '';
-      performSearch('');
-      searchInput.blur();
-    }
-  });
 
-  prevBtn.addEventListener('click', () => goToMatch(currentIndex - 1));
-  nextBtn.addEventListener('click', () => goToMatch(currentIndex + 1));
+      // 초기화
+      renderNotes();
 
-  clearBtn.addEventListener('click', () => {
-    searchInput.value = '';
-    performSearch('');
-    searchInput.focus();
-  });
-
-  // 단축키 '/' 누르면 검색창 포커스
-  window.addEventListener('keydown', (e) => {
-    if (e.key === '/' && document.activeElement !== searchInput) {
-      e.preventDefault();
-      searchInput.focus();
-      searchInput.select();
-    }
-  });
-
-  // URL 쿼리 파라미터 및 해시 연동
-  window.addEventListener('DOMContentLoaded', () => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const q = urlParams.get('q');
-    if (q) {
-      searchInput.value = q;
-      performSearch(q);
-    }
-
-    if (window.location.hash) {
-      const targetEl = document.querySelector(window.location.hash);
-      if (targetEl) {
-        setTimeout(() => {
-          targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }, 250);
+      // URL 해시 및 쿼리 파라미터 연동
+      function handleHash() {
+        if (window.location.hash) {
+          const targetId = window.location.hash.substring(1);
+          const targetEl = document.getElementById(targetId);
+          if (targetEl) {
+            const parentTab = targetEl.closest('.tab-content');
+            if (parentTab) {
+              switchTab(parentTab.id);
+            }
+            setTimeout(() => {
+              targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 250);
+          }
+        }
       }
-    }
-  });
-})();
-</script>
 
+      window.addEventListener('DOMContentLoaded', () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const q = urlParams.get('q');
+        if (q) {
+          searchInput.value = q;
+          performSearch(q);
+        }
+        handleHash();
+      });
+
+      window.addEventListener('hashchange', handleHash);
+    })();
+  </script>
 </body>
 </html>

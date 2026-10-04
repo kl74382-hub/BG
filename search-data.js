@@ -10,8 +10,9 @@ var REFERENCE_DATABASE = [
     id: "recall",
     title: "Recall (리콜)",
     subtitle: "개인 참조표",
-    version: "v1.0",
+    version: "v1.2",
     file: "Recall.html",
+    aidFile: "Recall_player_aid_v1.2_KO.html",
     tags: ["전략", "SF", "엔진빌딩", "자원관리"],
     description: "키카드 사용, 행동 상자(A~F), 리콜 및 생산, 개발 액션(건설/발굴), 이동 규칙 완벽 정리",
     sections: [
@@ -70,10 +71,11 @@ var REFERENCE_DATABASE = [
     id: "rock-hard-1977",
     title: "Rock Hard: 1977 (록 하드: 1977)",
     subtitle: "매뉴얼 & 공식 에라타·FAQ",
-    version: "v1.0 (에라타 반영)",
+    version: "v1.2.0 (SIKMAG 에이드 번역)",
     file: "RockHard1977.html",
+    aidFile: "RockHard_player_aid_v1.2_KO.html",
     tags: ["전략", "일꾼놓기", "록스타", "음악", "에라타", "Devir"],
-    description: "앰프 보드 3대 능력치(Chops, Reputation, Songs 0~11), 3개 페이즈(낮/밤/심야), 캔디 & 슈가 크래시 시스템, 공식 에라타 및 디자이너 FAQ 완벽 수록",
+    description: "앰프 보드 3대 능력치(Chops, Reputation, Songs 0~11), 3개 페이즈(낮/밤/심야), 캔디 & 저혈당/회복 시스템, 공식 에라타 및 디자이너 FAQ 완벽 수록",
     sections: [
       {
         id: "sec-overview",
