@@ -708,12 +708,80 @@
       #tab-manual {
         display: block !important;
       }
-      #tab-tools, #tab-notes {
+      #tab-citizens, #tab-tools, #tab-notes {
         display: none !important;
       }
       h2.section-header {
         page-break-before: auto;
       }
+    }
+
+    /* 시민 카드 도감 필터 버튼 스타일 */
+    .filter-bar {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      border-radius: 10px;
+      padding: 10px 14px;
+      margin-bottom: 14px;
+    }
+    .filter-btns {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .filter-btn {
+      padding: 5px 10px;
+      border: 1px solid #cbd5e1;
+      background: #ffffff;
+      border-radius: 6px;
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 700;
+      color: #475569;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .filter-btn:hover {
+      border-color: #94a3b8;
+      color: #0f172a;
+    }
+    .filter-btn.active {
+      background: #0f172a;
+      color: #fca5a5;
+      border-color: #0f172a;
+    }
+    .lore-toggle-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      color: #334155;
+      cursor: pointer;
+      user-select: none;
+    }
+    .citizen-table th, .citizen-table td {
+      font-size: 12.5px;
+      line-height: 1.5;
+    }
+    .citizen-en {
+      color: #475569;
+      font-size: 11.5px;
+      display: block;
+      margin-bottom: 4px;
+    }
+    .citizen-ko {
+      color: #0f172a;
+      font-weight: 500;
+      display: block;
+    }
+    .hide-lore .col-lore {
+      display: none;
     }
 
     @media (max-width: 600px) {
@@ -750,6 +818,10 @@
   <div class="tab-bar">
     <button type="button" class="tab-btn active" data-tab="tab-manual">
       <span>📖 규칙 및 참조표</span>
+    </button>
+    <button type="button" class="tab-btn" data-tab="tab-citizens">
+      <span>🏛️ 시민 카드 도감 (31종)</span>
+      <span class="tab-count">31</span>
     </button>
     <button type="button" class="tab-btn" data-tab="tab-tools">
       <span>🗡️ 원로원 개표 & 진영 계산기</span>
@@ -790,6 +862,7 @@
           <a href="#sec-forum" class="chip-link">5. 포룸 & 추방 투표</a>
           <a href="#sec-endgame" class="chip-link">6. 게임 종료 & 승리 조건</a>
           <a href="#sec-variants" class="chip-link">7. 변형 규칙 & 세부 판례</a>
+          <a href="#sec-citizens" class="chip-link" style="background:#fee2e2; border-color:#fca5a5; color:#991b1b;">🏛️ 시민 카드 31종 전체 도감</a>
         </div>
       </div>
 
@@ -902,7 +975,8 @@
                 <span class="badge b-red">피 1~2</span>
               </td>
               <td>
-                • 다른 플레이어(또는 신전에서 자신)의 개인 공간에 추가하여 충성심과 진영을 바꿉니다.<br>
+                • 다른 플레이어(또는 신전에서 자신)의 개인 공간(Tableau)에 추가하여 충성심과 진영을 바꿉니다.<br>
+                • <strong>본인 열람 가능:</strong> 자신의 개인 공간에 놓인 모든 카드(타인이 뒷면으로 놓은 포섭 카드 포함)는 <strong>본인이 언제든 확인</strong>할 수 있습니다.<br>
                 • <strong>1:1 상쇄 규칙:</strong> 월계관 1개와 피 1개는 정확히 1:1로 서로를 상쇄합니다.<br>
                 • 개인 공간에 추가되는 포섭 카드는 <strong>왼쪽에서 오른쪽 순서</strong>로 나열합니다.
               </td>
@@ -963,7 +1037,7 @@
                 </ul>
               </div>
               <div class="group-box" style="margin:0; padding:10px 14px;">
-                <span class="tag-title">⚖️ 포룸 (Forum):</span> 포룸에 <strong>운명 카드를 최대 2장까지 배치</strong>하거나, 다른 시민을 <strong>추방하기 위한 투표를 발의</strong>합니다. <small style="color:#b91c1c; font-weight:700;">(둘 다 수행 가능! 상세 규칙은 5장 참조)</small>
+                <span class="tag-title">⚖️ 포룸 (Forum):</span> 포룸에 <strong>운명 카드를 최대 2장까지 배치</strong> <strong>및/또는(and/or)</strong> 다른 시민을 <strong>추방하기 위한 투표를 발의</strong>합니다. <small style="color:#b91c1c; font-weight:700;">(하나만 하거나 둘 다 수행 가능! 상세 규칙은 5장 참조)</small>
               </div>
             </div>
           </div>
@@ -1104,12 +1178,16 @@
           </div>
         </div>
 
-        <h3>📌 세부 용어 및 핵심 판례 (Clarifications)</h3>
+        <h3>📌 공식 참조 카드 주요 용어 및 핵심 판례 (Important Terms & Clarifications)</h3>
         <ul class="rule-list">
-          <li><strong>태우기 (Burn):</strong> 카드를 앞면 공개 없이 신전의 지정 칸에 <strong>뒷면으로 버려 게임에서 완전히 제외</strong>합니다 (테베레강에서 주울 수 없음).</li>
+          <li><strong>개인 공간 (Tableau):</strong> 자신 앞에 놓인 <strong>시민 카드</strong>와 그 시민에게 부여된 <strong>포섭(Sway) 카드들</strong>이 놓이는 영역입니다. 손패 수에 포함되지 않으며, <strong>자신의 개인 공간에 있는 모든 카드(뒷면 포섭 카드 포함)는 본인이 언제든 확인(열람)할 수 있습니다.</strong></li>
+          <li><strong>포섭 (Sway):</strong> 포섭 카드를 <strong>다른 플레이어의 개인 공간에 뒷면으로 놓는 행동</strong>입니다 (충성파&harr;해방파 진영 변경용). <small style="color:#64748b;">※ 자기 자신의 개인 공간에 포섭 카드를 놓는 것은 오직 <strong>신전(Temple)</strong> 행동으로만 가능합니다.</small></li>
+          <li><strong>시민 (Citizen):</strong> 공개되기 전까지 개인 공간에 비밀리에 뒷면으로 유지되며, <strong>앞면으로 공개(Revealed)된 순간부터 고유 능력이 활성화</strong>됩니다.</li>
+          <li><strong>태우기 (Burn):</strong> 카드를 앞면 공개 없이 신전의 지정 칸(Burned space)에 <strong>뒷면으로 놓아 게임에서 완전히 제외</strong>합니다 (테베레강에서 주울 수 없음).</li>
           <li><strong>같은 장소 (Colocated):</strong> 동일한 장소 구역에 2명 이상의 플레이어 말이 함께 있는 상태입니다.</li>
-          <li><strong>공개된(Revealed) vs 실제(True) 진영:</strong>
+          <li><strong>공개됨(Revealed) 및 공개된 vs 실제(True) 진영:</strong>
             <ul>
+              <li><strong>공개됨 (Revealed):</strong> 플레이어의 개인 공간(Tableau)에 <strong>앞면(Faceup)</strong>으로 놓여 있는 시민 카드 또는 포섭 카드를 뜻합니다.</li>
               <li><strong>공개된 진영:</strong> 테이블 위에 <strong>앞면으로 오픈된 카드들만</strong>으로 계산한 겉보기 진영</li>
               <li><strong>실제 진영:</strong> <strong>뒷면 카드까지 모두 포함</strong>하여 계산한 진짜 진영</li>
               <li>카드 텍스트에 수식어 없이 단순히 <strong>'진영'</strong>이라고만 적혀 있다면 <strong>항상 '실제 진영'</strong>을 뜻합니다.</li>
@@ -1117,6 +1195,482 @@
           </li>
           <li><strong>우선권 (Timing):</strong> 시민 능력과 안건 효과가 충돌할 경우 <strong>시민 능력이 우선</strong>합니다. 동시에 발생하는 효과는 <strong>호민관부터 시계 방향(턴 순서)</strong>으로 처리하며, <strong>"즉시(Immediately)"</strong> 효과는 다른 모든 효과보다 먼저 발동합니다.</li>
         </ul>
+      </section>
+    </div>
+
+    <!-- TAB: 시민 카드 도감 (31종) -->
+    <div id="tab-citizens" class="tab-content" style="display:none;">
+      <section id="sec-citizens">
+        <h2 class="section-header" style="margin-top:0;">🏛️ 시민 카드 31종 전체 도감 & 한글 번역표</h2>
+        <p style="margin:0 0 12px 0; font-size:13px; color:#475569;">
+          • <strong>진영 상징:</strong> <span class="badge b-green">🌿 월계관 (충성파 10종)</span> / <span class="badge b-red">🩸 피 (해방파 12종)</span> / <span class="badge b-purple">🌿🩸 월계관+피 (기회주의자 9종)</span><br>
+          • <strong>상급 시민:</strong> <span class="badge b-yellow">🪖 상급</span> 표시가 있는 10장의 카드는 좌측 하단에 투구 아이콘이 있는 상급자용 시민 카드입니다.
+        </p>
+
+        <div class="filter-bar">
+          <div class="filter-btns">
+            <button type="button" class="filter-btn active" data-filter="all">전체 (31)</button>
+            <button type="button" class="filter-btn" data-filter="loyalist">🌿 충성파 (10)</button>
+            <button type="button" class="filter-btn" data-filter="liberator">🩸 해방파 (12)</button>
+            <button type="button" class="filter-btn" data-filter="opportunist">⚖️ 기회주의자 (9)</button>
+            <button type="button" class="filter-btn" data-filter="advanced">🪖 상급 시민 (10)</button>
+          </div>
+          <label class="lore-toggle-label">
+            <input type="checkbox" id="toggleLore" checked>
+            <span>📖 카드 배경 이야기(원문/번역) 표시</span>
+          </label>
+        </div>
+
+        <div style="overflow-x:auto;">
+          <table id="citizenTable" class="rule-table citizen-table">
+            <thead>
+              <tr>
+                <th style="width:44px; text-align:center;">번호</th>
+                <th style="width:170px;">카드 이름 (영문 / 한글)</th>
+                <th style="width:105px; text-align:center;">진영 상징</th>
+                <th style="width:125px;">발동 타이밍</th>
+                <th>카드 효과 (원문 / 한글 번역)</th>
+                <th class="col-lore" style="width:32%;">카드 이름에 관한 배경 (원문 / 한글 번역)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr data-faction="opportunist" data-adv="normal">
+                <td style="text-align:center; font-weight:800;">1</td>
+                <td><strong>SERVIUS SULPICIUS GALBA</strong><br><span style="color:#475569;">세르비우스 술피키우스 갈바</span></td>
+                <td style="text-align:center;"><span class="badge b-purple">🌿1 + 🩸1</span><br><small>기회주의자</small></td>
+                <td><strong>MAY REVEAL ON YOUR TURN</strong><br><span style="color:#b91c1c; font-weight:700;">자신의 턴에 공개 가능</span></td>
+                <td>
+                  <span class="citizen-en">When at the Temple, you may Burn 1 card and resolve both options (to Burn a Sway card from your tableau AND play a Sway card into your tableau).</span>
+                  <span class="citizen-ko"><strong>신전(Temple)</strong>에 있을 때, 손패의 카드 1장을 <strong>태우고(Burn)</strong> 두 가지 선택지를 <strong>모두</strong> 해결할 수 있습니다(자신의 개인 공간에 있는 포섭 카드 1장 태우기 <strong>그리고</strong> 손패의 포섭 카드 1장을 자신의 개인 공간에 내려놓기).</span>
+                </td>
+                <td class="col-lore">
+                  <span class="citizen-en"><em>Destiny was unkind to Galba. As a Legate of Caesar's 12th legion during the Gallic Wars and later a praetor, Galba fought alongside Caesar for many years. In 49 BCE, he believed his friendship with Caesar ruined his chances at gaining a consulship. He joined the conspirators after a debt dispute and Caesar directly opposing his aims for political power. History remembers him unkindly, as the great grandfather of a failed emperor and a man whose wife had an affair with Caesar.</em></span>
+                  <span class="citizen-ko">운명은 갈바에게 가혹했습니다. 갈리아 전쟁 당시 카이사르 제12군단의 군단장(Legate)이자 훗날 법무관(Praetor)이었던 갈바는 수년간 카이사르와 함께 싸웠습니다. 그러나 기원전 49년, 그는 카이사르와의 우정 때문에 자신이 집정관(Consul)에 당선될 기회를 잃었다고 믿게 되었습니다. 이후 채무 분쟁이 벌어지고 카이사르가 그의 정치적 야심을 정면으로 가로막자, 그는 암살 공모자들에게 합류했습니다. 역사는 그를 실패한 황제의 증조부이자, 아내가 카이사르와 불륜을 저지른 남자로 야박하게 기억하고 있습니다.</span>
+                </td>
+              </tr>
+              <tr data-faction="opportunist" data-adv="normal">
+                <td style="text-align:center; font-weight:800;">2</td>
+                <td><strong>PUBLIUS CORNELIUS DOLABELLA</strong><br><span style="color:#475569;">푸블리우스 코르넬리우스 돌라벨라</span></td>
+                <td style="text-align:center;"><span class="badge b-purple">🌿1 + 🩸1</span><br><small>기회주의자</small></td>
+                <td><strong>MAY REVEAL AT ANY TIME</strong><br><span style="color:#0369a1; font-weight:700;">언제든지 공개 가능</span></td>
+                <td>
+                  <span class="citizen-en">When revealed, you may immediately steal 1 card from each colocated player's hand. Your hand limit is 8 cards. At End of Game, before Fate is counted, you may play up to 2 Sway cards from your hand into your own tableau.</span>
+                  <span class="citizen-ko">이 카드가 공개될 때, <strong>즉시</strong> 같은 장소에 있는 다른 모든 플레이어의 손패에서 카드를 1장씩 훔칠 수 있습니다. 당신의 손패 제한은 <strong>8장</strong>이 됩니다. <strong>게임 종료 시</strong>, 운명(Fate) 카드를 개표하기 전에 손패에서 포섭 카드를 최대 2장까지 자신의 개인 공간에 내려놓을 수 있습니다.</span>
+                </td>
+                <td class="col-lore">
+                  <span class="citizen-en"><em>Dolabella, a legate at the time, fought against Caesar in his civil war and was pardoned after being defeated. He was promised a consulship many times in the following years, but each promise turned out to be a lie. On the Ides of March, during the aftermath of the assassination, he seized the consul insignia from Caesar's corpse and was finally appointed. Later, he changed his political viewpoints and was murdered by the conspirators' forces.</em></span>
+                  <span class="citizen-ko">당시 군단장이었던 돌라벨라는 내전에서 카이사르에 맞서 싸우다 패배한 뒤 사면을 받았습니다. 이후 수년간 집정관 자리를 여러 차례 약속받았으나, 그 약속들은 매번 거짓으로 드러났습니다. 3월 15일(Ides of March), 암살 직후의 혼란 속에서 그는 카이사르의 시신으로부터 집정관의 휘장을 빼앗았고 마침내 집정관에 임명되었습니다. 훗날 그는 정치적 입장을 바꾸었다가 암살 공모자들의 군대에 의해 살해당했습니다.</span>
+                </td>
+              </tr>
+              <tr data-faction="opportunist" data-adv="normal">
+                <td style="text-align:center; font-weight:800;">3</td>
+                <td><strong>PONTIUS AQUILA</strong><br><span style="color:#475569;">폰티우스 아퀼라</span></td>
+                <td style="text-align:center;"><span class="badge b-purple">🌿1 + 🩸1</span><br><small>기회주의자</small></td>
+                <td><strong>MAY REVEAL AT ANY TIME</strong><br><span style="color:#0369a1; font-weight:700;">언제든지 공개 가능</span></td>
+                <td>
+                  <span class="citizen-en">Each time another player Sways you, you may either draw a card from the Gardens OR add an unrevealed Fate card from your hand into the Curia.</span>
+                  <span class="citizen-ko">다른 플레이어가 당신을 <strong>포섭(Sway)</strong>할 때마다, 당신은 <strong>정원(Gardens)</strong>에서 카드(운명 카드) 1장을 뽑거나 <strong>또는</strong> 손패에서 운명 카드 1장을 공개하지 않고 뒷면 그대로 <strong>원로원 회의장(Curia)</strong>에 추가할 수 있습니다.</span>
+                </td>
+                <td class="col-lore">
+                  <span class="citizen-en"><em>Pontius Aquila's history is clouded. He is known to have been a Tribune of the Plebs—a position held only by Plebeians. This position was sacrosanct, which meant any harm done to the Tribune was punishable by death. Caesar sneered at this position and is known to have yelled at Aquila—who refused to stand during Caesar's triumph—"Come then, take back the Republic from me, you Tribune!" This insult, among others, eventually caused Aquila to join the conspirators.</em></span>
+                  <span class="citizen-ko">폰티우스 아퀼라의 행적은 베일에 싸여 있습니다. 그는 평민(Plebeians)만이 맡을 수 있는 직책인 호민관(Tribune of the Plebs)이었던 것으로 알려져 있습니다. 이 직책은 신성불가침의 권리를 지녀, 호민관에게 해를 가하는 자는 사형에 처해졌습니다. 카이사르는 이 직책을 비웃었으며, 자신의 개선식 동안 자리에서 일어나기를 거부한 아퀼라에게 "자, 어서 와서 나에게서 공화정을 되찾아 가 보시지, 호민관 나리!"라고 호통쳤다고 전해집니다. 다른 수모들과 더불어 이 모욕은 결국 아퀼라가 암살 공모자들에게 가담하는 계기가 되었습니다.</span>
+                </td>
+              </tr>
+              <tr data-faction="opportunist" data-adv="normal">
+                <td style="text-align:center; font-weight:800;">4</td>
+                <td><strong>GAIUS CASSIUS PARMENSIS</strong><br><span style="color:#475569;">가이우스 카시우스 파르멘시스</span></td>
+                <td style="text-align:center;"><span class="badge b-purple">🌿1 + 🩸1</span><br><small>기회주의자</small></td>
+                <td><strong>MAY REVEAL AT ANY TIME</strong><br><span style="color:#0369a1; font-weight:700;">언제든지 공개 가능</span></td>
+                <td>
+                  <span class="citizen-en">Whenever another player moves to your current Location, you may immediately move to a new Location (but do not resolve any actions). You must still move to a new Location on your turn.</span>
+                  <span class="citizen-ko">다른 플레이어가 당신이 현재 있는 장소로 이동해 올 때마다, 당신은 <strong>즉시</strong> 새로운 장소로 이동할 수 있습니다(단, 이동한 장소의 행동은 해결하지 않습니다). 이후 자신의 턴이 되면 여전히 평소처럼 새로운 장소로 이동해야 합니다.</span>
+                </td>
+                <td class="col-lore">
+                  <span class="citizen-en"><em>Parmensis was a lawyer, naval commander, and poet. Although marked for death by Marcus Antonius after his involvment in the conspiracy, they later joined forces against Octavian. After Antonius' fall, Parmensis fled to Athens, hiding as the last living assassin of Caesar. Tormented, he penned the play Thyestes, depicting his own tragic story. Upon his eventual capture and execution, it is rumored that this play, reflecting his fate, was passed off as the work of a poet within Octavian's inner circle.</em></span>
+                  <span class="citizen-ko">파르멘시스는 법률가이자 해군 사령관, 그리고 시인이었습니다. 암살 음모에 가담한 뒤 마르쿠스 안토니우스의 살생부에 올랐으나, 훗날 두 사람은 옥타비아누스에 맞서기 위해 손을 잡았습니다. 안토니우스가 몰락한 후, 파르멘시스는 카이사르 암살자 중 마지막 생존자로서 아테네로 도주해 은신했습니다. 고뇌에 시달리던 그는 자신의 비극적인 이야기를 투영한 희곡 《티에스테스(Thyestes)》를 집필했습니다. 결국 붙잡혀 처형당한 뒤, 그의 운명을 담은 이 희곡은 옥타비아누스 측근 시인의 작품으로 둔갑해 세상에 발표되었다는 소문이 전해집니다.</span>
+                </td>
+              </tr>
+              <tr data-faction="liberator" data-adv="normal">
+                <td style="text-align:center; font-weight:800;">5</td>
+                <td><strong>JUNIA TERTIA</strong><br><span style="color:#475569;">유니아 테르티아</span></td>
+                <td style="text-align:center;"><span class="badge b-red">🩸1</span><br><small>해방파</small></td>
+                <td><strong>MAY REVEAL ON YOUR TURN</strong><br><span style="color:#b91c1c; font-weight:700;">자신의 턴에 공개 가능</span></td>
+                <td>
+                  <span class="citizen-en">When revealed, you may immediately place 2 Sway cards facedown in your tableau. While Tribune, no Vote is held and you choose which Issue is resolved.</span>
+                  <span class="citizen-ko">이 카드가 공개될 때, <strong>즉시</strong> 손패에서 포섭 카드 2장을 자신의 개인 공간에 뒷면으로 내려놓을 수 있습니다. 당신이 <strong>호민관(Tribune)</strong>인 동안에는 안건 투표를 진행하지 않으며, 두 안건 중 어떤 안건을 해결할지 당신이 직접 선택합니다.</span>
+                </td>
+                <td class="col-lore">
+                  <span class="citizen-en"><em>Junia was the daughter of Servilia, sister to Brutus, and initially supportive of Caesar. She was also the wife of Cassius—lead instigator—and soon opposed Caesar. After the assassination and following battle where Cassius died, she lived a long life as an univira (never remarried) and amassed a great estate. Upon her death at the age of 96-97, she had a large public funeral, where the death masks of Cassius and Brutus—expected in the procession—were nowhere to be seen.</em></span>
+                  <span class="citizen-ko">유니아는 세르빌리아의 딸이자 브루투스의 누이였으며, 처음에는 카이사르를 지지했습니다. 그러나 암살의 주동자인 카시우스의 아내이기도 했던 그녀는 곧 카이사르에게 등을 돌렸습니다. 암살 사건과 뒤이은 전투에서 카시우스가 사망한 후, 그녀는 평생 재혼하지 않는 정절녀(univira)로서 장수하며 막대한 재산을 모았습니다. 96~97세의 나이로 세상을 떠났을 때 성대한 국장이 치러졌는데, 장례 행렬에 당연히 등장할 것으로 예상되었던 카시우스와 브루투스의 데스마스크는 어디에서도 찾아볼 수 없었습니다.</span>
+                </td>
+              </tr>
+              <tr data-faction="loyalist" data-adv="advanced">
+                <td style="text-align:center; font-weight:800;">6</td>
+                <td><strong>SEMPRONIA</strong><br><span style="color:#475569;">셈프로니아</span></td>
+                <td style="text-align:center;"><span class="badge b-green">🌿1</span><br><small>충성파</small><br><span class="badge b-yellow">🪖 상급</span></td>
+                <td><strong>MAY REVEAL AT ANY TIME</strong><br><span style="color:#0369a1; font-weight:700;">언제든지 공개 가능</span></td>
+                <td>
+                  <span class="citizen-en">When at the Baths, you may draw 4 Sway cards instead of 3. Your hand limit is 8 cards. Once, at any time on their turn, colocated players may give you a Fate card in exchange for you to Sway them.</span>
+                  <span class="citizen-ko"><strong>대중목욕탕(Baths)</strong>에 있을 때, 포섭 카드를 3장 대신 <strong>4장</strong> 뽑을 수 있습니다. 당신의 손패 제한은 <strong>8장</strong>이 됩니다. 당신과 같은 장소에 있는 플레이어들은 각자 자신의 턴 중 아무 때나(턴당 1회), 당신에게 운명 카드 1장을 건네주는 대가로 당신이 그 플레이어를 <strong>포섭(Sway)</strong>하게 할 수 있습니다.</span>
+                </td>
+                <td class="col-lore">
+                  <span class="citizen-en"><em>Sempronia's true history is cloudy. Her name is sometimes conflated or confused with three different women. She was Decimus's mother, known for advocating revolutionary politics and supporting previous conspirators across Rome, including involvement in the Cataline conspiracy. She is reputed to have had many lovers, including Caesar, but is more well known for being charismatic, full of guile, and highly intelligent.</em></span>
+                  <span class="citizen-ko">셈프로니아의 실제 역사는 불분명하며, 그녀의 이름은 때때로 세 명의 서로 다른 여성과 혼동되거나 합쳐져 전해집니다. 그녀는 데키무스의 어머니로, 카틸리나 음모 사건에 가담하는 등 로마 전역에서 혁명적 정치를 옹호하고 이전의 모반자들을 지원한 것으로 유명했습니다. 카이사르를 비롯해 수많은 연인을 두었다는 소문이 있었지만, 무엇보다 카리스마가 넘치고 교활하며 매우 지적인 여성으로 널리 알려져 있습니다.</span>
+                </td>
+              </tr>
+              <tr data-faction="liberator" data-adv="advanced">
+                <td style="text-align:center; font-weight:800;">7</td>
+                <td><strong>SEXTUS POMPEIUS</strong><br><span style="color:#475569;">섹스투스 폼페이우스</span></td>
+                <td style="text-align:center;"><span class="badge b-red">🩸3</span><br><small>해방파</small><br><span class="badge b-yellow">🪖 상급</span></td>
+                <td><strong>MAY REVEAL ON YOUR TURN</strong><br><span style="color:#b91c1c; font-weight:700;">자신의 턴에 공개 가능</span></td>
+                <td>
+                  <span class="citizen-en">When revealed, immediately draw 3 Fate cards. You may freely give Fate cards to any other players at any time before End of Game. Also, revealed Liberators (🩸) cannot be Called for Exile (except for you).</span>
+                  <span class="citizen-ko">이 카드가 공개될 때, <strong>즉시</strong> 운명 카드 3장을 뽑습니다. 당신은 게임 종료 전이라면 언제든지 다른 아무 플레이어에게나 운명 카드를 자유롭게 건네줄 수 있습니다. 또한, 공개된 상태의 <strong>해방파(🩸)</strong> 플레이어는(당신을 제외하고) <strong>추방 투표의 대상이 될 수 없습니다</strong>.</span>
+                </td>
+                <td class="col-lore">
+                  <span class="citizen-en"><em>History remembers Sextus as one of Caesar's most fervent opponents. After the assassination, major conspirators claimed that Sextus Pompeius, son of Pompey the Great, would be their strongest ally. Sextus continued to fight against Caesarians for 9 years as other conspirators were defeated and captured by Octavian's forces. In 35 BCE, Sextus was captured. Octavian claimed he was an outlaw, without the rights of a citizen, and executed him without a trial.</em></span>
+                  <span class="citizen-ko">역사는 섹스투스를 카이사르의 가장 열렬한 적대자 중 한 명으로 기억합니다. 암살 직후, 주요 공모자들은 폼페이우스 마그누스(대 폼페이우스)의 아들인 섹스투스 폼페이우스가 자신들의 가장 든든한 동맹이 될 것이라 공언했습니다. 다른 공모자들이 옥타비아누스군에 패배하고 붙잡히는 와중에도 섹스투스는 9년 동안 카이사르파에 맞서 싸움을 이어갔습니다. 기원전 35년 마침내 체포되자, 옥타비아누스는 그가 시민의 권리가 없는 무법자라고 주장하며 재판도 없이 그를 처형했습니다.</span>
+                </td>
+              </tr>
+              <tr data-faction="liberator" data-adv="advanced">
+                <td style="text-align:center; font-weight:800;">8</td>
+                <td><strong>DECIMUS TURULLIUS</strong><br><span style="color:#475569;">데키무스 투룰리우스</span></td>
+                <td style="text-align:center;"><span class="badge b-red">🩸2</span><br><small>해방파</small><br><span class="badge b-yellow">🪖 상급</span></td>
+                <td><strong>MAY REVEAL ON YOUR TURN</strong><br><span style="color:#b91c1c; font-weight:700;">자신의 턴에 공개 가능</span></td>
+                <td>
+                  <span class="citizen-en">When revealed, you may immediately look at the Burned cards in the Temple and choose any 3 to place in your hand. You have no hand limit.</span>
+                  <span class="citizen-ko">이 카드가 공개될 때, <strong>즉시</strong> <strong>신전(Temple)</strong>에 태워진(Burned) 카드들을 확인하고 그중 원하는 카드 3장을 골라 손패로 가져올 수 있습니다. 당신은 <strong>손패 제한이 없습니다</strong>.</span>
+                </td>
+                <td class="col-lore">
+                  <span class="citizen-en"><em>Turullius was the penultimate assassin hunted down by Octavian. As a Quaestor, Turullius used his acumen for finance to raise a fleet of ships to support Marcus Antonius. This fleet of ships—built from trees sacred to Asclepius, the Greek god of health and healing—was used in the battle of Actium, the final stand of Marcus Antonius against Octavian. Shortly after the battle, Turullius was executed by Octavian on the Grecian island of Cos, home of the once sacred grove.</em></span>
+                  <span class="citizen-ko">투룰리우스는 옥타비아누스에게 추적당해 죽은 끝에서 두 번째 암살자였습니다. 재무관(Quaestor)이었던 투룰리우스는 자신의 뛰어난 재정적 수완을 발휘해 마르쿠스 안토니우스를 지원할 함대를 건조했습니다. 건강과 치유의 그리스 신 아스클레피오스에게 바쳐진 신성한 숲의 나무들을 베어 만든 이 함대는, 옥타비아누스에 맞선 마르쿠스 안토니우스의 최후의 결전이었던 악티움 해전에 투입되었습니다. 해전 직후 투룰리우스는 한때 그 신성한 숲이 있었던 그리스 코스(Cos) 섬에서 옥타비아누스에 의해 처형당했습니다.</span>
+                </td>
+              </tr>
+              <tr data-faction="loyalist" data-adv="normal">
+                <td style="text-align:center; font-weight:800;">9</td>
+                <td><strong>QUINTUS HORATIUS FLACCUS</strong><br><span style="color:#475569;">퀸투스 호라티우스 플라쿠스</span></td>
+                <td style="text-align:center;"><span class="badge b-green">🌿1</span><br><small>충성파</small></td>
+                <td><strong>MAY REVEAL ON YOUR TURN</strong><br><span style="color:#b91c1c; font-weight:700;">자신의 턴에 공개 가능</span></td>
+                <td>
+                  <span class="citizen-en">Whenever you run out of Sway or Fate cards, you may immediately burn a Sway card from your tableau to draw 3 cards of which you have none in hand.</span>
+                  <span class="citizen-ko">손패에 포섭 카드 또는 운명 카드 중 한 종류가 완전히 바닥날 때마다, <strong>즉시</strong> 자신의 개인 공간에 있는 포섭 카드 1장을 <strong>태우고(Burn)</strong> 손패에 하나도 없는 종류의 카드 3장을 뽑을 수 있습니다.</span>
+                </td>
+                <td class="col-lore">
+                  <span class="citizen-en"><em>Commonly known as Horus, he was the son of a freed slave and lived in Greece during the conspiracy. When Marcus Junius Brutus came to Athens to raise an army after the assassination, Horace was swept up in the idealism and became a military tribune. After Brutus' defeat, Horace returned to Rome stripped of wealth. Here he began his career as a poet, and became part of Augustus' inner circle and one of the Roman world's most well-remembered writers.</em></span>
+                  <span class="citizen-ko">흔히 호라티우스(Horace, 카드 원문 표기는 Horus)로 알려진 그는 해방 노예의 아들이었으며 음모가 벌어질 당시 그리스에 머물고 있었습니다. 암살 이후 마르쿠스 유니우스 브루투스가 군대를 일으키기 위해 아테네에 오자, 호라티우스는 그 이상주의에 휩쓸려 군단 막료(Military Tribune)가 되었습니다. 브루투스가 패배한 뒤 재산을 모두 몰수당한 채 로마로 돌아온 그는 시인으로서의 삶을 시작했고, 훗날 아우구스투스 측근의 일원이자 로마 세계에서 가장 널리 기억되는 문학가 중 한 사람이 되었습니다.</span>
+                </td>
+              </tr>
+              <tr data-faction="opportunist" data-adv="advanced">
+                <td style="text-align:center; font-weight:800;">10</td>
+                <td><strong>QUINTUS LIGARIUS</strong><br><span style="color:#475569;">퀸투스 리가리우스</span></td>
+                <td style="text-align:center;"><span class="badge b-purple">🌿1 + 🩸1</span><br><small>기회주의자</small><br><span class="badge b-yellow">🪖 상급</span></td>
+                <td><strong>MAY REVEAL AT ANY TIME</strong><br><span style="color:#0369a1; font-weight:700;">언제든지 공개 가능</span></td>
+                <td>
+                  <span class="citizen-en">You cannot be Exiled by other players. Whenever another player Calls a Vote to Exile (regardless of the result), you may place up to 2 unrevealed Fate cards from your hand into the Curia.</span>
+                  <span class="citizen-ko">당신은 다른 플레이어들에 의해 <strong>추방(Exile)당하지 않습니다</strong>. 다른 플레이어가 <strong>추방 투표를 발의</strong>할 때마다(투표 결과와 상관없이), 당신은 손패에서 운명 카드를 최대 2장까지 공개하지 않고 뒷면 그대로 <strong>원로원 회의장(Curia)</strong>에 넣을 수 있습니다.</span>
+                </td>
+                <td class="col-lore">
+                  <span class="citizen-en"><em>Quintus Ligarius was a Roman general who fought against Caesar in North Africa at the Battle of Thapsus during the civil war and was later exiled. During a trial, Cicero gave a famously emotional speech entitled Pro Ligario that brought Caesar to near tears, so much so that he allowed Ligarius to return to Rome; and in doing so, strengthened the count of conspirators by one.</em></span>
+                  <span class="citizen-ko">퀸투스 리가리우스는 내전 당시 북아프리카 탑수스 전투에서 카이사르에 맞서 싸운 로마 장군으로, 패전 후 추방당했습니다. 재판 과정에서 키케로가 《리가리우스를 위한 변론(Pro Ligario)》이라는 유명한 감동적 연설을 펼쳐 카이사르가 눈물을 글썽일 정도로 마음을 움직였고, 결국 카이사르는 리가리우스의 로마 귀환을 허락했습니다. 그리고 이 결정은 결과적으로 암살 공모자의 숫자를 한 명 더 늘려준 셈이 되었습니다.</span>
+                </td>
+              </tr>
+              <tr data-faction="loyalist" data-adv="advanced">
+                <td style="text-align:center; font-weight:800;">11</td>
+                <td><strong>LUCIUS MARCIUS CENSORINUS</strong><br><span style="color:#475569;">루키우스 마르키우스 켄소리누스</span></td>
+                <td style="text-align:center;"><span class="badge b-green">🌿2</span><br><small>충성파</small><br><span class="badge b-yellow">🪖 상급</span></td>
+                <td><strong>MAY REVEAL ON YOUR TURN</strong><br><span style="color:#b91c1c; font-weight:700;">자신의 턴에 공개 가능</span></td>
+                <td>
+                  <span class="citizen-en">When revealed, you may immediately look at the top 4 cards of the Curia, Burn 2 of them, and place the other 2 back into the Curia. At End of Game, before Fate is counted, you may discard up to 2 Liberator (🩸) Sway cards from your tableau.</span>
+                  <span class="citizen-ko">이 카드가 공개될 때, <strong>즉시</strong> <strong>원로원 회의장(Curia)</strong>의 맨 위 카드 4장을 확인하여 그중 2장을 <strong>태우고(Burn)</strong>, 나머지 2장을 다시 원로원 회의장에 되돌려 놓을 수 있습니다. <strong>게임 종료 시</strong>, 운명 카드를 개표하기 전에 자신의 개인 공간에서 <strong>해방파(🩸) 포섭 카드</strong>를 최대 2장까지 버릴 수 있습니다.</span>
+                </td>
+                <td class="col-lore">
+                  <span class="citizen-en"><em>On the Ides of March, during the assassination, Lucius Marcius Censorinus was one of only two senators who came to the aid of Caesar and tried to stop the attack. Both senators were later appointed as Consuls in 39 BCE. Censorinus went on to follow Marcus Antonius in battle against Decimus Brutus' forces at the battle of Mutina, and after the decisive battle of Philippi, he was left in control of the region. Censorinus spent much of his later life appointed high within the priesthood.</em></span>
+                  <span class="citizen-ko">3월 15일 암살이 벌어지던 순간, 루키우스 마르키우스 켄소리누스는 카이사르를 구하기 위해 달려들어 습격을 막으려 했던 단 두 명의 원로원 의원 중 한 명이었습니다. 두 의원 모두 훗날 기원전 39년에 집정관으로 임명되었습니다. 켄소리누스는 무티나 전투에서 마르쿠스 안토니우스를 따라 데키무스 브루투스의 군대와 싸웠으며, 결정적이었던 필리피 전투 이후에는 그 지역의 통치권을 맡았습니다. 그는 말년의 대부분을 고위 사제직에 봉직하며 보냈습니다.</span>
+                </td>
+              </tr>
+              <tr data-faction="loyalist" data-adv="normal">
+                <td style="text-align:center; font-weight:800;">12</td>
+                <td><strong>MARCUS AEMILIUS LEPIDUS</strong><br><span style="color:#475569;">마르쿠스 아이밀리우스 레피두스</span></td>
+                <td style="text-align:center;"><span class="badge b-green">🌿2</span><br><small>충성파</small></td>
+                <td><strong>MAY REVEAL AT ANY TIME</strong><br><span style="color:#0369a1; font-weight:700;">언제든지 공개 가능</span></td>
+                <td>
+                  <span class="citizen-en">During all Votes of any kind, your Vote counts as 2. Also, you may choose not to Vote and instead draw 1 card from the Baths or Gardens.</span>
+                  <span class="citizen-ko">종류를 불문하고 <strong>모든 투표(안건 투표 및 추방 투표)</strong>에서 당신의 표는 <strong>2표</strong>로 계산됩니다. 또한, 당신은 투표를 기권하는 대신 <strong>대중목욕탕(Baths)</strong> 또는 <strong>정원(Gardens)</strong>에서 카드 1장을 뽑기를 선택할 수 있습니다.</span>
+                </td>
+                <td class="col-lore">
+                  <span class="citizen-en"><em>Lepidus was one of Caesar's only true allies. After the assassination, he marched his troops into the center of Rome with the intention to punish the conspirators. Dissuaded by Antonius and accepting a rule of amnesty against the conspirators, he obtained the post of Pontifex Maximus. Forming a second triumvirate with Antonius and Octavian (Augustus), he eventually fell into obscurity after struggling against Octavian, and died peacefully at the age of 76.</em></span>
+                  <span class="citizen-ko">레피두스는 카이사르의 몇 안 되는 진정한 동맹 중 한 명이었습니다. 암살 직후 그는 공모자들을 처벌하기 위해 군대를 이끌고 로마 중심부로 진군했습니다. 그러나 안토니우스의 만류로 공모자들에 대한 사면 조치를 수용하는 대신 최고 제사장(Pontifex Maximus) 직위를 얻었습니다. 이후 안토니우스, 옥타비아누스(아우구스투스)와 함께 제2차 삼두정치를 결성했으나, 옥타비아누스와의 권력 투쟁에서 밀려나 정계에서 잊힌 채 76세의 나이로 평온하게 생을 마감했습니다.</span>
+                </td>
+              </tr>
+              <tr data-faction="loyalist" data-adv="normal">
+                <td style="text-align:center; font-weight:800;">13</td>
+                <td><strong>GAIUS CALVISIUS SABINUS</strong><br><span style="color:#475569;">가이우스 칼비시우스 사비누스</span></td>
+                <td style="text-align:center;"><span class="badge b-green">🌿2</span><br><small>충성파</small></td>
+                <td><strong>MAY REVEAL AT ANY TIME</strong><br><span style="color:#0369a1; font-weight:700;">언제든지 공개 가능</span></td>
+                <td>
+                  <span class="citizen-en">When revealed, you may immediately place any number of Doves from the Tiber River into your hand. Whenever a Fate card with a Knife is placed faceup into the Forum, you may play a Fate card with a Dove from your hand on top of it.</span>
+                  <span class="citizen-ko">이 카드가 공개될 때, <strong>즉시</strong> <strong>테베레강(Tiber River)</strong> 버린 카드 더미에서 <strong>비둘기(Dove)</strong> 카드를 원하는 만큼 자신의 손패로 가져올 수 있습니다. <strong>포룸(Forum)</strong>에 <strong>칼(Knife)</strong>이 그려진 운명 카드가 앞면으로 놓일 때마다, 당신은 손패에서 비둘기 운명 카드 1장을 그 카드 위에 포개어 내려놓을 수 있습니다.</span>
+                </td>
+                <td class="col-lore">
+                  <span class="citizen-en"><em>On the Ides of March, during the assassination, Gaius Calvisius Sabinus was one of only two senators who came to the aid of Caesar and tried to stop the attack. Both senators were later appointed as Consuls in 39 BCE. Sabinus, who held the obscure priesthood, curio maximus, was later stationed in Spain and was one of the few men to be awarded a triumph by Octavian.</em></span>
+                  <span class="citizen-ko">3월 15일 암살이 벌어지던 순간, 가이우스 칼비시우스 사비누스는 카이사르를 구하기 위해 나서서 공격을 막으려 했던 단 두 명의 원로원 의원 중 한 명이었습니다. 두 의원 모두 훗날 기원전 39년에 집정관으로 임명되었습니다. '쿠리오 막시무스(curio maximus)'라는 생소한 사제직을 맡기도 했던 사비누스는 이후 히스파니아(스페인)에 주둔했으며, 옥타비아누스로부터 개선식을 허락받은 몇 안 되는 인물 중 한 명이 되었습니다.</span>
+                </td>
+              </tr>
+              <tr data-faction="loyalist" data-adv="advanced">
+                <td style="text-align:center; font-weight:800;">14</td>
+                <td><strong>ATIA</strong><br><span style="color:#475569;">아티아</span></td>
+                <td style="text-align:center;"><span class="badge b-green">🌿2</span><br><small>충성파</small><br><span class="badge b-yellow">🪖 상급</span></td>
+                <td><strong>MAY REVEAL ON YOUR TURN</strong><br><span style="color:#b91c1c; font-weight:700;">자신의 턴에 공개 가능</span></td>
+                <td>
+                  <span class="citizen-en">Once per turn, you may discard a Sway card from your hand to discard a random Fate card from each colocated player's hand.</span>
+                  <span class="citizen-ko">턴당 한 번, 자신의 손패에서 포섭 카드 1장을 버림으로써 같은 장소에 있는 다른 모든 플레이어의 손패에서 각각 무작위 운명 카드 1장씩을 버리게 할 수 있습니다.</span>
+                </td>
+                <td class="col-lore">
+                  <span class="citizen-en"><em>Atia was the niece of Caesar and mother of Octavian, the future emperor Augustus. She was also the grandmother of 5 future Roman Emperors and is widely known as one of the most admired matrons of the Roman Republic. So protective of a mother was she, that when Augustus was named heir to Caesar's power, she urged him to renounce the power. Upon her death, a massive public funeral was held in her honor.</em></span>
+                  <span class="citizen-ko">아티아는 카이사르의 조카딸이자 미래의 황제 아우구스투스(옥타비아누스)의 어머니였습니다. 또한 장차 로마 황제가 될 5명의 인물의 할머니이기도 했으며, 로마 공화정에서 가장 존경받는 귀부인 중 한 명으로 널리 알려졌습니다. 아들을 지극히 보호하려 했던 그녀는 옥타비아누스가 카이사르의 권력을 이을 후계자로 지명되자 아들에게 그 권력을 포기하라고 간곡히 권유할 정도였습니다. 그녀가 세상을 떠나자 그녀를 기리는 거대한 국장이 거행되었습니다.</span>
+                </td>
+              </tr>
+              <tr data-faction="loyalist" data-adv="normal">
+                <td style="text-align:center; font-weight:800;">15</td>
+                <td><strong>QUINTUS PEDIUS</strong><br><span style="color:#475569;">퀸투스 페디우스</span></td>
+                <td style="text-align:center;"><span class="badge b-green">🌿2</span><br><small>충성파</small></td>
+                <td><strong>MAY REVEAL AT ANY TIME</strong><br><span style="color:#0369a1; font-weight:700;">언제든지 공개 가능</span></td>
+                <td>
+                  <span class="citizen-en">Whenever you Sway another player, you may give 2 Sway cards instead of 1—and if you do, draw 1 Sway card from the Baths.</span>
+                  <span class="citizen-ko">당신이 다른 플레이어를 <strong>포섭(Sway)</strong>할 때마다, 포섭 카드를 1장 대신 <strong>2장</strong> 부여할 수 있습니다. 그렇게 할 경우, <strong>대중목욕탕(Baths)</strong>에서 포섭 카드 1장을 뽑습니다.</span>
+                </td>
+                <td class="col-lore">
+                  <span class="citizen-en"><em>Pedius was Caesar's nephew and fought alongside him during the Gallic and civil war. After the assassination, Pedius was declared an heir in Caesar's will. He went on to create the Pedian Law, which called for the punishment to all of Caesar's murderers. This led to the death of 17 conspirators. Later, while Octavian (Augustus) was battling in the north, Pedius ruled over Rome. He was so concerned with the well-being of Rome that he is known to have died from "political fatigue."</em></span>
+                  <span class="citizen-ko">페디우스는 카이사르의 조카로, 갈리아 전쟁과 내전 기간 내내 카이사르와 함께 싸웠습니다. 암살 이후 페디우스는 카이사르의 유언장을 통해 상속인 중 한 명으로 공표되었습니다. 그는 카이사르 살해자 전원에 대한 처벌을 명하는 '페디우스 법(Lex Pedia)'을 제정했고, 이는 17명의 공모자를 죽음으로 몰아넣었습니다. 훗날 옥타비아누스(아우구스투스)가 북부에서 전투를 벌이는 동안 로마를 통치했던 페디우스는 로마의 안녕을 지나치게 염려한 나머지 이른바 '정치적 과로'로 사망했다고 전해집니다.</span>
+                </td>
+              </tr>
+              <tr data-faction="loyalist" data-adv="normal">
+                <td style="text-align:center; font-weight:800;">16</td>
+                <td><strong>MARCUS ANTONIUS</strong><br><span style="color:#475569;">마르쿠스 안토니우스</span></td>
+                <td style="text-align:center;"><span class="badge b-green">🌿3</span><br><small>충성파</small></td>
+                <td><strong>MAY REVEAL AT ANY TIME</strong><br><span style="color:#0369a1; font-weight:700;">언제든지 공개 가능</span></td>
+                <td>
+                  <span class="citizen-en">When at the Forum, colocated players may only play 1 Fate card. If it is played facedown, you may view it and swap it with a Fate card from your hand.</span>
+                  <span class="citizen-ko">당신이 <strong>포룸(Forum)</strong>에 있을 때, 같은 장소(포룸)에 있는 다른 플레이어들은 운명 카드를 <strong>1장만</strong> 내려놓을 수 있습니다. 만약 그 카드가 뒷면으로 놓였다면, 당신은 그 카드를 확인한 뒤 자신의 손패에 있는 운명 카드 1장과 <strong>교체(Swap)</strong>할 수 있습니다.</span>
+                </td>
+                <td class="col-lore">
+                  <span class="citizen-en"><em>More well-known as Mark Antony, he is one of the most familiar figures from this era. He served with Caesar for years and was one of his only friends to remain faithful. In the years following the assassination, he and Octavian (Augustus) together laid waste to the conspirators' armies. Years later, as Octavian rose to power and targeted him, he was overwhelmed by the opposing forces, committed suicide, and died in the arms of his love, Cleopatra.</em></span>
+                  <span class="citizen-ko">영미권 이름인 '마크 안토니(Mark Antony)'로도 잘 알려진 그는 이 시대에서 가장 친숙한 인물 중 한 명입니다. 수년간 카이사르를 보좌했으며 끝까지 충의를 지킨 몇 안 되는 벗이었습니다. 암살 이후 수년 동안 그는 옥타비아누스(아우구스투스)와 힘을 합쳐 공모자들의 군대를 궤멸시켰습니다. 그러나 세월이 흘러 권력을 장악한 옥타비아누스가 그를 겨냥하자, 적군에 압도당한 그는 스스로 목숨을 끊어 연인 클레오파트라의 품에서 숨을 거두었습니다.</span>
+                </td>
+              </tr>
+              <tr data-faction="loyalist" data-adv="normal">
+                <td style="text-align:center; font-weight:800;">17</td>
+                <td><strong>CALPURNIA</strong><br><span style="color:#475569;">칼푸르니아</span></td>
+                <td style="text-align:center;"><span class="badge b-green">🌿3</span><br><small>충성파</small></td>
+                <td><strong>MAY REVEAL ON YOUR TURN</strong><br><span style="color:#b91c1c; font-weight:700;">자신의 턴에 공개 가능</span></td>
+                <td>
+                  <span class="citizen-en">Instead of the normal action at the Temple, you may search the Burned cards and take up to 2 Fate cards OR look at the top 3 cards in the Curia.</span>
+                  <span class="citizen-ko"><strong>신전(Temple)</strong>에서 일반 장소 행동을 수행하는 대신, 태워진(Burned) 카드들을 검색하여 운명 카드를 최대 2장까지 손패로 가져오거나 <strong>또는</strong> <strong>원로원 회의장(Curia)</strong>의 맨 위 카드 3장을 확인할 수 있습니다.</span>
+                </td>
+                <td class="col-lore">
+                  <span class="citizen-en"><em>Many sources describe Calpurnia, the wife of Caesar, as a humble woman. After the assassination, she personally delivered the will of Caesar to Marcus Antonius and remained an univira (never remarried) until her death. Her premonitions of Caesar's death are famed, and when Decimus came for Caesar on the Ides of March, she attempted to send him away by claiming Caesar was ill. To the last moment, she strove to save the stubborn, myopic Caesar.</em></span>
+                  <span class="citizen-ko">많은 사료가 카이사르의 아내 칼푸르니아를 겸손한 여성으로 묘사합니다. 암살 직후 그녀는 카이사르의 유언장을 마르쿠스 안토니우스에게 직접 전달했으며, 세상을 떠날 때까지 재혼하지 않는 정절녀(univira)로 남았습니다. 카이사르의 죽음을 예견한 그녀의 불길한 꿈은 매우 유명한데, 3월 15일 데키무스가 카이사르를 데리러 왔을 때 그녀는 카이사르가 아프다는 핑계를 대며 데키무스를 돌려보내려 했습니다. 마지막 순간까지도 그녀는 고집스럽고 근시안적이었던 카이사르를 구하기 위해 애썼습니다.</span>
+                </td>
+              </tr>
+              <tr data-faction="opportunist" data-adv="normal">
+                <td style="text-align:center; font-weight:800;">18</td>
+                <td><strong>FULVIA</strong><br><span style="color:#475569;">풀비아</span></td>
+                <td style="text-align:center;"><span class="badge b-purple">🌿1 + 🩸1</span><br><small>기회주의자</small></td>
+                <td><strong>MAY REVEAL ON YOUR TURN</strong><br><span style="color:#b91c1c; font-weight:700;">자신의 턴에 공개 가능</span></td>
+                <td>
+                  <span class="citizen-en">When revealed, you may immediately place any number of Knives from the Tiber River into your hand. You are not required to move to a new Location on your turn but may instead remain on your current Location.</span>
+                  <span class="citizen-ko">이 카드가 공개될 때, <strong>즉시</strong> <strong>테베레강(Tiber River)</strong> 버린 카드 더미에서 <strong>칼(Knife)</strong> 카드를 원하는 만큼 자신의 손패로 가져올 수 있습니다. 당신은 자신의 턴에 반드시 새로운 장소로 이동할 필요가 없으며, 대신 <strong>현재 장소에 그대로 머무를 수 있습니다</strong>(머무른 장소의 행동도 정상 해결).</span>
+                </td>
+                <td class="col-lore">
+                  <span class="citizen-en"><em>Fulvia was a powerful woman, but history has not treated her well. Fulvia was deeply immersed in the aftermath of the assassination: while her husband Marcus Antonius was pursuing the conspirators far from Rome, she remained and assumed nearly supreme power. She raised 8 legions (40,000 soldiers) to fight alongside Antonius and was the first non-mythological female presented on a Roman coin.</em></span>
+                  <span class="citizen-ko">풀비아는 막강한 영향력을 지닌 여성이었으나 역사는 그녀를 호의적으로 기록하지 않았습니다. 풀비아는 암살 이후의 정국에 깊숙이 개입했는데, 남편 마르쿠스 안토니우스가 로마에서 멀리 떠나 공모자들을 추격하는 동안 로마에 남아 사실상 최고 권력을 행사했습니다. 그녀는 안토니우스를 돕기 위해 8개 군단(4만 명의 병사)을 직접 편성해 싸웠으며, 신화 속 인물이 아닌 실존 여성으로서는 최초로 로마 주화에 얼굴이 새겨진 인물이기도 합니다.</span>
+                </td>
+              </tr>
+              <tr data-faction="opportunist" data-adv="advanced">
+                <td style="text-align:center; font-weight:800;">19</td>
+                <td><strong>GAIUS TREBONIUS</strong><br><span style="color:#475569;">가이우스 트레보니우스</span></td>
+                <td style="text-align:center;"><span class="badge b-purple">🌿1 + 🩸1</span><br><small>기회주의자</small><br><span class="badge b-yellow">🪖 상급</span></td>
+                <td><strong>MAY REVEAL ON YOUR TURN</strong><br><span style="color:#b91c1c; font-weight:700;">자신의 턴에 공개 가능</span></td>
+                <td>
+                  <span class="citizen-en">Once per turn, after you move, you may discard a card from your hand to lay down a colocated player's pawn. On their next turn, they must remain in the Location, stand up their pawn, and resolve the action(s) there.</span>
+                  <span class="citizen-ko">턴당 한 번, 당신이 이동을 마친 후 손패에서 카드 1장을 버림으로써 같은 장소에 있는 다른 플레이어 1명의 말을 눕혀 놓을 수 있습니다. 그 플레이어는 자신의 다음 턴에 이동하지 않고 <strong>반드시 해당 장소에 머무르며</strong>, 말을 다시 세우고 그 장소의 행동을 해결해야 합니다.</span>
+                </td>
+                <td class="col-lore">
+                  <span class="citizen-en"><em>Trebonius, a homo novus, was the first in his family's lineage to serve in the Roman Senate. As a confidant of Caesar, he was appointed consul by Caesar himself, even as he conspired against him. Nevertheless, it was Trebonius who barred Marcus Antonius from entry into the Curia di Pompeo during the assassination. The following year, he was tortured and beheaded at the hands of his co-conspirator, Dolabella.</em></span>
+                  <span class="citizen-ko">신참자(homo novus)였던 트레보니우스는 가문에서 최초로 로마 원로원에 입성한 인물이었습니다. 카이사르의 측근이었던 그는 카이사르를 암살하려는 음모를 꾸미는 와중에도 카이사르 본인에 의해 집정관으로 임명되었습니다. 그럼에도 암살 당일 마르쿠스 안토니우스가 폼페이우스 원로원 회의장(Curia di Pompeo) 안으로 들어오지 못하도록 밖에서 붙잡아 둔 인물이 바로 트레보니우스였습니다. 이듬해 그는 한때 공모자였던 돌라벨라의 손에 고문을 당하고 참수당했습니다.</span>
+                </td>
+              </tr>
+              <tr data-faction="opportunist" data-adv="normal">
+                <td style="text-align:center; font-weight:800;">20</td>
+                <td><strong>TILLIUS CIMBER</strong><br><span style="color:#475569;">틸리우스 킴베르</span></td>
+                <td style="text-align:center;"><span class="badge b-purple">🌿1 + 🩸1</span><br><small>기회주의자</small></td>
+                <td><strong>MAY REVEAL ON YOUR TURN</strong><br><span style="color:#b91c1c; font-weight:700;">자신의 턴에 공개 가능</span></td>
+                <td>
+                  <span class="citizen-en">During the Sway step of your turn, instead of Swaying a colocated player, you may take a card from the Tiber River OR discard a card from your hand to add an unrevealed Fate card from your hand into the Curia.</span>
+                  <span class="citizen-ko">자신의 턴 <strong>포섭(Sway) 단계</strong>에 같은 장소에 있는 플레이어를 포섭하는 대신, <strong>테베레강(Tiber River)</strong> 버린 카드 더미에서 카드 1장을 가져오거나 <strong>또는</strong> 손패에서 카드 1장을 버리고 손패의 운명 카드 1장을 공개하지 않고 뒷면 그대로 <strong>원로원 회의장(Curia)</strong>에 추가할 수 있습니다.</span>
+                </td>
+                <td class="col-lore">
+                  <span class="citizen-en"><em>Elected Praetor in 44 BCE, Cimber is said to have been a bold man with a tendency toward drink and violence. Mysteriously, his reasons for joining the conspirators are unknown. Once a supporter of Caesar, he was also the instigator of the assassination. On the day of the assassination, he approached Caesar with a petition in hand to free his brother from exile, and when Caesar brushed him away he grabbed Caesar's toga to allow the first knives to find their target.</em></span>
+                  <span class="citizen-ko">기원전 44년 법무관으로 선출된 킴베르는 술과 폭력을 즐기는 대담한 사나이였다고 전해집니다. 불가사의하게도 그가 암살 공모에 가담한 이유는 알려져 있지 않습니다. 한때 카이사르의 지지자였던 그는 암살의 행동 개시자 역할을 맡았습니다. 암살 당일, 그는 추방당한 자신의 형제를 사면해 달라는 탄원서를 들고 카이사르에게 다가갔으며, 카이사르가 그를 물리치자 카이사르의 토가(겉옷)를 붙잡아 끌어내림으로써 첫 번째 칼날들이 표적을 찌를 수 있도록 신호를 보냈습니다.</span>
+                </td>
+              </tr>
+              <tr data-faction="liberator" data-adv="advanced">
+                <td style="text-align:center; font-weight:800;">21</td>
+                <td><strong>LUCIUS CORNELIUS CINNA</strong><br><span style="color:#475569;">루키우스 코르넬리우스 킨나</span></td>
+                <td style="text-align:center;"><span class="badge b-red">🩸1</span><br><small>해방파</small><br><span class="badge b-yellow">🪖 상급</span></td>
+                <td><strong>MAY REVEAL AT ANY TIME</strong><br><span style="color:#0369a1; font-weight:700;">언제든지 공개 가능</span></td>
+                <td>
+                  <span class="citizen-en">If you are Exiled, draw 2 Citizens and choose 1 or remain as Cinna (faceup Sway is still discarded from your tableau). Place the unchosen Citizens on the bottom of the deck. At End of Game, before Fate is counted, you may place up to 3 Fate cards from the Tiber River directly into the Curia unrevealed.</span>
+                  <span class="citizen-ko">당신이 <strong>추방(Exile)</strong>당할 경우, 시민 카드 2장을 뽑아 그중 1장을 고르거나 <strong>또는</strong> <strong>킨나로 그대로 남을 수 있습니다</strong>(개인 공간의 앞면 포섭 카드들은 규칙대로 버려집니다). 선택하지 않은 시민 카드들은 시민 덱 맨 아래에 놓습니다. <strong>게임 종료 시</strong>, 운명 카드를 개표하기 전에 <strong>테베레강(Tiber River)</strong> 버린 카드 더미에서 운명 카드를 최대 3장까지 골라 공개하지 않고 뒷면 그대로 <strong>원로원 회의장(Curia)</strong>에 직접 넣을 수 있습니다.</span>
+                </td>
+                <td class="col-lore">
+                  <span class="citizen-en"><em>Cinna was the brother-in-law of Caesar and did not take part in the assassination itself. Caesar had saved him from exile in Spain, but after the Ides of March, Cinna gave an inflammatory speech against Caesar, tearing off the praetor's robe that Caesar had given him. He became so hated that during Caesar's funeral procession, another man known as Cinna was murdered in an extreme case of mistaken identity.</em></span>
+                  <span class="citizen-ko">킨나는 카이사르의 처남이었으며 암살 현장 자체에는 직접 가담하지 않았습니다. 카이사르는 히스파니아에 추방되어 있던 그를 구해 주었으나, 3월 15일 암살 직후 킨나는 카이사르가 하사했던 법무관 예복을 갈기갈기 찢어 던지며 카이사르를 규탄하는 선동적인 연설을 펼쳤습니다. 이로 인해 대중의 극심한 증오를 사게 되었고, 카이사르의 장례 행렬 도중 동명이인이었던 또 다른 '킨나(시인 헬비우스 킨나)'가 성난 군중에게 오인받아 살해당하는 극단적인 참극이 벌어지기도 했습니다.</span>
+                </td>
+              </tr>
+              <tr data-faction="liberator" data-adv="normal">
+                <td style="text-align:center; font-weight:800;">22</td>
+                <td><strong>LUCIUS MINUCIUS BASILUS</strong><br><span style="color:#475569;">루키우스 미누키우스 바실루스</span></td>
+                <td style="text-align:center;"><span class="badge b-red">🩸1</span><br><small>해방파</small></td>
+                <td><strong>MAY REVEAL ON YOUR TURN</strong><br><span style="color:#b91c1c; font-weight:700;">자신의 턴에 공개 가능</span></td>
+                <td>
+                  <span class="citizen-en">When revealed, each other player must immediately give you 1 card of their choice from their hand. At End of Game, after Fate has been counted and Citizens and Sway are revealed, you may place up to 2 Sway cards from the Tiber River into your tableau.</span>
+                  <span class="citizen-ko">이 카드가 공개될 때, 다른 모든 플레이어는 <strong>즉시</strong> 각자의 손패에서 원하는 카드 1장씩을 골라 당신에게 주어야 합니다. <strong>게임 종료 시</strong>, 운명 카드 개표가 끝나고 모든 시민 카드와 포섭 카드가 공개된 <strong>직후</strong>, 당신은 <strong>테베레강(Tiber River)</strong> 버린 카드 더미에서 포섭 카드를 최대 2장까지 골라 자신의 개인 공간에 놓을 수 있습니다.</span>
+                </td>
+                <td class="col-lore">
+                  <span class="citizen-en"><em>Basilus was a prominent military officer under Caesar's command during the conquests of Gaul. Upon the completion of his service, he expected provincial control as payment. Instead, what he received was a bribe that so insulted him, he joined the conspirators. One year after the assassination, Basilus was brutally murdered by his own slaves, whom he had grievously mistreated.</em></span>
+                  <span class="citizen-ko">바실루스는 갈리아 원정 당시 카이사르 휘하에서 활약한 저명한 군 장교였습니다. 복무를 마친 뒤 그는 보상으로 속주 총독 자리를 기대했으나, 대신 건네받은 것은 돈(뇌물)뿐이었고 이에 깊은 모욕감을 느껴 암살 공모자들에게 가담했습니다. 암살 사건 1년 후, 바실루스는 자신이 평소 가혹하게 학대했던 노예들의 손에 잔인하게 살해당했습니다.</span>
+                </td>
+              </tr>
+              <tr data-faction="liberator" data-adv="normal">
+                <td style="text-align:center; font-weight:800;">23</td>
+                <td><strong>SERVILIA</strong><br><span style="color:#475569;">세르빌리아</span></td>
+                <td style="text-align:center;"><span class="badge b-red">🩸1</span><br><small>해방파</small></td>
+                <td><strong>MAY REVEAL ON YOUR TURN</strong><br><span style="color:#b91c1c; font-weight:700;">자신의 턴에 공개 가능</span></td>
+                <td>
+                  <span class="citizen-en">Instead of playing Fate cards at the Forum, you may swap up to 2 faceup Fate cards in the Forum with 2 from your hand and place them facedown (you may still Call a Vote to Exile).</span>
+                  <span class="citizen-ko"><strong>포룸(Forum)</strong>에서 운명 카드를 내려놓는 행동 대신, 포룸에 놓여 있는 <strong>앞면 운명 카드</strong>를 최대 2장까지 자신의 손패에 있는 운명 카드와 <strong>교체(Swap)</strong>하여 <strong>뒷면으로</strong> 놓을 수 있습니다(추방 투표 발의는 여전히 함께 수행할 수 있습니다).</span>
+                </td>
+                <td class="col-lore">
+                  <span class="citizen-en"><em>Mother of Brutus and mistress to Caesar, Servilia is one of the most famous of all Roman women. During Caesar's civil war she was torn between supporting two men she loved: Brutus and Caesar. She unknowingly invited the conspirators into her home to discuss the assassination. After the assassination, she grew old and lived a peaceful life, dying of natural causes.</em></span>
+                  <span class="citizen-ko">브루투스의 어머니이자 카이사르의 정부였던 세르빌리아는 로마 역사상 가장 유명한 여성 중 한 명입니다. 카이사르의 내전 기간 동안 그녀는 자신이 사랑하는 두 남자, 브루투스와 카이사르 사이에서 누구를 지지할지 고뇌했습니다. 그녀는 자신도 모르는 사이에 공모자들을 자택으로 초대해 암살을 모의할 자리를 내주기도 했습니다. 암살 사건 이후 그녀는 평온한 여생을 보내며 장수하다가 자연사했습니다.</span>
+                </td>
+              </tr>
+              <tr data-faction="liberator" data-adv="advanced">
+                <td style="text-align:center; font-weight:800;">24</td>
+                <td><strong>PACUVIUS LABEO</strong><br><span style="color:#475569;">파쿠비우스 라베오</span></td>
+                <td style="text-align:center;"><span class="badge b-red">🩸2</span><br><small>해방파</small><br><span class="badge b-yellow">🪖 상급</span></td>
+                <td><strong>MAY REVEAL ON YOUR TURN</strong><br><span style="color:#b91c1c; font-weight:700;">자신의 턴에 공개 가능</span></td>
+                <td>
+                  <span class="citizen-en">When revealed, immediately draw 3 Sway cards. During the Sway step of your turn, you may Sway as many different colocated players as you want.</span>
+                  <span class="citizen-ko">이 카드가 공개될 때, <strong>즉시</strong> 포섭 카드 3장을 뽑습니다. 당신의 턴 <strong>포섭(Sway) 단계</strong> 동안, 당신과 같은 장소에 있는 서로 다른 플레이어를 <strong>원하는 인원수만큼 모두</strong> 포섭할 수 있습니다(각 플레이어당 1장씩).</span>
+                </td>
+                <td class="col-lore">
+                  <span class="citizen-en"><em>Labeo's deeds prior to the assassination of Caesar have been lost to history (or perhaps were never recorded at all). As a lawyer and strong proponent of the assassination, Labeo worked hard in the recruiting process. Close friend to Marcus Junius Brutus, it is said that Labeo's name were the last words to pass through Brutus' lips as he committed suicide. Soon after, Labeo settled his affairs, dug his own grave, and committed ceremonial suicide with the help of a slave.</em></span>
+                  <span class="citizen-ko">카이사르 암살 이전 라베오의 행적은 역사에서 유실되었습니다(혹은 애초에 기록조차 되지 않았을지도 모릅니다). 법률가이자 암살의 강력한 지지자였던 라베오는 공모자들을 포섭하는 과정에서 큰 역할을 했습니다. 마르쿠스 유니우스 브루투스의 절친한 친구였던 그의 이름은 브루투스가 자결할 때 입술에서 흘러나온 마지막 유언이었다고 전해집니다. 그 직후 라베오 역시 주변을 정리하고 손수 자신의 무덤을 판 뒤, 노예의 도움을 받아 의식적인 자결을 감행했습니다.</span>
+                </td>
+              </tr>
+              <tr data-faction="liberator" data-adv="advanced">
+                <td style="text-align:center; font-weight:800;">25</td>
+                <td><strong>MARCUS TULLIUS CICERO</strong><br><span style="color:#475569;">마르쿠스 툴리우스 키케로</span></td>
+                <td style="text-align:center;"><span class="badge b-red">🩸1</span><br><small>해방파</small><br><span class="badge b-yellow">🪖 상급</span></td>
+                <td><strong>MAY REVEAL AT ANY TIME</strong><br><span style="color:#0369a1; font-weight:700;">언제든지 공개 가능</span></td>
+                <td>
+                  <span class="citizen-en">When revealed, immediately place the top 2 cards from the Baths into your tableau. Any time Allegiances are checked, revealed, etc., split your Sway into 2 sets (as equally as possible) and choose 1 to count and 1 to ignore. You may never be an Opportunist (no matter what your Sway cards indicate).</span>
+                  <span class="citizen-ko">이 카드가 공개될 때, <strong>즉시</strong> <strong>대중목욕탕(Baths)</strong> 덱 맨 위 카드 2장을 자신의 개인 공간에(뒷면으로) 놓습니다. 진영을 확인하거나 공개하는 등의 모든 순간마다, 자신의 개인 공간에 있는 포섭 카드들을 <strong>두 묶음으로(가능한 한 균등한 장수로) 나눈 뒤</strong>, 한 묶음만 진영 수치로 계산하고 다른 한 묶음은 무시할 것을 선택합니다. 당신은 포섭 카드의 수치가 어떠하든 <strong>절대로 기회주의자(Opportunist)가 될 수 없습니다</strong>.</span>
+                </td>
+                <td class="col-lore">
+                  <span class="citizen-en"><em>Cicero was not among the conspirators, though his sympathies toward them were well known. In a letter to Trebonius, he wrote, "How I wish that you had invited me to that most glorious banquet on the Ides of March!" Cicero provided many duplicitous speeches, relying on his oration instead of action, and when Marcus Antonius ordered his death, Cicero's hands were nailed to the rostra in the Forum as a warning.</em></span>
+                  <span class="citizen-ko">키케로는 암살 공모자 명단에 직접 이름을 올리지는 않았으나, 그들에게 동조했다는 사실은 널리 알려져 있었습니다. 그는 트레보니우스에게 보낸 편지에 "3월 15일의 그 영광스러운 연회에 당신들이 나를 초대했더라면 얼마나 좋았겠소!"라고 적기도 했습니다. 키케로는 직접 행동에 나서기보다 웅변술에 기대어 수많은 이중적 연설을 남겼으며, 훗날 마르쿠스 안토니우스가 그의 처형을 명령했을 때 키케로의 두 손은 경고의 의미로 포룸의 연단(Rostra)에 못 박혔습니다.</span>
+                </td>
+              </tr>
+              <tr data-faction="liberator" data-adv="normal">
+                <td style="text-align:center; font-weight:800;">26</td>
+                <td><strong>PORCIA</strong><br><span style="color:#475569;">포르키아</span></td>
+                <td style="text-align:center;"><span class="badge b-red">🩸2</span><br><small>해방파</small></td>
+                <td><strong>MAY REVEAL ON YOUR TURN</strong><br><span style="color:#b91c1c; font-weight:700;">자신의 턴에 공개 가능</span></td>
+                <td>
+                  <span class="citizen-en">When at the Forum, you may place up to 3 cards, instead of 2. When at the Temple, you may resolve either option without Burning a card from your hand.</span>
+                  <span class="citizen-ko"><strong>포룸(Forum)</strong>에 있을 때, 운명 카드를 2장 대신 <strong>최대 3장까지</strong> 내려놓을 수 있습니다. <strong>신전(Temple)</strong>에 있을 때, 손패에서 카드를 태우지(Burn) 않고도 두 가지 선택지 중 하나를 해결할 수 있습니다.</span>
+                </td>
+                <td class="col-lore">
+                  <span class="citizen-en"><em>Wife of Brutus and daughter of Cato, Porcia was known as a prudent and iron-willed stoic. She was privy to the conspiracy—even rumored to be involved—and supported her husband entirely. It is said she stabbed herself in the leg to prove she was worthy of knowing about the assassination. Her death is a flurry of conjecture, but many believe she committed suicide by swallowing burning hot coals—proof of her powerful will.</em></span>
+                  <span class="citizen-ko">브루투스의 아내이자 소 카토의 딸인 포르키아는 신중하고 강철 같은 의지를 지닌 스토아 학파 인물로 알려져 있습니다. 그녀는 암살 음모를 알고 있었으며—심지어 직접 관여했다는 소문도 있었으며—남편을 전적으로 지지했습니다. 그녀가 암살 계획을 공유받을 자격이 있음을 증명하기 위해 스스로 자신의 허벅지를 단검으로 찔렀다는 일화가 유명합니다. 그녀의 죽음에 대해서는 수많은 추측이 무성하지만, 많은 이들은 그녀가 불타는 숯불을 삼켜 자결했다고 믿으며, 이는 그녀의 강인한 의지를 보여 주는 증거로 회자됩니다.</span>
+                </td>
+              </tr>
+              <tr data-faction="liberator" data-adv="normal">
+                <td style="text-align:center; font-weight:800;">27</td>
+                <td><strong>PUBLIUS SERVILIUS CASCA LONGUS</strong><br><span style="color:#475569;">푸블리우스 세르빌리우스 카스카 롱구스</span></td>
+                <td style="text-align:center;"><span class="badge b-red">🩸2</span><br><small>해방파</small></td>
+                <td><strong>MAY REVEAL AT ANY TIME</strong><br><span style="color:#0369a1; font-weight:700;">언제든지 공개 가능</span></td>
+                <td>
+                  <span class="citizen-en">Whenever a Fate card is played into the Forum by another player on their turn, you may take any Knife card from the Tiber River. Your hand limit is 8 cards.</span>
+                  <span class="citizen-ko">다른 플레이어가 자신의 턴에 <strong>포룸(Forum)</strong>에 운명 카드를 내려놓을 때마다, 당신은 <strong>테베레강(Tiber River)</strong> 버린 카드 더미에서 원하는 <strong>칼(Knife)</strong> 카드를 가져올 수 있습니다. 당신의 손패 제한은 <strong>8장</strong>이 됩니다.</span>
+                </td>
+                <td class="col-lore">
+                  <span class="citizen-en"><em>Known as "Envious Casca" by Shakespeare, he and his brother were close friends of Caesar before joining the conspirators. Casca is known to be the first to wound Caesar with a stab from behind to the shoulder. He, like Cassius, committed suicide after fleeing east, having been defeated by Marcus Antonius at the Battle of Philippi.</em></span>
+                  <span class="citizen-ko">셰익스피어의 희곡에서 "질투심 많은 카스카(Envious Casca)"로 불린 그와 그의 동생은 공모자들에게 합류하기 전까지 카이사르의 가까운 친구였습니다. 카스카는 카이사르의 등 뒤에서 어깨를 찔러 첫 번째 자상을 입힌 인물로 알려져 있습니다. 그 역시 카시우스와 마찬가지로 동방으로 도주했다가 필리피 전투에서 마르쿠스 안토니우스에게 패배한 뒤 스스로 목숨을 끊었습니다.</span>
+                </td>
+              </tr>
+              <tr data-faction="liberator" data-adv="normal">
+                <td style="text-align:center; font-weight:800;">28</td>
+                <td><strong>GAIUS CASSIUS LONGINUS</strong><br><span style="color:#475569;">가이우스 카시우스 롱기누스</span></td>
+                <td style="text-align:center;"><span class="badge b-red">🩸3</span><br><small>해방파</small></td>
+                <td><strong>MAY REVEAL AT ANY TIME</strong><br><span style="color:#0369a1; font-weight:700;">언제든지 공개 가능</span></td>
+                <td>
+                  <span class="citizen-en">Whenever another revealed Liberator (🩸) places Fate cards into the Forum on their turn, you may reveal a Fate card from your hand and place it directly into the Curia.</span>
+                  <span class="citizen-ko">공개된 상태인 다른 <strong>해방파(🩸)</strong> 플레이어가 자신의 턴에 <strong>포룸(Forum)</strong>에 운명 카드를 놓을 때마다, 당신은 손패에서 운명 카드 1장을 앞면으로 공개한 뒤 <strong>원로원 회의장(Curia)</strong>에 직접 넣을 수 있습니다.</span>
+                </td>
+                <td class="col-lore">
+                  <span class="citizen-en"><em>Cassius was the lead conspirator of the plot to kill Caesar. He was a student of philosophy and grew up with a hatred of despots: as a child, Cassius fought with the son of Sulla—the Imperial precursor to Caesar. After the assassination, Cassius fled east and was defeated by Marcus Antonius at the Battle of Philippi where he committed suicide, using the very same knife he had used on the Ides of March.</em></span>
+                  <span class="citizen-ko">카시우스는 카이사르 암살 음모를 이끈 수석 주동자였습니다. 철학을 배운 그는 독재자에 대한 증오심을 품고 자랐는데, 어린 시절에는 카이사르에 앞선 독재관이었던 술라의 아들과 주먹다짐을 벌이기도 했습니다. 암살 이후 동방으로 달아난 카시우스는 필리피 전투에서 마르쿠스 안토니우스에게 패배하자, 3월 15일 카이사르를 찌를 때 썼던 바로 그 단검으로 자결했습니다.</span>
+                </td>
+              </tr>
+              <tr data-faction="liberator" data-adv="normal">
+                <td style="text-align:center; font-weight:800;">29</td>
+                <td><strong>GAIUS SERVILIUS CASCA</strong><br><span style="color:#475569;">가이우스 세르빌리우스 카스카</span></td>
+                <td style="text-align:center;"><span class="badge b-red">🩸2</span><br><small>해방파</small></td>
+                <td><strong>MAY REVEAL ON YOUR TURN</strong><br><span style="color:#b91c1c; font-weight:700;">자신의 턴에 공개 가능</span></td>
+                <td>
+                  <span class="citizen-en">When revealed, immediately draw a number of Fate cards equal to the number of revealed Liberators (🩸). When at the Gardens, you may draw 5 Fate cards, choose 3, and place the others on the bottom of the deck.</span>
+                  <span class="citizen-ko">이 카드가 공개될 때, <strong>즉시</strong> 현재 공개된 상태인 <strong>해방파(🩸)</strong> 플레이어의 수(자신 포함)만큼 운명 카드를 뽑습니다. <strong>정원(Gardens)</strong>에 있을 때, 운명 카드를 3장 뽑는 대신 <strong>5장</strong>을 뽑아 그중 3장을 고르고 나머지는 덱 맨 아래에 놓을 수 있습니다.</span>
+                </td>
+                <td class="col-lore">
+                  <span class="citizen-en"><em>The lesser known of the two Casca brothers, Gaius Casca and his more well-remembered brother were great friends of Caesar prior to the conspiracy. Of the 23 wounds suffered by Caesar (many posthumously), it is said that only one was fatal. Gaius Casca—hesitant, and spurned on by his brother screaming to him in Greek—is suspected to be the conspirator responsible for that single fatal wound, which pierced Caesar between the ribs.</em></span>
+                  <span class="citizen-ko">카스카 형제 중 덜 알려진 동생 가이우스 카스카와 더 유명한 그의 형(푸블리우스 카스카)은 음모 가담 전까지만 해도 카이사르의 절친한 친구였습니다. 카이사르가 입은 23개의 자상(상당수는 사망 직후에 가해짐) 가운데 실제로 치명상이었던 것은 단 하나뿐이었다고 전해집니다. 주저하다가 형이 그리스어로 도와달라고 소리치는 재촉에 떠밀려 칼을 찌른 가이우스 카스카가 바로 카이사르의 갈비뼈 사이를 꿰뚫은 그 유일한 치명상을 입힌 장본인으로 추정됩니다.</span>
+                </td>
+              </tr>
+              <tr data-faction="loyalist" data-adv="normal">
+                <td style="text-align:center; font-weight:800;">30</td>
+                <td><strong>DECIMUS JUNIUS BRUTUS ALBINUS</strong><br><span style="color:#475569;">데키무스 유니우스 브루투스 알비누스</span></td>
+                <td style="text-align:center;"><span class="badge b-green">🌿1</span><br><small>충성파</small></td>
+                <td><strong>MAY REVEAL AT ANY TIME</strong><br><span style="color:#0369a1; font-weight:700;">언제든지 공개 가능</span></td>
+                <td>
+                  <span class="citizen-en">Whenever you place cards into the Forum, you may always place them facedown. Also, when 👁️ Issues are resolved you may always choose to open or close your eyes (regardless of your Allegiance or the called for conditions).</span>
+                  <span class="citizen-ko">당신이 <strong>포룸(Forum)</strong>에 카드를 놓을 때마다, 눈 아이콘 칸 여부와 관계없이 항상 <strong>뒷면으로</strong> 내려놓을 수 있습니다. 또한, <strong>눈 아이콘(👁️) 안건</strong>이 해결될 때 당신은 자신의 실제 진영이나 호민관이 부르는 조건과 상관없이 언제나 눈을 뜰지 감을지 자유롭게 선택할 수 있습니다.</span>
+                </td>
+                <td class="col-lore">
+                  <span class="citizen-en"><em>Caesar thought of Decimus as a son. They fought together during the conquest of Gaul and Caesar's civil war. The friendship came to an end when Decimus personally led Caesar to the Curia di Pompeo for his assassination. Marcus Brutus' betrayal is nothing compared to Decimus'. When Caesar's will was revealed, Decimus was named an heir to the fortune of his best friend who he had helped murder.</em></span>
+                  <span class="citizen-ko">카이사르는 데키무스를 친아들처럼 여겼습니다. 두 사람은 갈리아 정복 전쟁과 카이사르의 내전 내내 생사고락을 함께했습니다. 그러나 데키무스가 암살 장소인 폼페이우스 원로원 회의장으로 카이사르를 직접 유인해 데려가면서 그 우정은 파국을 맞았습니다. 마르쿠스 브루투스의 배신조차 데키무스의 배신에 비하면 아무것도 아니었습니다. 훗날 카이사르의 유언장이 공개되었을 때, 데키무스는 자신이 살해하는 데 일조한 가장 친한 친구의 막대한 유산 상속인으로 이름을 올리고 있었습니다.</span>
+                </td>
+              </tr>
+              <tr data-faction="loyalist" data-adv="normal">
+                <td style="text-align:center; font-weight:800;">31</td>
+                <td><strong>MARCUS JUNIUS BRUTUS</strong><br><span style="color:#475569;">마르쿠스 유니우스 브루투스</span></td>
+                <td style="text-align:center;"><span class="badge b-green">🌿1</span><br><small>충성파</small></td>
+                <td><strong>MAY REVEAL AT ANY TIME</strong><br><span style="color:#0369a1; font-weight:700;">언제든지 공개 가능</span></td>
+                <td>
+                  <span class="citizen-en">When a colocated player Sways you during the Sway step of their turn, after you view it, you may choose to Burn any card from your hand to discard the Sway instead.</span>
+                  <span class="citizen-ko">같은 장소에 있는 플레이어가 자신의 턴 <strong>포섭(Sway) 단계</strong>에 당신을 포섭할 때, 당신은 그 포섭 카드를 확인한 후 손패에서 아무 카드나 1장 골라 <strong>태움(Burn)</strong>으로써 해당 포섭 카드를 개인 공간에 놓는 대신 버릴(Discard) 수 있습니다.</span>
+                </td>
+                <td class="col-lore">
+                  <span class="citizen-en"><em>Et tu Brute? Thanks to Shakespeare, Brutus is the most famous conspirator that took part in the assassination. He was a close friend of Caesar and his mother was a mistress of Caesar—skeptical rumors of his true parentage live on. Despite this, he was inspired by his lineage: his ancestor, Lucius Junius Brutus, overthrew the tyrannical Roman King, Tarquinius, and founded the Roman Republic. Brutus—inspired to save the Republic—was an integral part of its death.</em></span>
+                  <span class="citizen-ko">"브루투스, 너마저?" 셰익스피어 덕분에 브루투스는 암살에 가담한 가장 유명한 공모자로 꼽힙니다. 그는 카이사르의 절친한 친구였으며 그의 어머니는 카이사르의 정부였기에, 그의 친부가 누구인지에 대한 의구심 섞인 소문은 오늘날까지 이어지고 있습니다. 그럼에도 그는 자신의 혈통에서 영감을 받았습니다. 그의 선조인 루키우스 유니우스 브루투스는 폭군 타르퀴니우스 왕을 축출하고 로마 공화정을 세운 인물이었습니다. 공화정을 구하겠다는 사명감에 고무된 브루투스는, 아이러니하게도 공화정의 종말에 결정적인 역할을 하고 말았습니다.</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </section>
     </div>
 
