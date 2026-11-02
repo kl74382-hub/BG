@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>23개의 칼 (23 Knives) – 플레이어 에이드 v1.0</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  @page {
+    size: A4 portrait;
+    margin: 10mm;
+  }
+  * {
+    box-sizing: border-box;
+  }
+  body {
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 13px;
+    line-height: 1.55;
+    color: #1e293b;
+    background-color: #f1f5f9;
+    margin: 0;
+    padding: 16px;
+  }
+  
+  /* 상단 고정 내비게이션 & 검색창 */
+  .top-nav-bar {
+    position: sticky;
+    top: 8px;
+    z-index: 1000;
+    max-width: 920px;
+    margin: 0 auto 16px auto;
+  }
+  .top-nav-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    background: rgba(255, 255, 255, 0.97);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    padding: 8px 14px;
+    border-radius: 10px;
+    border: 1px solid #cbd5e1;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+    flex-wrap: wrap;
+  }
+  .nav-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .btn-home {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    background-color: #0f172a;
+    color: #f8fafc;
+    text-decoration: none;
+    font-size: 12.5px;
+    font-weight: 700;
+    border-radius: 6px;
+    border: 1px solid #334155;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+  }
+  .btn-home:hover {
+    background-color: #1e293b;
+    color: #fca5a5;
+    border-color: #b91c1c;
+  }
+  .btn-web {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    background-color: #b91c1c;
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 12.5px;
+    font-weight: 700;
+    border-radius: 6px;
+    border: 1px solid #991b1b;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+  }
+  .btn-web:hover {
+    background-color: #991b1b;
+    color: #f8fafc;
+  }
+  .badge-knives {
+    background: #fee2e2;
+    color: #991b1b;
+    border: 1px solid #fecaca;
+    font-size: 11px;
+    font-weight: 800;
+    padding: 2px 7px;
+    border-radius: 4px;
+    white-space: nowrap;
+  }
+  .search-box {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: #f8fafc;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    padding: 3px 8px;
+    flex: 1;
+    max-width: 440px;
+    transition: all 0.2s;
+  }
+  .search-box:focus-within {
+    border-color: #b91c1c;
+    background: #ffffff;
+    box-shadow: 0 0 0 2px rgba(185, 28, 28, 0.15);
+  }
+  .search-icon {
+    font-size: 13px;
+    color: #64748b;
+    user-select: none;
+  }
+  #searchInput {
+    border: none;
+    background: transparent;
+    outline: none;
+    font-family: inherit;
+    font-size: 13px;
+    color: #0f172a;
+    width: 100%;
+    min-width: 80px;
+  }
+  .search-count {
+    font-size: 11px;
+    color: #b91c1c;
+    font-weight: 700;
+    white-space: nowrap;
+    user-select: none;
+  }
+  .search-nav-btn {
+    border: 1px solid #cbd5e1;
+    background: #ffffff;
+    border-radius: 4px;
+    cursor: pointer;
+    padding: 2px 6px;
+    font-size: 10px;
+    color: #334155;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    height: 22px;
+    transition: all 0.15s;
+  }
+  .search-nav-btn:hover:not(:disabled) {
+    background: #fee2e2;
+    border-color: #b91c1c;
+    color: #b91c1c;
+  }
+  .search-nav-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+  .search-clear-btn {
+    border: none;
+    background: transparent;
+    color: #94a3b8;
+    cursor: pointer;
+    font-size: 14px;
+    padding: 0 2px;
+    display: none;
+    line-height: 1;
+  }
+  .search-clear-btn:hover {
+    color: #ef4444;
+  }
+
+  /* 검색어 하이라이트 */
+  mark.search-highlight {
+    background-color: #fef08a;
+    color: #854d0e;
+    padding: 1px 3px;
+    border-radius: 3px;
+    transition: background-color 0.2s;
+  }
+  mark.search-highlight.active-match {
+    background-color: #b91c1c;
+    color: #ffffff;
+    outline: 2px solid #991b1b;
+  }
+
+  /* 메인 카드 레이아웃 */
+  .page-card {
+    background: #ffffff;
+    max-width: 920px;
+    margin: 0 auto 20px auto;
+    padding: 26px 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+    border: 1px solid #e2e8f0;
+  }
+  .page-divider {
+    page-break-before: always;
+    margin-top: 30px;
+  }
+
+  /* 헤더 섹션 */
+  .aid-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 2px solid #0f172a;
+    padding-bottom: 12px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .aid-title-wrap {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .aid-title {
+    font-size: 24px;
+    font-weight: 900;
+    color: #0f172a;
+    margin: 0;
+    letter-spacing: -0.5px;
+  }
+  .aid-subtitle {
+    font-size: 13px;
+    color: #64748b;
+    font-weight: 600;
+  }
+  .credits-tag {
+    font-size: 11px;
+    color: #475569;
+    background: #f1f5f9;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    padding: 4px 8px;
+    text-align: right;
+    line-height: 1.4;
+  }
+
+  /* 2단 그리드 */
+  .grid-2col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  @media (max-width: 768px) {
+    .grid-2col {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* 섹션 블록 */
+  .section-box {
+    background: #f8fafc;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    padding: 12px 14px;
+    margin-bottom: 12px;
+  }
+  .section-title {
+    font-size: 13.5px;
+    font-weight: 800;
+    color: #0f172a;
+    margin: 0 0 8px 0;
+    padding-bottom: 5px;
+    border-bottom: 1.5px solid #b91c1c;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .sub-title {
+    font-size: 12.5px;
+    font-weight: 800;
+    color: #1e293b;
+    margin: 8px 0 4px 0;
+  }
+
+  /* 리스트 */
+  ul.aid-list, ol.aid-list {
+    margin: 4px 0 6px 0;
+    padding-left: 18px;
+  }
+  ul.aid-list li, ol.aid-list li {
+    margin-bottom: 4px;
+    font-size: 12px;
+  }
+
+  /* 배지 & 아이콘 */
+  .badge {
+    display: inline-block;
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1.3;
+  }
+  .b-white { background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; }
+  .b-red { background: #fee2e2; color: #b91c1c; border: 1px solid #fecaca; }
+  .b-purple { background: #f3e8ff; color: #7e22ce; border: 1px solid #e9d5ff; }
+  .b-yellow { background: #fef08a; color: #854d0e; border: 1px solid #fde047; }
+  .b-green  { background: #dcfce7; color: #166534; border: 1px solid #bbf7d0; }
+  .b-gray   { background: #e2e8f0; color: #334155; border: 1px solid #cbd5e1; }
+  .b-blue   { background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; }
+
+  .callout-box {
+    background: #fffbeb;
+    border-left: 3px solid #f59e0b;
+    padding: 7px 10px;
+    border-radius: 0 6px 6px 0;
+    font-size: 11.5px;
+    color: #92400e;
+    margin: 6px 0;
+    line-height: 1.45;
+  }
+
+  /* 인쇄 최적화 */
+  @media print {
+    body {
+      background: #ffffff;
+      padding: 0;
+      font-size: 11.5px;
+    }
+    .top-nav-bar {
+      display: none !important;
+    }
+    .page-card {
+      box-shadow: none;
+      border: none;
+      padding: 0;
+      margin: 0;
+      max-width: 100%;
+    }
+    .page-divider {
+      page-break-before: always;
+      margin-top: 0;
+      padding-top: 8mm;
+    }
+    .section-box {
+      background: #ffffff !important;
+      border: 1px solid #cbd5e1 !important;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- 상단 고정 내비게이션 & 검색창 -->
+<div class="top-nav-bar">
+  <div class="top-nav-inner">
+    <div class="nav-left">
+      <a href="index.html" class="btn-home">← 참조표 목록</a>
+      <a href="23Knives.html" class="btn-web">📖 웹 참조표 & 메모</a>
+      <span class="badge-knives">🗡️ 23 Knives v1.0</span>
+    </div>
+    <div class="search-box">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="searchInput" placeholder="에이드 내 규칙/키워드 검색..." autocomplete="off">
+      <span id="searchCount" class="search-count"></span>
+      <button type="button" id="prevBtn" class="search-nav-btn" title="이전 (Shift+Enter)" disabled>▲</button>
+      <button type="button" id="nextBtn" class="search-nav-btn" title="다음 (Enter)" disabled>▼</button>
+      <button type="button" id="clearBtn" class="search-clear-btn" title="지우기 (Esc)">✕</button>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE 1: 3대 진영, 카드 구조, 턴 진행 순서 -->
+<div class="page-card">
+  <div class="aid-header">
+    <div class="aid-title-wrap">
+      <h1 class="aid-title">🗡️ 23개의 칼 (23 Knives)</h1>
+      <span class="aid-subtitle">플레이어 에이드 v1.0 (인쇄용 PAGE 1 / 2)</span>
+    </div>
+    <div class="credits-tag">
+      인원: 3~8인 | 시간: 30~60분<br>
+      원로원 암살 기준점: <strong>칼 23개</strong>
+    </div>
+  </div>
+
+  <div class="callout-box" style="background:#fef2f2; border-left:4px solid #b91c1c; color:#991b1b; font-weight:700; margin-bottom:12px; font-size:12px;">
+    ⚡ 핵심 승리 요약: 원로원(Curia) 최종 칼 합계가 <strong>23개 이상</strong>이면 카이사르 사망(최고 '피' 해방파 1인 승리), <strong>23개 미만</strong>이면 카이사르 생존(최고 '월계관' 충성파 1인 승리). 단, <strong>기회주의자</strong>가 개표 직후 손패로 생사를 뒤바꾸면 기회주의자 전원 승리!
+  </div>
+
+  <div class="grid-2col">
+    <!-- 왼쪽 컬럼: 3대 진영, 카드 & 상쇄 규칙 -->
+    <div>
+      <div class="section-box">
+        <div class="section-title">
+          <span>1. 3대 진영 및 판별 (Factions)</span>
+          <span class="badge b-red">1:1 상쇄</span>
+        </div>
+        <p style="font-size:11.5px; margin:0 0 6px 0; color:#334155;">
+          개인 공간(시민 카드 + 모든 포섭 카드)의 <strong>월계관</strong>과 <strong>피</strong>는 <strong>1:1로 서로 상쇄</strong>됩니다.
+        </p>
+        <ul class="aid-list">
+          <li><span class="badge b-green">🌿 충성파 (Loyalist)</span> <strong>월계관 &gt; 피</strong>: 카이사르 생존(22 이하) 목표. 순수 월계관 최고 1인 승리.</li>
+          <li><span class="badge b-red">🩸 해방파 (Liberator)</span> <strong>피 &gt; 월계관</strong>: 카이사르 암살(23 이상) 목표. 순수 피 최고 1인 승리.</li>
+          <li><span class="badge b-purple">⚖️ 기회주의자 (Opportunist)</span> <strong>월계관 = 피</strong>: 원로원 개표 직후 손패의 운명 카드를 제출해 생사를 역전시키면 팀 전체 승리.</li>
+        </ul>
+      </div>
+
+      <div class="section-box">
+        <div class="section-title">
+          <span>2. 주요 카드 요약 (Cards)</span>
+          <span class="badge b-gray">3종 카드</span>
+        </div>
+        <ul class="aid-list">
+          <li><strong>시민 카드 (31장):</strong> 개인 공간에 뒷면 배치(손패 미포함). 적힌 타이밍에 <strong>앞면으로 공개되어야만 고유 능력 발동</strong> (다시 뒷면 전환 불가, 기본 규칙보다 우선).</li>
+          <li><strong>포섭 카드 (68장):</strong> <span class="badge b-green">월계관 1~2</span> 또는 <span class="badge b-red">피 1~2</span>. 개인 공간에 왼쪽&rarr;오른쪽 순으로 나열.</li>
+          <li><strong>운명 카드 (86장):</strong> <span class="badge b-red">🗡️ 칼 1~5</span>(4 없음, 카운트 +1) / <span class="badge b-blue">🕊️ 비둘기 1~3</span>(카운트 -1).</li>
+        </ul>
+      </div>
+
+      <div class="section-box">
+        <div class="section-title">
+          <span>3. 게임 준비 요약 (Setup)</span>
+          <span class="badge b-white">초기 세팅</span>
+        </div>
+        <ul class="aid-list">
+          <li>운명 덱&rarr;정원, 포섭 덱&rarr;대중목욕탕 배치. 각 덱 맨 윗장 1장씩 <strong>테베레강에 앞면 공개</strong>.</li>
+          <li>플레이어 말은 <strong>신전(Temple)</strong>에서 시작.</li>
+          <li>시민 카드 2장 중 1장 선택해 개인 공간에 뒷면 배치.</li>
+          <li>안건 덱 &amp; 투표 보드는 <strong>시작 플레이어의 오른쪽 사람(첫 호민관)</strong>에게 전달. (5인 미만 시 '5+' 안건 제거)</li>
+          <li><strong>초기 손패:</strong> 각자 <strong>운명 2장 + 포섭 2장</strong> (손패 한도 6장).</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 오른쪽 컬럼: 턴 진행 5단계 -->
+    <div>
+      <div class="section-box">
+        <div class="section-title">
+          <span>4. 턴 진행 순서 (Turn Structure)</span>
+          <span class="badge b-red">I ~ V 단계</span>
+        </div>
+        <ol class="aid-list">
+          <li style="margin-bottom:6px;">
+            <strong>I. 이동 (MOVE) [필수]:</strong> 반드시 현재 장소가 아닌 <strong>다른 장소</strong>로 말을 이동합니다.
+          </li>
+          <li style="margin-bottom:6px;">
+            <strong>II. 장소 행동 해결 (ACTIONS):</strong> 도착한 장소의 효과를 최대한 수행합니다:
+            <div style="background:#ffffff; border:1px solid #e2e8f0; border-radius:6px; padding:6px 8px; margin-top:4px;">
+              <div style="margin-bottom:4px;"><strong style="color:#b91c1c;">🌿 정원:</strong> 운명 3장 뽑기 + <strong>위치 무관 다른 플레이어 1명에게 포섭 1장 부여</strong></div>
+              <div style="margin-bottom:4px;"><strong style="color:#b91c1c;">🛁 대중목욕탕:</strong> 포섭 3장 뽑기 + <strong>아무 플레이어(자신 포함) 개인 공간의 포섭 카드 1장 앞면 공개</strong></div>
+              <div style="margin-bottom:4px;"><strong style="color:#b91c1c;">🌊 테베레강:</strong> 버린 카드 더미에서 원하는 카드 <strong>최대 2장 앞면 공개 후 획득</strong></div>
+              <div style="margin-bottom:4px;"><strong style="color:#b91c1c;">🏛️ 신전:</strong> 손패에서 카드 1장 <strong>태우기(뒷면 영구 제외)</strong> 후 택1: ① 내 개인 공간 포섭 1장 태우기 / ② 손패의 포섭 1장을 내 개인 공간에 뒷면 추가</div>
+              <div><strong style="color:#b91c1c;">⚖️ 포룸:</strong> 운명 카드 <strong>최대 2장 배치</strong> 및/또는 <strong>추방 투표 발의</strong> (둘 다 가능)</div>
+            </div>
+          </li>
+          <li style="margin-bottom:6px;">
+            <strong>III. 포섭 (SWAY) [선택]:</strong> 자신과 <strong>같은 장소(Colocated)에 있는 다른 플레이어 1명</strong>의 개인 공간에 손패의 포섭 카드 1장을 뒷면으로 놓습니다.
+          </li>
+          <li style="margin-bottom:6px;">
+            <strong>IV. 카드 버리기 (DISCARD):</strong> 손패가 <strong>6장을 초과</strong>하면 초과분을 테베레강에 <strong>앞면</strong>으로 버립니다.
+          </li>
+          <li>
+            <strong>V. 안건 투표 (호민관 전용):</strong> 안건 2장 공개 &rarr; 전원 비밀 투표(빨강/회색) &rarr; 다수결 채택(동점 시 호민관 결정) &rarr; 미채택 안건은 덱 맨 아래로 &rarr; 채택 안건에 <strong>칼렌즈 아이콘(🗡️) 있으면 단검 1칸 전진</strong> &rarr; 안건 덱을 <strong>반시계 방향</strong>으로 전달.
+          </li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE 2: 포룸 & 추방 투표, 게임 종료, 변형 규칙 & 판례 -->
+<div class="page-card page-divider">
+  <div class="aid-header">
+    <div class="aid-title-wrap">
+      <h2 class="aid-title" style="font-size:20px;">🗡️ 포룸·추방 투표, 게임 종료 및 변형 규칙</h2>
+      <span class="aid-subtitle">23개의 칼 (23 Knives) 플레이어 에이드 (PAGE 2 / 2)</span>
+    </div>
+    <div class="credits-tag">PAGE 2 / 2</div>
+  </div>
+
+  <div class="grid-2col">
+    <!-- 왼쪽 컬럼: 포룸 상세 및 추방 투표 -->
+    <div>
+      <div class="section-box">
+        <div class="section-title">
+          <span>5. 포룸 상세 규칙 (Forum Rules)</span>
+          <span class="badge b-yellow">5슬롯 & 정산</span>
+        </div>
+        <ul class="aid-list">
+          <li>포룸의 5개 슬롯을 <strong>화살표 순서대로</strong> 채웁니다. (5칸이 다 차면 5번째 칸 위에 겹쳐 배치)</li>
+          <li><span class="badge b-gray">🚫👁️ 사선 눈 칸</span>: 앞면/뒷면 자유 배치 | <span class="badge b-yellow">👁️ 눈 아이콘 칸</span>: <strong>반드시 앞면 공개</strong> 배치</li>
+          <li><strong>포룸 정산 (5장 이상):</strong> 턴 종료 시(호민관은 안건 해결 후) 포룸에 카드가 <strong>5장 이상</strong>이면 모두 뒷면으로 섞어 <strong>원로원(Curia)에 넣고 단검을 1칸 전진</strong>시킵니다.</li>
+        </ul>
+
+        <div class="sub-title" style="color:#b91c1c; margin-top:10px;">🗳️ 추방 투표 (Calling a Vote to Exile)</div>
+        <ul class="aid-list">
+          <li>포룸에서 자신 외 다른 플레이어 1명을 지목해 발의 (전원 빨강=찬성 / 회색=반대 비밀 투표).</li>
+          <li><strong style="color:#991b1b;">⚠️ 제한:</strong> 칼렌즈 트랙의 <strong>마지막 검은색 칸 2곳</strong>에 단검이 있을 때는 발의 불가!</li>
+          <li><strong>추방 가결 (과반 찬성):</strong>
+            <ul>
+              <li>대상자의 <strong>시민 카드 + 앞면 포섭 카드 모두 버림</strong> (뒷면 포섭은 유지).</li>
+              <li>대상자는 운명/포섭 덱에서 <strong>손패 6장까지 보충</strong>.</li>
+              <li>시민 덱에서 <strong>2장을 뽑아 1장을 뒷면 장착</strong> (나머지 1장은 덱에 섞음).</li>
+            </ul>
+          </li>
+          <li><strong>추방 부결 (과반 반대 또는 동점):</strong> 발의자가 수치를 당해 <strong>발의자의 시민 카드와 모든 포섭 카드를 앞면으로 강제 공개</strong>!</li>
+        </ul>
+      </div>
+
+      <div class="section-box">
+        <div class="section-title">
+          <span>6. 세부 용어 및 우선권 판례</span>
+          <span class="badge b-gray">Clarifications</span>
+        </div>
+        <ul class="aid-list">
+          <li><strong>태우기 (Burn):</strong> 공개 없이 신전 지정 칸에 뒷면으로 영구 제외.</li>
+          <li><strong>공개된(Revealed) vs 실제(True) 진영:</strong> 수식어 없이 단순히 <strong>'진영'</strong>이라 적힌 경우 항상 뒷면까지 합산한 <strong>실제 진영</strong>을 의미합니다.</li>
+          <li><strong>우선권:</strong> 시민 능력 &gt; 안건 효과. 동시 발동 시 <strong>호민관부터 시계 방향</strong> 처리 ("즉시" 효과가 최우선).</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 오른쪽 컬럼: 게임 종료 & 변형 규칙 -->
+    <div>
+      <div class="section-box">
+        <div class="section-title">
+          <span>7. 게임 종료 및 승리 판정 (End of Game)</span>
+          <span class="badge b-red">단검 원로원 진입</span>
+        </div>
+        <p style="font-size:11.5px; margin:0 0 6px 0; color:#334155;">
+          단검이 마지막 칸을 지나 <strong>원로원(Curia)에 들어가는 즉시</strong> 종료됩니다:
+        </p>
+        <ol class="aid-list">
+          <li>포룸에 남은 운명 카드를 섞어 원로원에 추가합니다.</li>
+          <li>'게임 종료 시' 시민 능력을 호민관부터 시계 방향으로 해결합니다.</li>
+          <li><strong>원로원 개표:</strong> 모든 운명 카드를 공개해 <strong>칼(+1)과 비둘기(-1) 합계</strong> 계산:
+            <ul>
+              <li><strong>23 이상:</strong> 카이사르 사망 | <strong>23 미만:</strong> 카이사르 생존</li>
+            </ul>
+          </li>
+          <li>전원 시민 카드와 모든 포섭 카드를 공개해 <strong>실제 진영과 순수 수치</strong>를 확인합니다.</li>
+          <li><strong>기회주의자 개입:</strong> 기회주의자들은 손패의 운명 카드를 원하는 만큼 제출 가능. 이로 인해 <strong>카이사르의 생사가 뒤바뀌면 기회주의자 전원 승리!</strong></li>
+          <li><strong>진영별 단독 승리 (역전 실패 시):</strong>
+            <ul>
+              <li>카이사르 생존 시: <strong>순수 월계관 최고 충성파 1인</strong> 승리</li>
+              <li>카이사르 사망 시: <strong>순수 피 최고 해방파 1인</strong> 승리</li>
+              <li><strong>동점 시:</strong> 자신의 <strong>시민 카드에 인쇄된 해당 상징 개수가 더 적은 사람</strong> 승리 (여전히 동점이면 공동 승리).</li>
+            </ul>
+          </li>
+        </ol>
+      </div>
+
+      <div class="section-box">
+        <div class="section-title">
+          <span>8. 변형 규칙 요약 (Variants)</span>
+          <span class="badge b-blue">선택 규칙</span>
+        </div>
+        <ul class="aid-list">
+          <li><strong>트리아 루디오 (3인 규칙):</strong> 포룸 5번째 칸에 항상 뒷면 운명 카드 1장을 깔아 <strong>포룸을 4칸으로 운영</strong>. 호민관은 <strong>2턴 유지</strong>(첫 턴 안건 공개, 둘째 턴 투표).</li>
+          <li><strong>심플리치타스 (초보자용):</strong> 시민 특수 능력 없이 진영 아이콘만 사용.</li>
+          <li><strong>퀴드 프로 쿼 (협상 규칙):</strong> 추방 투표 직전 카드 교환·투표 약속 등 비구속적 뇌물/협상 허용.</li>
+          <li><strong>아우트 옴니아 아우트 니힐 (팀전):</strong> 카이사르 생사에 따라 해방파 전원 또는 충성파 전원이 공동 승리.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function() {
+  const searchInput = document.getElementById('searchInput');
+  const searchCount = document.getElementById('searchCount');
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  const clearBtn = document.getElementById('clearBtn');
+
+  let currentMatches = [];
+  let currentIndex = -1;
+
+  function clearHighlights() {
+    const highlights = document.querySelectorAll('mark.search-highlight');
+    highlights.forEach(mark => {
+      const parent = mark.parentNode;
+      if (parent) {
+        parent.replaceChild(document.createTextNode(mark.textContent), mark);
+        parent.normalize();
+      }
+    });
+  }
+
+  function highlightText(rootNode, query) {
+    if (!query) return [];
+    const matches = [];
+    const queryLower = query.toLowerCase();
+
+    const treeWalker = document.createTreeWalker(
+      rootNode,
+      NodeFilter.SHOW_TEXT,
+      {
+        acceptNode: function(node) {
+          if (!node.textContent || !node.textContent.trim()) return NodeFilter.FILTER_REJECT;
+          let parent = node.parentElement;
+          while (parent && parent !== rootNode) {
+            if (parent.classList.contains('top-nav-bar') || parent.tagName === 'SCRIPT' || parent.tagName === 'STYLE') {
+              return NodeFilter.FILTER_REJECT;
+            }
+            parent = parent.parentElement;
+          }
+          return NodeFilter.FILTER_ACCEPT;
+        }
+      }
+    );
+
+    const textNodes = [];
+    while (treeWalker.nextNode()) {
+      textNodes.push(treeWalker.currentNode);
+    }
+
+    textNodes.forEach(textNode => {
+      const text = textNode.textContent;
+      const textLower = text.toLowerCase();
+      let index = textLower.indexOf(queryLower);
+      if (index === -1) return;
+
+      const fragment = document.createDocumentFragment();
+      let lastIndex = 0;
+
+      while (index !== -1) {
+        if (index > lastIndex) {
+          fragment.appendChild(document.createTextNode(text.substring(lastIndex, index)));
+        }
+        const mark = document.createElement('mark');
+        mark.className = 'search-highlight';
+        mark.textContent = text.substring(index, index + query.length);
+        matches.push(mark);
+        fragment.appendChild(mark);
+
+        lastIndex = index + query.length;
+        index = textLower.indexOf(queryLower, lastIndex);
+      }
+
+      if (lastIndex < text.length) {
+        fragment.appendChild(document.createTextNode(text.substring(lastIndex)));
+      }
+
+      if (textNode.parentNode) {
+        textNode.parentNode.replaceChild(fragment, textNode);
+      }
+    });
+
+    return matches;
+  }
+
+  function updateMatchUI() {
+    const query = searchInput.value.trim();
+    clearBtn.style.display = query ? 'inline-block' : 'none';
+
+    if (!query) {
+      searchCount.textContent = '';
+      prevBtn.disabled = true;
+      nextBtn.disabled = true;
+      return;
+    }
+
+    if (currentMatches.length === 0) {
+      searchCount.textContent = '0건';
+      prevBtn.disabled = true;
+      nextBtn.disabled = true;
+      return;
+    }
+
+    searchCount.textContent = `${currentIndex + 1}/${currentMatches.length}`;
+    prevBtn.disabled = false;
+    nextBtn.disabled = false;
+  }
+
+  function goToMatch(index) {
+    if (currentMatches.length === 0) return;
+    if (currentIndex >= 0 && currentMatches[currentIndex]) {
+      currentMatches[currentIndex].classList.remove('active-match');
+    }
+    currentIndex = (index + currentMatches.length) % currentMatches.length;
+    const target = currentMatches[currentIndex];
+    target.classList.add('active-match');
+    target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    updateMatchUI();
+  }
+
+  function performSearch(query) {
+    clearHighlights();
+    currentMatches = [];
+    currentIndex = -1;
+
+    const trimmed = (query || '').trim();
+    if (!trimmed) {
+      updateMatchUI();
+      return;
+    }
+
+    const cards = document.querySelectorAll('.page-card');
+    cards.forEach(card => {
+      const matches = highlightText(card, trimmed);
+      currentMatches = currentMatches.concat(matches);
+    });
+
+    if (currentMatches.length > 0) {
+      goToMatch(0);
+    } else {
+      updateMatchUI();
+    }
+  }
+
+  searchInput.addEventListener('input', (e) => performSearch(e.target.value));
+  searchInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      if (e.shiftKey) goToMatch(currentIndex - 1);
+      else goToMatch(currentIndex + 1);
+    } else if (e.key === 'Escape') {
+      searchInput.value = '';
+      performSearch('');
+      searchInput.blur();
+    }
+  });
+
+  prevBtn.addEventListener('click', () => goToMatch(currentIndex - 1));
+  nextBtn.addEventListener('click', () => goToMatch(currentIndex + 1));
+  clearBtn.addEventListener('click', () => {
+    searchInput.value = '';
+    performSearch('');
+    searchInput.focus();
+  });
+
+  window.addEventListener('keydown', (e) => {
+    if (e.key === '/' && document.activeElement !== searchInput) {
+      e.preventDefault();
+      searchInput.focus();
+      searchInput.select();
+    }
+  });
+})();
+</script>
+</body>
+</html>
