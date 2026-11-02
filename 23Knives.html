@@ -1766,6 +1766,35 @@
         });
       });
 
+      // 1-1. 시민 카드 도감 필터 및 배경 이야기 토글
+      const filterBtns = document.querySelectorAll('.filter-btn');
+      const citizenRows = document.querySelectorAll('#citizenTable tbody tr');
+      const toggleLore = document.getElementById('toggleLore');
+      const citizenTable = document.getElementById('citizenTable');
+
+      filterBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          filterBtns.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          const filter = btn.dataset.filter;
+          citizenRows.forEach(row => {
+            if (filter === 'all') {
+              row.style.display = '';
+            } else if (filter === 'advanced') {
+              row.style.display = (row.dataset.adv === 'advanced') ? '' : 'none';
+            } else {
+              row.style.display = (row.dataset.faction === filter) ? '' : 'none';
+            }
+          });
+        });
+      });
+
+      if (toggleLore && citizenTable) {
+        toggleLore.addEventListener('change', (e) => {
+          citizenTable.classList.toggle('hide-lore', !e.target.checked);
+        });
+      }
+
       // 1-2. 원로원 개표 & 진영 계산기 로직
       const calcKnives = document.getElementById('calcKnives');
       const calcDoves = document.getElementById('calcDoves');
